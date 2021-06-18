@@ -107,6 +107,15 @@ class TaskCurriculum:
     def get_curriculum(self):
         return self.curriculum
 
+    def get_all_tasks(self):
+        tasks_set = set()
+        for split in self.curriculum:
+            for condition in self.curriculum[split]:
+                for curriculum_block in self.curriculum[split][condition]:
+                    block_tasks = self.curriculum[split][condition][curriculum_block]
+                    tasks_set.update(block_tasks)
+        return tasks_set
+
     def get_curriculum_summary(self):
         metadata = {"name": self.name, "timestamp": self.timestamp}
 

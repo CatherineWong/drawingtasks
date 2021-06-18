@@ -94,6 +94,26 @@ def _build_default_tasks():
     return [test_task]
 
 
+def test_task_curriculum_get_all_tasks():
+    test_curriculum_id = "test_id"
+    task_curriculum = to_test.TaskCurriculum(
+        curriculum_id=test_curriculum_id,
+        task_generator_name=DEFAULT_TEST_TASK_GENERATOR,
+    )
+
+    test_split = to_test.TaskCurriculum.SPLIT_TRAIN
+    test_condition = "test_condition"
+    test_curriculum_block = "test_block"
+    test_tasks = _build_default_tasks()
+    task_curriculum.add_tasks(
+        split=test_split,
+        condition=test_condition,
+        curriculum_block=test_curriculum_block,
+        tasks=test_tasks,
+    )
+    assert len(task_curriculum.get_all_tasks()) == len(test_tasks)
+
+
 def test_task_curriculum_get_curriculum_summary():
     test_curriculum_id = "test_id"
     task_curriculum = to_test.TaskCurriculum(
