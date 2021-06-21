@@ -12,6 +12,7 @@ import math
 import cairo
 import imageio
 import numpy as np
+from dreamcoder.utilities import Curried
 from dreamcoder.program import Program, Primitive
 from dreamcoder.type import baseType, arrow, tmaybe, t0, t1, t2
 
@@ -48,7 +49,17 @@ repetitions = [
     Primitive("rep{}".format(i), trep, j + 1) for i, j in enumerate(range(7))
 ]
 
-# Basic graphics objects
+### Some and None
+def _return_argument(argument):
+    return argument
+
+
+some_none = [
+    Primitive("None", tmaybe(t0), None),
+    Primitive("Some", arrow(t0, tmaybe(t0)), _return_argument),
+]
+
+### Basic graphics objects
 _line = [np.array([(0.0, 0.0), (1.0, 0.0)])]
 _circle = [
     np.array(
@@ -59,16 +70,106 @@ _circle = [
     )
 ]
 
-_emptystroke = []  # ---
+_emptystroke = []
 objects = [
     Primitive("emptystroke", tstroke, _emptystroke),
     Primitive("line", tstroke, _line),
     Primitive("circle", tstroke, _circle),
 ]
 
-# Utilities for importing grammars over object primitives.
+### Transformations over objects. Original source from https://github.com/ellisk42/ec/blob/draw/dreamcoder/domains/draw/primitives.py
+def set_default_if_none(arg, default):
+    return arg if arg is not None else default
 
-# Utilities for rendering and derendering images.
+
+def _makeAffine(s=1.0, theta=0.0, x=0.0, y=0.0, order=ORDERS[0]):
+    """Makes an affine transformation matrix for any linear combination of translation, rotation, scaling.
+    :order: one of the 6 ways you can permutate the three transformation primitives.
+    Passed as a string (e.g. "trs" means scale, then rotate, then tranlate.)
+    Input and output types guarantees a primitive will only be transformed once.
+    """
+    s = set_default_if_none(s, 1.0)
+    theta = set_default_if_none(theta, 0.0)
+    x = set_default_if_none(x, 0.0)
+    y = set_default_if_none(y, 0.0)
+    order = set_default_if_none(order, ORDERS[0])
+
+    def _rotation(theta):
+        transformation_matrix = np.array(
+            [
+                [math.cos(theta), -math.sin(theta), 0.0],
+                [math.sin(theta), math.cos(theta), 0.0],
+                [0.0, 0.0, 1.0],
+            ]
+        )
+        return transformation_matrix
+
+    def _scale(s):  # 2D uniform scaling in x and y
+        transformation_matrix = np.array(
+            [[s, 0.0, 0.0], [0.0, s, 0.0], [0.0, 0.0, 1.0]]
+        )
+        return transformation_matrix
+
+    def _translation(x, y):
+        transformation_matrix = np.array(
+            [[1.0, 0.0, x], [0.0, 1.0, y], [0.0, 0.0, 1.0]]
+        )
+        return transformation_matrix
+
+    char_to_function = {"t": _translation(x, y), "r": _rotation(theta), "s": _scale(s)}
+
+    def _parse_order_string(order):
+        transformation_fns = [char_to_function[char] for char in order]
+        return transformation_fns[0] @ transformation_fns[1] @ transformation_fns[2]
+
+    return _parse_order_string(order)
+
+
+def _tform_iterative(p, transformation_matrix, i=1):
+    """Applies a transformation matrix i times to the object p.
+    :p: can be a list or numpy array.
+    """
+    if isinstance(p, list):
+        return [_tform_iterative(x, transformation_matrix, i) for x in p]
+
+    p = np.concatenate((p, np.ones((p.shape[0], 1))), axis=1)
+    for _ in range(i):
+        p = (
+            transformation_matrix @ p.transpose()
+        ).transpose()  # apply affine transfomatiton.
+    p = np.delete(p, 2, axis=1)  # --- remove third dimension
+    return p
+
+
+def _tform_once(p, transformation_matrix):
+    return _tform_iterative(p, transformation_matrix, i=1)
+
+
+def transform(p, s=1.0, theta=0.0, x=0.0, y=0.0, order=ORDERS[0]):
+    """Transform Python utility wrapper that applies an affine transformation matrix directly to a primitive. Python-usable API that mirrors the functional semantics"""
+    T = _makeAffine(s, theta, x, y, order)  # get affine matrix.
+    p = _tform_once(p, T)
+    return p
+
+
+transformations = [
+    Primitive(
+        "transmat",
+        arrow(
+            tmaybe(tscale),
+            tmaybe(tangle),
+            tmaybe(tdist),
+            tmaybe(tdist),
+            tmaybe(ttrorder),
+            ttransmat,
+        ),
+        Curried(_makeAffine),
+    ),
+    Primitive("transform", arrow(tstroke, ttransmat, tstroke), Curried(_tform_once)),
+]
+
+
+# Utilities for rendering.
 def render_stroke_arrays_to_canvas(
     stroke_arrays,
     stroke_width_height=2 * XYLIM,
