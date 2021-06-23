@@ -6,14 +6,11 @@ import numpy as np
 from dreamcoder.program import Program
 import primitives.object_primitives as to_test
 
-SIMPLE_OBJECT_PROGRAMS = [
-    "(line)",
-    "(circle)",
-]
+SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)"]
 
 
 def _test_parse_render_save_programs(program_strings, tmpdir):
-    export_dir = "/Users/catwong/Desktop"
+    export_dir = tmpdir
     for program_id, program_string in enumerate(program_strings):
         try:
             # Can it parse the program?
@@ -42,7 +39,10 @@ def test_parse_render_save_simple_objects(tmpdir):
 def assert_equal_program_array(program_string, ground_truth):
     p = Program.parse(program_string)
     output = p.evaluate([])
-    assert np.array_equal(ground_truth, output)
+    if type(output) == type([]):
+        all(np.array_equal(i, j) for i, j in zip(output, ground_truth))
+    else:
+        assert np.array_equal(ground_truth, output)
 
 
 def _get_test_scale():
@@ -152,3 +152,30 @@ def test_tform_once_and_transform():
         transformation_program,
         to_test.transform(p, x=test_translation_value, y=test_translation_value),
     )
+
+
+def test_reflect():
+    ground_truth_reflection = [np.array([(-1.0, 0.0), (0.0, 0.0)])]
+    transformation_program = "(reflect line angle2)"
+    assert_equal_program_array(transformation_program, ground_truth_reflection)
+
+
+def test_repeat():
+    (
+        ground_truth_translation,
+        test_translation_value,
+        translation_program,
+    ) = _get_test_translation()
+    transformation_program = f"(repeat line rep2 {translation_program})"
+    p = Program.parse(transformation_program)
+    # Can it render the program?
+    rendered = to_test.render_parsed_program(p)
+    assert np.sum(rendered) > 0
+
+
+def test_connect():
+    p1 = to_test._circle
+    p2 = to_test._line
+    transformation_program = "(connect circle line)"
+
+    assert_equal_program_array(transformation_program, p1 + p2)

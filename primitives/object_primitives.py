@@ -48,6 +48,7 @@ orders = [Primitive(j, ttrorder, j) for j in ORDERS]
 repetitions = [
     Primitive("rep{}".format(i), trep, j + 1) for i, j in enumerate(range(7))
 ]
+constants = scales + distances + angles + orders + repetitions
 
 ### Some and None
 def _return_argument(argument):
@@ -166,6 +167,42 @@ transformations = [
         Curried(_makeAffine),
     ),
     Primitive("transform", arrow(tstroke, ttransmat, tstroke), Curried(_tform_once)),
+]
+
+## Complex relational primitives
+def _reflect(p, theta=math.pi / 2):
+    """Applies a reflection to object p over the line through the origin. Rotates p by -theta, then reflects it over the y axis and unrotates by +theta. Y-axis is pi/2."""
+
+    th = theta - math.pi / 2
+    p = transform(p, theta=-th)
+    T = np.array([[-1.0, 0.0], [0.0, 1.0]])
+    p = [np.matmul(T, pp.transpose()).transpose() for pp in p]
+    p = transform(p, theta=th)
+    return p
+
+
+def _repeat(p, n, transformation_matrix):
+    """
+    Takes a base primitive p and returns a list of n primitives, each which transforms the n-1 primitive in the list by the transformation_matrix.
+    """
+    p_out = []
+    for i in range(n):
+        if i > 0:
+            p = _tform_once(p, transformation_matrix)  # apply transformation
+        pthis = [np.copy(pp) for pp in p]  # copy current state, and append
+        p_out.extend(pthis)
+    return p_out
+
+
+def _connect(p1, p2):
+    """Connects two primitives into a single new primitive."""
+    return p1 + p2
+
+
+relations = [
+    Primitive("reflect", arrow(tstroke, tangle, tstroke), Curried(_reflect)),
+    Primitive("connect", arrow(tstroke, tstroke, tstroke), Curried(_connect)),
+    Primitive("repeat", arrow(tstroke, trep, ttransmat, tstroke), Curried(_repeat)),
 ]
 
 
