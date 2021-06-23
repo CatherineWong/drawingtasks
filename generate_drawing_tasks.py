@@ -24,9 +24,13 @@ import pathlib
 import tasksgenerator.tasks_generator as tasks_generator
 from primitives.object_primitives import export_rendered_program
 
+import tasksgenerator.s12_s13_tasks_generator
+
 DEFAULT_EXPORT_DIR = "data"
 DEFAULT_SYNTHESIS_TASKS_SUBDIR = "synthesis"
 DEFAULT_RENDERS_SUBDIR = "renders"
+GENERATING_COMMAND = "generating_command"
+COMMAND_PREFIX = "python src/generate_drawing_tasks.py "
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -40,7 +44,7 @@ parser.add_argument(
     help="If provided, alternate directory to write out the synthesis tasks.",
 )
 parser.add_argument(
-    "--renders_export_subdir",
+    "--renders_export_dir",
     default=None,
     help="If provided, alternate directory to write out the rendered images.",
 )
@@ -74,9 +78,19 @@ def generate_tasks_curriculum(args):
     return tasks_curriculum
 
 
+def build_generating_command_string(args):
+    command_string = " ".join(
+        [f"--{arg_name} {arg_val}" for (arg_name, arg_val) in vars(args).items()]
+    )
+    return COMMAND_PREFIX + command_string
+
+
 def export_curriculum_summary(args, tasks_curriculum):
     pathlib.Path(args.task_export_dir).mkdir(parents=True, exist_ok=True)
     curriculum_summary = tasks_curriculum.get_curriculum_summary()
+    curriculum_summary[tasks_generator.TaskCurriculum.METADATA][
+        GENERATING_COMMAND
+    ] = build_generating_command_string(args)
     num_tasks = args.num_tasks_per_condition if args.num_tasks_per_condition else "all"
     curriculum_summary_name = f"{args.tasks_generator}_{num_tasks}"
     curriculum_summary_file = os.path.join(

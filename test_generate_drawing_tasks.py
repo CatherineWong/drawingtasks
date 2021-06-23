@@ -30,6 +30,14 @@ def test_export_curriculum_summary(tmpdir):
     assert os.path.exists(curriculum_summary_file)
 
 
+def test_build_generating_command_string():
+    mock_args = MockArgs(
+        test_args="test",
+    )
+    built_command = to_test.build_generating_command_string(mock_args)
+    assert built_command == to_test.COMMAND_PREFIX + "--test_args test"
+
+
 def test_export_tasks(tmpdir):
     export_dir = tmpdir
     mock_args = MockArgs(
