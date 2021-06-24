@@ -20,12 +20,46 @@ TasksGeneratorRegistry = ClassRegistry("name", unique=True)
 class AbstractTasksGenerator:
     """TasksGenerators should define the 'name' class attribute and register using TasksGeneratoryRegistry.register"""
 
+    GENERATE_ALL = "all"
+
     def __init__(self, grammar):
         self.grammar = grammar
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         """:ret: TaskCurriculum"""
         raise NotImplementedError
+
+    def _generate_strokes_for_stimuli(self):
+        """Helper method that generates an array of stimuli as stroke arrays."""
+        raise NotImplementedError
+
+    def _generate_drawing_tasks_from_strokes(
+        self,
+        num_tasks_to_generate_per_condition,
+        request_type,
+        render_strokes_fn,
+        task_generator_name,
+    ):
+        """Helper method to generate Drawing Tasks from strokes arrays."""
+        task_strokes_for_stimuli = self._generate_strokes_for_stimuli()
+        num_total_tasks = len(task_strokes_for_stimuli)
+        num_to_generate = (
+            num_tasks_to_generate_per_condition
+            if num_tasks_to_generate_per_condition
+            is not AbstractTasksGenerator.GENERATE_ALL
+            else num_total_tasks
+        )
+        tasks = [
+            DrawingTask(
+                task_id=task_idx,
+                request=request_type,
+                ground_truth_strokes=task_strokes,
+                render_strokes_fn=render_strokes_fn,
+                task_generator_name=task_generator_name,
+            )
+            for (task_idx, task_strokes) in enumerate(task_strokes_for_stimuli)
+        ][:num_to_generate]
+        return tasks
 
 
 class DrawingTask(Task):
