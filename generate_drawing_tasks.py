@@ -8,7 +8,7 @@ By default, it exports:
     A tasks_curriculum_metadata.json file to TASK_EXPORT_DIR that contains the Curriculum and metadata.
 
 Usage:
-    python src/generate_drawing_tasks.py
+    python generate_drawing_tasks.py
             --task_export_dir: where to write out the tasks; by default it writes out to subdirectories called synthesis/ and human/ where human contains the high-resolution images.
             
             --synthesis_export_dir: where to write out the synthesis tasks, if not the task_export_dir.
@@ -25,12 +25,13 @@ import tasksgenerator.tasks_generator as tasks_generator
 from primitives.object_primitives import export_rendered_program
 
 import tasksgenerator.s12_s13_tasks_generator
+import tasksgenerator.s14_s15_tasks_generator
 
 DEFAULT_EXPORT_DIR = "data"
 DEFAULT_SYNTHESIS_TASKS_SUBDIR = "synthesis"
 DEFAULT_RENDERS_SUBDIR = "renders"
 GENERATING_COMMAND = "generating_command"
-COMMAND_PREFIX = "python src/generate_drawing_tasks.py "
+COMMAND_PREFIX = "python generate_drawing_tasks.py "
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

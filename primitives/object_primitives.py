@@ -26,7 +26,7 @@ ttransmat = baseType("ttransmat")
 trep = baseType("trep")
 
 ### Constant values
-XYLIM = 3.0  # i.e., -3 to 3
+XYLIM = 3.5  # i.e., -3 to 3
 SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT = 128
 
 SCALES = [0.5, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 4.0]

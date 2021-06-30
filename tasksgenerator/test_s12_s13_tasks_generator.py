@@ -7,7 +7,6 @@ from tasksgenerator.tasks_generator import TasksGeneratorRegistry
 import tasksgenerator.s12_s13_tasks_generator as to_test
 import primitives.object_primitives as object_primitives
 
-DESKTOP = "/Users/catwong/Desktop"  # Debugging only
 TOTAL_TEST_STIMULI = 13
 
 

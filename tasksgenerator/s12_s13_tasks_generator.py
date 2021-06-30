@@ -78,9 +78,9 @@ def make_grating_with_objects(
 DEFAULT_X_GRID = make_x_grid(n=4)
 
 
-def T_grid_idx(p, grid_idx, x_grid=DEFAULT_X_GRID):
+def T_grid_idx(p, grid_idx, y=0, x_grid=DEFAULT_X_GRID):
     # Place an object at a horizontal grating position.
-    return T(p, x=x_grid[grid_idx])
+    return T(p, y=y, x=x_grid[grid_idx])
 
 
 def hl(n_lines, x_shift=0, x_grid=DEFAULT_X_GRID):
@@ -264,7 +264,6 @@ class S13StochasticTasksGenerator(AbstractTasksGenerator):
             + object_primitives.transformations
         )
 
-    #
     def _generate_horizontal_object_primitives(self):
         # Generates the library of lollipop and dumbbell objects.
         x_grid = make_x_grid(n=4)
@@ -449,7 +448,7 @@ class S13StochasticTasksGenerator(AbstractTasksGenerator):
         )
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
-        """:ret: a curriculum for both conditions containing a single test block."""
+        """:ret: a curriculum for single condition containing a train block."""
 
         task_curriculum = TaskCurriculum(
             curriculum_id=self.name,
