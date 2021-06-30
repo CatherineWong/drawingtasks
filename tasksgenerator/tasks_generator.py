@@ -88,7 +88,8 @@ class DrawingTask(Task):
         rendering=None,
         task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR,
     ):
-        task_name = f"{task_generator_name}_{task_id}"
+        padded_index = str.zfill(str(task_id), 3)
+        task_name = f"{task_generator_name}_{padded_index}"
         super(DrawingTask, self).__init__(task_name, request, examples=[], features=[])
 
         self.ground_truth_program = ground_truth_program

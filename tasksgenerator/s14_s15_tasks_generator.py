@@ -152,11 +152,14 @@ class S14TasksGenerator(AbstractTasksGenerator):
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         """:ret: a curriculum for single condition containing a single train block."""
-
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition
+        )
         task_curriculum = TaskCurriculum(
-            curriculum_id=self._get_number_tasks_to_generate_per_condition(
-                num_tasks_to_generate_per_condition
-            ),
+            curriculum_id=human_readable,
             task_generator_name=self.name,
         )
 
