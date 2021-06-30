@@ -56,7 +56,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--num_tasks_per_condition",
-    default=None,
+    default=tasks_generator.AbstractTasksGenerator.GENERATE_ALL,
     help="If included, enumerate only a set number of tasks from the generator.",
 )
 parser.add_argument(
@@ -92,7 +92,7 @@ def export_curriculum_summary(args, tasks_curriculum):
     curriculum_summary[tasks_generator.TaskCurriculum.METADATA][
         GENERATING_COMMAND
     ] = build_generating_command_string(args)
-    num_tasks = args.num_tasks_per_condition if args.num_tasks_per_condition else "all"
+    num_tasks = args.num_tasks_per_condition
     curriculum_summary_name = f"{args.tasks_generator}_{num_tasks}"
     curriculum_summary_file = os.path.join(
         args.task_export_dir, curriculum_summary_name + ".json"

@@ -33,6 +33,21 @@ class AbstractTasksGenerator:
         """Helper method that generates an array of stimuli as stroke arrays."""
         raise NotImplementedError
 
+    def _get_number_tasks_to_generate_per_condition(
+        self, num_tasks_to_generate_per_condition
+    ):
+        """Helper method that returns the true number of tasks to generate and a human readable name. Generator must have defined an _generate_strokes_for_stimuli function."""
+        task_strokes_for_stimuli = self._generate_strokes_for_stimuli()
+        num_total_tasks = len(task_strokes_for_stimuli)
+        num_to_generate = (
+            num_tasks_to_generate_per_condition
+            if num_tasks_to_generate_per_condition
+            != AbstractTasksGenerator.GENERATE_ALL
+            else num_total_tasks
+        )
+        human_readable_num_to_generate = num_tasks_to_generate_per_condition
+        return num_to_generate, human_readable_num_to_generate
+
     def _generate_drawing_tasks_from_strokes(
         self,
         num_tasks_to_generate_per_condition,
@@ -41,14 +56,13 @@ class AbstractTasksGenerator:
         task_generator_name,
     ):
         """Helper method to generate Drawing Tasks from strokes arrays."""
-        task_strokes_for_stimuli = self._generate_strokes_for_stimuli()
-        num_total_tasks = len(task_strokes_for_stimuli)
-        num_to_generate = (
+        (
+            num_to_generate,
+            human_readable_num_to_generate,
+        ) = self._get_number_tasks_to_generate_per_condition(
             num_tasks_to_generate_per_condition
-            if num_tasks_to_generate_per_condition
-            is not AbstractTasksGenerator.GENERATE_ALL
-            else num_total_tasks
         )
+        task_strokes_for_stimuli = self._generate_strokes_for_stimuli()
         tasks = [
             DrawingTask(
                 task_id=task_idx,

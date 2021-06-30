@@ -18,6 +18,9 @@ class TestTasksGenerator(to_test.AbstractTasksGenerator):
         grammar = Grammar.uniform(object_primitives.objects)
         super(TestTasksGenerator, self).__init__(grammar=grammar)
 
+    def _generate_strokes_for_stimuli(self):
+        return [t.rendering for t in _build_default_tasks()]
+
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         test_curriculum_id = "test_id"
         task_curriculum = to_test.TaskCurriculum(
@@ -161,3 +164,28 @@ def test_tasks_generator():
                 assert len(test_tasks) == len(curriculum_tasks)
                 for idx, test_task in enumerate(test_tasks):
                     assert test_task.name == curriculum_tasks[idx].name
+
+
+def test_tasks_generator_get_number_tasks_to_generate_per_condition():
+    task_generator = to_test.TasksGeneratorRegistry[DEFAULT_TEST_TASK_GENERATOR]
+    test_number_tasks_to_generate_per_condition = [
+        (
+            len(task_generator._generate_strokes_for_stimuli()),
+            to_test.AbstractTasksGenerator.GENERATE_ALL,
+        ),
+        (1, 1),
+        (5, 5),
+    ]
+
+    for (
+        test_num_to_generate,
+        test_human_readable_num_to_generate,
+    ) in test_number_tasks_to_generate_per_condition:
+        (
+            num_to_generate,
+            human_readable_num_to_generate,
+        ) = task_generator._get_number_tasks_to_generate_per_condition(
+            test_human_readable_num_to_generate
+        )
+        assert test_num_to_generate == num_to_generate
+        assert test_human_readable_num_to_generate == human_readable_num_to_generate

@@ -449,9 +449,15 @@ class S13StochasticTasksGenerator(AbstractTasksGenerator):
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         """:ret: a curriculum for single condition containing a train block."""
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition
+        )
 
         task_curriculum = TaskCurriculum(
-            curriculum_id=self.name,
+            curriculum_id=human_readable,
             task_generator_name=self.name,
         )
 
@@ -546,9 +552,9 @@ class S12S13TestTasksGenerator(AbstractTasksGenerator):
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         """:ret: a curriculum for both conditions containing a single test block."""
-
+        assert num_tasks_to_generate_per_condition == TaskCurriculum.CONDITION_ALL
         task_curriculum = TaskCurriculum(
-            curriculum_id=self.name,
+            curriculum_id=TaskCurriculum.CONDITION_ALL,
             task_generator_name=self.name,
         )
 
