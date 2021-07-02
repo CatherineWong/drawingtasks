@@ -16,11 +16,18 @@ import boto3
 
 DEFAULT_EXPORT_DIR = "data"
 DEFAULT_RENDERS_SUBDIR = "renders"
+
 SPLITS = ["train", "test"]
 EXPERIMENT_NAME = "lax"
 DOMAIN_NAME = "drawing"
 CURRICULUM_METADATA = "metadata"
 CURRICULUM_NAME = "name"
+
+DEFAULT_BASE_CONFIG = "base_experiment_config.json"
+CONFIG_NAME = "config_name"
+CONFIG_EXP_PARAMETERS = "experiment_parameters"
+S3_BUCKET = "s3_bucket"
+S3_STIMULI_PATH_FORMAT = "s3_stimuli_path_format"
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -34,9 +41,19 @@ parser.add_argument(
     help="Top level directory where curriculum JSON files are located.",
 )
 parser.add_argument(
+    "--base_experiment_config",
+    default=os.path.join(DEFAULT_EXPORT_DIR, DEFAULT_BASE_CONFIG),
+    help="Base experimental config to populate with experiment-specific data.",
+)
+parser.add_argument(
     "--curriculum",
     required=True,
     help="Name of the curriculum file. Must be in the curriculum export dir.",
+)
+parser.add_argument(
+    "--skip_upload",
+    action="store_true",
+    help="Whether to skip data upload and only generate a config.",
 )
 
 
@@ -106,22 +123,42 @@ def upload_stimuli_to_s3(args, curriculum, stim_paths_to_upload):
         f"Uploading {len(stim_paths_to_upload)} to bucket: {bucket_name} with stimuli_names: {demo_stimuli_name}? Hit any key to continue:"
     )
     s3, b = connect_to_s3_and_create_bucket(bucket_name)
-    for stim_idx, stim_path in enumerate(stim_paths_to_upload):
-        stimuli_name_in_bucket = get_stimuli_name(args, curriculum, stim_idx)
-        print(
-            f"Now uploading [{stim_idx}/{len(stim_paths_to_upload)}]: {stim_path} ==> {stimuli_name_in_bucket}"
-        )
-        s3.Object(bucket_name, stimuli_name_in_bucket).put(
-            Body=open(stim_path, "rb")
-        )  # Upload stimuli
-        s3.Object(bucket_name, stimuli_name_in_bucket).Acl().put(
-            ACL="public-read"
-        )  # Set access controls
+    if not args.skip_upload:
+        for stim_idx, stim_path in enumerate(stim_paths_to_upload):
+            stimuli_name_in_bucket = get_stimuli_name(args, curriculum, stim_idx)
+            print(
+                f"Now uploading [{stim_idx}/{len(stim_paths_to_upload)}]: {stim_path} ==> {stimuli_name_in_bucket}"
+            )
+            s3.Object(bucket_name, stimuli_name_in_bucket).put(
+                Body=open(stim_path, "rb")
+            )  # Upload stimuli
+            s3.Object(bucket_name, stimuli_name_in_bucket).Acl().put(
+                ACL="public-read"
+            )  # Set access controls
+    return bucket_name, demo_stimuli_name
+
+
+def generate_base_config(args, bucket_name, demo_stimuli_name):
+    """Generates a base experiment config for using the stimuli in this bucket."""
+    with open(args.base_experiment_config) as f:
+        base_config = json.load(f)
+
+    base_config[CONFIG_EXP_PARAMETERS][S3_BUCKET] = bucket_name
+    base_config[CONFIG_EXP_PARAMETERS][S3_STIMULI_PATH_FORMAT] = demo_stimuli_name
+    base_config[CONFIG_NAME] = bucket_name
+
+    config_name = os.path.join(DEFAULT_EXPORT_DIR, f"{bucket_name}.json")
+    with open(config_name, "w") as f:
+        json.dump(base_config, f)
+    print(f"Wrote base experimental config for bucket to: {config_name}")
 
 
 def main(args):
     curriculum, stim_paths_to_upload = get_stim_paths_from_curriculum(args)
-    upload_stimuli_to_s3(args, curriculum, stim_paths_to_upload)
+    bucket_name, demo_stimuli_name = upload_stimuli_to_s3(
+        args, curriculum, stim_paths_to_upload
+    )
+    generate_base_config(args, bucket_name, demo_stimuli_name)
 
 
 if __name__ == "__main__":
