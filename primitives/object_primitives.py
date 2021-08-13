@@ -27,7 +27,7 @@ trep = baseType("trep")
 
 ### Constant values
 XYLIM = 3.5  # i.e., -3 to 3
-SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT = 128
+SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT = 512
 
 SCALES = [0.5, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 4.0]
 NPOLY = range(3, 7)  # range of regular polyogns allowed.
@@ -220,7 +220,7 @@ def render_stroke_arrays_to_canvas(
         canvas_array, cairo.Format.A8, canvas_width_height - 2, canvas_width_height - 2
     )
     context = cairo.Context(surface)
-    context.set_source_rgb(256, 256, 256)
+    context.set_source_rgb(512, 512, 512)
 
     for stroke_array in stroke_arrays:
         renderable_stroke = np.copy(stroke_array)
@@ -240,6 +240,7 @@ def render_parsed_program(program):
 
 def export_rendered_program(rendered_array, export_id, export_dir):
     filename = os.path.join(export_dir, f"{export_id}.png")
-    inverted_array = 1 - rendered_array  # Invert B/W image for aesthetics.
+    b_w_array = np.array((rendered_array > 0)).astype(int)  # Make black and white.
+    inverted_array = 1 - b_w_array  # Invert B/W image for aesthetics.
     imageio.imwrite(filename, inverted_array)
     return filename

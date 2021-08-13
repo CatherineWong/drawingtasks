@@ -21,6 +21,7 @@ class AbstractTasksGenerator:
     """TasksGenerators should define the 'name' class attribute and register using TasksGeneratoryRegistry.register"""
 
     GENERATE_ALL = "all"
+    INTERSECT = "intersect"
 
     def __init__(self, grammar):
         self.grammar = grammar
@@ -76,6 +77,67 @@ class AbstractTasksGenerator:
         return tasks
 
 
+class ManualCurriculumTasksGenerator(AbstractTasksGenerator):
+    """TaskGenerator with utility functions for loading and creating task curricula based on other task generators."""
+
+    def __init__(self, grammar):
+        super().__init__(grammar=grammar)
+
+    def _load_tasks_from_existing_generator(self, existing_generator_name, task_ids):
+        """Loads task_ids (or ALL if task_ids is ALL) from the generator with existing_generator_name in the registry. Generator must have a _generate_tasks function that returns ID-d tasks."""
+        existing_generator = TasksGeneratorRegistry[existing_generator_name]
+        existing_tasks = existing_generator._generate_tasks()
+        if task_ids == AbstractTasksGenerator.GENERATE_ALL:
+            return existing_tasks
+        else:
+            return [existing_tasks[id] for id in task_ids]
+
+    def _intersect_numpy_array_renders_for_tasks(self, task_sets):
+        """Generates new tasks based on those that have intersecting renderings. Returns [array of DrawingTasks] with the name intersect_[generator_0]_[generator_1]... based on the intersection. Assumes renders are a numpy array and looks for an exact intersection."""
+
+        def get_intersected_generator_name_for_tasks(tasks):
+            task_generators = sorted(list(set([t.task_generator_name for t in tasks])))
+            intersect_generator_name = (
+                AbstractTasksGenerator.INTERSECT + "_" + "_".join(task_generators)
+            )
+            return intersect_generator_name
+
+        rendering_intersection = defaultdict(list)
+        import pdb
+
+        pdb.set_trace()
+        for task_set in task_sets:
+            for task in task_set:
+                hashable_rendering = task.rendering.tostring()
+                rendering_intersection[hashable_rendering].append(task)
+        new_intersected_tasks = []
+        for _, same_rendering_tasks in rendering_intersection.items():
+            if len(same_rendering_tasks) < 2:
+                continue
+            else:
+                intersected_task_idx = len(new_intersected_tasks)
+                original_base_task = same_rendering_tasks[0]
+                new_base_task = DrawingTask(
+                    task_id=intersected_task_idx,
+                    request=original_base_task.request,
+                    ground_truth_program=original_base_task.ground_truth_program,
+                    render_parsed_program_fn=original_base_task.render_parsed_program,
+                    render_strokes_fn=original_base_task.render_strokes,
+                    rendering=original_base_task.rendering,
+                    task_generator_name=get_intersected_generator_name_for_tasks(
+                        same_rendering_tasks
+                    ),
+                )
+                new_base_task.possible_ground_truth_programs = [
+                    t.ground_truth_program for t in same_rendering_tasks
+                ]
+                new_base_task.possible_ground_truth_strokes = [
+                    t.ground_truth_strokes for t in same_rendering_tasks
+                ]
+                new_intersected_tasks.append(new_base_task)
+        return new_intersected_tasks
+
+
 class DrawingTask(Task):
     def __init__(
         self,
@@ -92,10 +154,20 @@ class DrawingTask(Task):
         task_name = f"{task_generator_name}_{padded_index}"
         super(DrawingTask, self).__init__(task_name, request, examples=[], features=[])
 
-        self.ground_truth_program = ground_truth_program
-        self.ground_truth_strokes = ground_truth_strokes
+        self.task_generator_name = task_generator_name
+        self.ground_truth_program = (
+            ground_truth_program  # Single canonical ground truth program
+        )
+        self.ground_truth_strokes = (
+            ground_truth_strokes  # Single canonical ground truth strokes
+        )
+        self.possible_ground_truth_programs = [
+            ground_truth_program
+        ]  # For multiple ambiguous parses.
+        self.possible_ground_truth_strokes = [ground_truth_strokes]
         self.rendering = rendering
         self.render_parsed_program = render_parsed_program_fn
+        self.render_strokes = render_strokes_fn
         if self.rendering is None:
             if self.ground_truth_program is not None:
                 self.rendering = render_parsed_program_fn(ground_truth_program)

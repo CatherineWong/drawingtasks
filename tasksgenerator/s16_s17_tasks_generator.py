@@ -37,12 +37,12 @@ random.seed(RANDOM_SEED)
 
 
 @TasksGeneratorRegistry.register
-class S14TasksGenerator(AbstractTasksGenerator):
+class S16TasksGenerator(AbstractTasksGenerator):
     """Generates tasks with 'vertical skewer objects' placed at positions along with a vertical grating.
     This generator is closely modeled on the S12 vertical objects model from Tian et. al 2020. However, it uses a more limited basic set of vertical object primitives, and enumerates them deterministically over a cross product of spatial locations.
     """
 
-    name = "S14"
+    name = "S16"
 
     def __init__(self):
         grammar = Grammar.uniform(object_primitives.objects)
@@ -72,9 +72,22 @@ class S14TasksGenerator(AbstractTasksGenerator):
                 [[] for _ in range(n_objects)], n_vertical_grating_lines=1
             )
         ]
+        single_circle = [
+            T_grid_idx(c, 0, y=1.0, x_grid=x_grid)
+            + make_grating_with_objects(
+                [[] for _ in range(n_objects)], n_vertical_grating_lines=1
+            )
+        ]
         scarecrow = [
             T_grid_idx(l, 0, y=0.0, x_grid=x_grid)
             + T_grid_idx(c, 0, y=1.0, x_grid=x_grid)
+            + make_grating_with_objects(
+                [[] for _ in range(n_objects)], n_vertical_grating_lines=1
+            )
+        ]
+        inverse_scarecrow = [
+            T_grid_idx(l, 0, y=1.0, x_grid=x_grid)
+            + T_grid_idx(c, 0, y=0.0, x_grid=x_grid)
             + make_grating_with_objects(
                 [[] for _ in range(n_objects)], n_vertical_grating_lines=1
             )
@@ -86,7 +99,7 @@ class S14TasksGenerator(AbstractTasksGenerator):
                 [[] for _ in range(n_objects)], n_vertical_grating_lines=1
             )
         ]
-        return cross + eight + scarecrow + telephone
+        return cross + eight + scarecrow + telephone + inverse_scarecrow + single_circle
 
     def _generate_strokes_for_stimuli(self, max_vertical_objects=3, max_skewers=3):
         assert max_skewers <= 4
@@ -175,12 +188,12 @@ class S14TasksGenerator(AbstractTasksGenerator):
 
 
 @TasksGeneratorRegistry.register
-class S15TasksGenerator(AbstractTasksGenerator):
+class S17TasksGenerator(AbstractTasksGenerator):
     """Generates tasks with 'horizontal objects' placed at positions on a vertical grating.
     This generator is closely modeled on the S13 horizontal objects model from Tian et. al 2020. However, it uses a more limited basic set of horizontal object primitives, and enumerates them deterministically over a cross product of spatial locations.
     """
 
-    name = "S15"
+    name = "S17"
 
     def __init__(self):
         grammar = Grammar.uniform(object_primitives.objects)
@@ -198,14 +211,26 @@ class S15TasksGenerator(AbstractTasksGenerator):
         l = short_hline
 
         lollipop = [T_grid_idx(c, 0, x_grid=x_grid) + T_grid_idx(l, 1, x_grid=x_grid)]
+
+        flipped_lollipop = [
+            T_grid_idx(c, 1, x_grid=x_grid) + T_grid_idx(l, 0, x_grid=x_grid)
+        ]
+
         short_dumbell = [
             T_grid_idx(c, 0, x_grid=x_grid)
             + T_grid_idx(l, 1, x_grid=x_grid)
             + T_grid_idx(c, 2, x_grid=x_grid)
         ]
+
+        short_resistor = [
+            T_grid_idx(l, 0, x_grid=x_grid)
+            + T_grid_idx(c, 1, x_grid=x_grid)
+            + T_grid_idx(l, 2, x_grid=x_grid)
+        ]
+
         glasses = [T_grid_idx(c, 0, x_grid=x_grid) + T_grid_idx(c, 1, x_grid=x_grid)]
 
-        return lollipop + short_dumbell + glasses
+        return lollipop + flipped_lollipop + short_dumbell + glasses + short_resistor
 
     def _generate_strokes_for_stimuli(self, max_skewers=3, max_horizontal_objects=2):
         # Generates the
@@ -302,10 +327,10 @@ class S15TasksGenerator(AbstractTasksGenerator):
 
 
 @TasksGeneratorRegistry.register
-class S14S15UnionTasksGenerator(ManualCurriculumTasksGenerator):
-    """Generates tasks from the complete union of S14 and S15."""
+class S16S17UnionTasksGenerator(ManualCurriculumTasksGenerator):
+    """Generates tasks from the complete union of S16 and S17."""
 
-    name = "S14_S15_union"
+    name = "S16_S17_union"
 
     def __init__(self):
         grammar = Grammar.uniform(object_primitives.objects)
@@ -318,72 +343,16 @@ class S14S15UnionTasksGenerator(ManualCurriculumTasksGenerator):
 
     def _generate_tasks(self, num_tasks_to_generate_per_condition=None):
         # Does not use num_tasks_to_generate_per_condition. Definitionally generates all tasks
-        s14_tasks = self._load_tasks_from_existing_generator(
-            existing_generator_name=S14TasksGenerator.name,
+        s16_tasks = self._load_tasks_from_existing_generator(
+            existing_generator_name=S16TasksGenerator.name,
             task_ids=AbstractTasksGenerator.GENERATE_ALL,
         )
 
-        s15_tasks = self._load_tasks_from_existing_generator(
-            existing_generator_name=S15TasksGenerator.name,
+        s17_tasks = self._load_tasks_from_existing_generator(
+            existing_generator_name=S17TasksGenerator.name,
             task_ids=AbstractTasksGenerator.GENERATE_ALL,
         )
-        return s14_tasks + s15_tasks
-
-    def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
-        """:ret: a curriculum for single condition containing a single train block."""
-        task_curriculum = TaskCurriculum(
-            curriculum_id=AbstractTasksGenerator.GENERATE_ALL,
-            task_generator_name=self.name,
-        )
-
-        task_curriculum.add_tasks(
-            split=TaskCurriculum.SPLIT_TRAIN,
-            condition=self.name,
-            curriculum_block=0,
-            tasks=self._generate_tasks(num_tasks_to_generate_per_condition),
-        )
-        return task_curriculum
-
-
-@TasksGeneratorRegistry.register
-class S14S15CurriculumIntersectionTasksGenerator(ManualCurriculumTasksGenerator):
-    """Generates tasks explicitly designed for the pre-post study using the S14 and S15 generators. In particular, it generates the following:
-
-    SPLIT_TRAIN: a randomly sampled block_0 of tasks from the base primitives and their simple combinations.
-                a randomly sampled block_1 of tasks from the harder combinations excluding the intersecting tasks.
-
-    SPLIT_TEST: a randomly sampled test set from the full intersection of S14 and S15.
-
-    """
-
-    name = "S14_S15_curriculum_intersection"
-
-    def __init__(self):
-        grammar = Grammar.uniform(object_primitives.objects)
-        super().__init__(
-            grammar=object_primitives.constants
-            + object_primitives.some_none
-            + object_primitives.objects
-            + object_primitives.transformations
-        )
-
-    def _generate_tasks(self, num_tasks_to_generate_per_condition=12):
-        # Does not use num_tasks_to_generate_per_condition. Definitionally generates all tasks
-        s14_tasks = self._load_tasks_from_existing_generator(
-            existing_generator_name=S14TasksGenerator.name,
-            task_ids=AbstractTasksGenerator.GENERATE_ALL,
-        )
-
-        s15_tasks = self._load_tasks_from_existing_generator(
-            existing_generator_name=S15TasksGenerator.name,
-            task_ids=AbstractTasksGenerator.GENERATE_ALL,
-        )
-
-        intersecting_tasks = self._intersect_numpy_array_renders_for_tasks(
-            [s14_tasks, s15_tasks]
-        )
-
-        return intersecting_tasks
+        return s16_tasks + s17_tasks
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         """:ret: a curriculum for single condition containing a single train block."""

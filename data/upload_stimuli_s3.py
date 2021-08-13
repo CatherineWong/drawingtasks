@@ -27,7 +27,10 @@ DEFAULT_BASE_CONFIG = "base_experiment_config.json"
 CONFIG_NAME = "config_name"
 CONFIG_EXP_PARAMETERS = "experiment_parameters"
 S3_BUCKET = "s3_bucket"
+S3_BUCKET_TOTAL_STIMULI = "s3_bucket_total_stimuli"
 S3_STIMULI_PATH_FORMAT = "s3_stimuli_path_format"
+S3_STIMULI_PATH_TO_LOCAL = "s3_stimuli_paths_to_local_name"
+MANIFEST = "manifest.json"
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -115,17 +118,19 @@ def connect_to_s3_and_create_bucket(bucket_name):
     return s3, b
 
 
-def upload_stimuli_to_s3(args, curriculum, stim_paths_to_upload):
-    """Uploads stimuli following the naming convention for S3 buckets."""
+def upload_stimuli_and_manifest_to_s3(args, curriculum, stim_paths_to_upload):
+    """Uploads stimuli following the naming convention for S3 buckets. Also uploads a manifest with details mapping the bucket stimuli paths to the originals."""
     bucket_name = get_bucket_name(args, curriculum)
     demo_stimuli_name = get_stimuli_name(args, curriculum, 0)
     input(
         f"Uploading {len(stim_paths_to_upload)} to bucket: {bucket_name} with stimuli_names: {demo_stimuli_name}? Hit any key to continue:"
     )
     s3, b = connect_to_s3_and_create_bucket(bucket_name)
-    if not args.skip_upload:
-        for stim_idx, stim_path in enumerate(stim_paths_to_upload):
-            stimuli_name_in_bucket = get_stimuli_name(args, curriculum, stim_idx)
+    stim_in_bucket_to_local = dict()
+    for stim_idx, stim_path in enumerate(stim_paths_to_upload):
+        stimuli_name_in_bucket = get_stimuli_name(args, curriculum, stim_idx)
+        stim_in_bucket_to_local[stimuli_name_in_bucket] = stim_path
+        if not args.skip_upload:
             print(
                 f"Now uploading [{stim_idx}/{len(stim_paths_to_upload)}]: {stim_path} ==> {stimuli_name_in_bucket}"
             )
@@ -135,16 +140,32 @@ def upload_stimuli_to_s3(args, curriculum, stim_paths_to_upload):
             s3.Object(bucket_name, stimuli_name_in_bucket).Acl().put(
                 ACL="public-read"
             )  # Set access controls
-    return bucket_name, demo_stimuli_name
+
+    # Create and upload manifest.
+    manifest = generate_manifest(args, curriculum, stim_in_bucket_to_local)
+    s3.Object(bucket_name, MANIFEST).put(
+        Body=str(json.dumps(manifest))
+    )  # Upload stimuli
+    s3.Object(bucket_name, MANIFEST).Acl().put(ACL="public-read")
+
+    total_stimuli = len(stim_paths_to_upload)
+    return bucket_name, demo_stimuli_name, total_stimuli
 
 
-def generate_base_config(args, bucket_name, demo_stimuli_name):
+def generate_manifest(args, curriculum, stim_in_bucket_to_local):
+    manifest_base = curriculum
+    manifest_base[S3_STIMULI_PATH_TO_LOCAL] = stim_in_bucket_to_local
+    return manifest_base
+
+
+def generate_base_config(args, bucket_name, demo_stimuli_name, total_stimuli):
     """Generates a base experiment config for using the stimuli in this bucket."""
     with open(args.base_experiment_config) as f:
         base_config = json.load(f)
 
     base_config[CONFIG_EXP_PARAMETERS][S3_BUCKET] = bucket_name
     base_config[CONFIG_EXP_PARAMETERS][S3_STIMULI_PATH_FORMAT] = demo_stimuli_name
+    base_config[CONFIG_EXP_PARAMETERS][S3_BUCKET_TOTAL_STIMULI] = total_stimuli
     base_config[CONFIG_NAME] = bucket_name
 
     config_name = os.path.join(DEFAULT_EXPORT_DIR, f"{bucket_name}.json")
@@ -155,10 +176,10 @@ def generate_base_config(args, bucket_name, demo_stimuli_name):
 
 def main(args):
     curriculum, stim_paths_to_upload = get_stim_paths_from_curriculum(args)
-    bucket_name, demo_stimuli_name = upload_stimuli_to_s3(
+    bucket_name, demo_stimuli_name, total_stimuli = upload_stimuli_and_manifest_to_s3(
         args, curriculum, stim_paths_to_upload
     )
-    generate_base_config(args, bucket_name, demo_stimuli_name)
+    generate_base_config(args, bucket_name, demo_stimuli_name, total_stimuli)
 
 
 if __name__ == "__main__":

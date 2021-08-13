@@ -6,8 +6,9 @@ from dreamcoder.grammar import Grammar
 import primitives.object_primitives as object_primitives
 
 
-DEFAULT_TEST_TASK_ID = "test_tasks"
+DEFAULT_TEST_TASK_ID = "0"
 DEFAULT_TEST_TASK_GENERATOR = "test_tasks_generator"
+DEFAULT_MANUAL_CURRICULUM_TASK_GENERATOR = "test_manual_curriculum_tasks_generator"
 
 
 @to_test.TasksGeneratorRegistry.register
@@ -18,8 +19,11 @@ class TestTasksGenerator(to_test.AbstractTasksGenerator):
         grammar = Grammar.uniform(object_primitives.objects)
         super(TestTasksGenerator, self).__init__(grammar=grammar)
 
+    def _generate_tasks(self):
+        return _build_default_tasks()
+
     def _generate_strokes_for_stimuli(self):
-        return [t.rendering for t in _build_default_tasks()]
+        return [t.rendering for t in self._generate_tasks()]
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         test_curriculum_id = "test_id"
@@ -39,6 +43,15 @@ class TestTasksGenerator(to_test.AbstractTasksGenerator):
             tasks=test_tasks,
         )
         return task_curriculum
+
+
+@to_test.TasksGeneratorRegistry.register
+class TestManualCurriculumTasksGenerator(to_test.ManualCurriculumTasksGenerator):
+    name = DEFAULT_MANUAL_CURRICULUM_TASK_GENERATOR
+
+    def __init__(self):
+        grammar = Grammar.uniform(object_primitives.objects)
+        super().__init__(grammar=grammar)
 
 
 def test_drawing_task_from_program():
@@ -80,8 +93,9 @@ def test_drawing_task_from_strokes():
     assert DEFAULT_TEST_TASK_GENERATOR in test_task.name
 
 
-def _build_default_tasks():
-    test_task_id = DEFAULT_TEST_TASK_ID
+def _build_default_tasks(
+    test_task_id=DEFAULT_TEST_TASK_ID, task_generator_name=DEFAULT_TEST_TASK_GENERATOR
+):
     test_ground_truth_program = Program.parse("(line)")
     ground_truth_render = object_primitives.render_parsed_program(
         test_ground_truth_program
@@ -92,7 +106,7 @@ def _build_default_tasks():
         request=object_primitives.tstroke,
         ground_truth_program=test_ground_truth_program,
         render_parsed_program_fn=object_primitives.render_parsed_program,
-        task_generator_name=DEFAULT_TEST_TASK_GENERATOR,
+        task_generator_name=task_generator_name,
     )
     return [test_task]
 
@@ -189,3 +203,55 @@ def test_tasks_generator_get_number_tasks_to_generate_per_condition():
         )
         assert test_num_to_generate == num_to_generate
         assert test_human_readable_num_to_generate == human_readable_num_to_generate
+
+
+def test_manual_curriculum_tasks_generator_load_tasks_from_existing_generator():
+    existing_generator = to_test.TasksGeneratorRegistry[DEFAULT_TEST_TASK_GENERATOR]
+    manual_generator = to_test.TasksGeneratorRegistry[
+        DEFAULT_MANUAL_CURRICULUM_TASK_GENERATOR
+    ]
+
+    existing_tasks = existing_generator._generate_tasks()
+
+    def check_same_tasks(tasks_array_1, tasks_array_2):
+        for task_1, task_2 in zip(tasks_array_1, tasks_array_2):
+            assert task_1 == task_2
+
+    # Test load ALL
+    all_tasks = manual_generator._load_tasks_from_existing_generator(
+        existing_generator_name=DEFAULT_TEST_TASK_GENERATOR,
+        task_ids=to_test.AbstractTasksGenerator.GENERATE_ALL,
+    )
+    check_same_tasks(existing_tasks, all_tasks)
+
+    # Test load 1
+    some_tasks = manual_generator._load_tasks_from_existing_generator(
+        existing_generator_name=DEFAULT_TEST_TASK_GENERATOR, task_ids=[0]
+    )
+    check_same_tasks([existing_tasks[0]], all_tasks)
+
+
+def test_intersect_numpy_array_renders_for_tasks():
+    default_generator_1 = DEFAULT_TEST_TASK_GENERATOR + "1"
+    default_generator_2 = DEFAULT_TEST_TASK_GENERATOR + "2"
+    test_tasks_1 = _build_default_tasks(
+        test_task_id=DEFAULT_TEST_TASK_ID, task_generator_name=default_generator_1
+    )
+    test_tasks_2 = _build_default_tasks(
+        test_task_id=DEFAULT_TEST_TASK_ID, task_generator_name=default_generator_2
+    )
+    manual_generator = to_test.TasksGeneratorRegistry[
+        DEFAULT_MANUAL_CURRICULUM_TASK_GENERATOR
+    ]
+    sets_to_intersect = [test_tasks_1, test_tasks_2]
+    intersecting_tasks = manual_generator._intersect_numpy_array_renders_for_tasks(
+        sets_to_intersect
+    )
+
+    assert len(intersecting_tasks) == len(test_tasks_1)
+    for task in intersecting_tasks:
+        assert len(task.possible_ground_truth_strokes) == len(sets_to_intersect)
+        assert len(task.possible_ground_truth_programs) == len(sets_to_intersect)
+        assert to_test.AbstractTasksGenerator.INTERSECT in task.name
+        assert default_generator_1 in task.name
+        assert default_generator_2 in task.name

@@ -26,6 +26,7 @@ from primitives.object_primitives import export_rendered_program
 
 import tasksgenerator.s12_s13_tasks_generator
 import tasksgenerator.s14_s15_tasks_generator
+import tasksgenerator.s16_s17_tasks_generator
 
 DEFAULT_EXPORT_DIR = "data"
 DEFAULT_SYNTHESIS_TASKS_SUBDIR = "synthesis"

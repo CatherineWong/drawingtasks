@@ -3,7 +3,10 @@ test_s14_s15_tasks_generator.py | Author : Catherine Wong.
 """
 import os
 import numpy as np
-from tasksgenerator.tasks_generator import TasksGeneratorRegistry
+from tasksgenerator.tasks_generator import (
+    TasksGeneratorRegistry,
+    AbstractTasksGenerator,
+)
 import tasksgenerator.s14_s15_tasks_generator as to_test
 import primitives.object_primitives as object_primitives
 
@@ -81,10 +84,37 @@ def test_s14_generate_strokes_for_stimuli(tmpdir):
 
 
 def test_s15_tasks_generator_generate_tasks(tmpdir):
-    generator = TasksGeneratorRegistry[to_test.S14TasksGenerator.name]
+    generator = TasksGeneratorRegistry[to_test.S15TasksGenerator.name]
 
     num_to_generate = 10
     tasks = generator._generate_tasks(num_to_generate)
     assert len(tasks) == num_to_generate
 
     _test_save_tasks(tasks, export_dir=tmpdir)
+
+
+def test_s14_s15_tasks_generator_generate_tasks(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.S14S15UnionTasksGenerator.name]
+
+    s14_tasks = TasksGeneratorRegistry[to_test.S14TasksGenerator.name]._generate_tasks(
+        AbstractTasksGenerator.GENERATE_ALL
+    )
+
+    s15_tasks = TasksGeneratorRegistry[to_test.S15TasksGenerator.name]._generate_tasks(
+        AbstractTasksGenerator.GENERATE_ALL
+    )
+
+    tasks = generator._generate_tasks()
+    assert len(tasks) == len(s14_tasks) + len(s15_tasks)
+
+    _test_save_tasks(tasks, export_dir=tmpdir)
+
+
+def test_s14_s15_tasks_generator_generate_tasks(tmpdir):
+    generator = TasksGeneratorRegistry[
+        to_test.S14S15CurriculumIntersectionTasksGenerator.name
+    ]
+
+    tasks = generator._generate_tasks()
+
+    _test_save_tasks(tasks, export_dir=DESKTOP)
