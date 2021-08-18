@@ -78,6 +78,24 @@ objects = [
     Primitive("circle", tstroke, _circle),
 ]
 
+# Higher order utility functions. These are composed of lines.
+def polygon(n=3):
+    # Regular polygons
+    y = 0.5 / math.tan(math.pi / n)
+    return _repeat(transform(_line, x=-0.5, y=y), n, _makeAffine(theta=2 * math.pi / n))
+
+
+def rectangle(width, height):
+    strokes = transform(_line, s=width, x=-(width * 0.5), y=height * 0.5) + transform(
+        _line, s=width, x=-(width * 0.5), y=-(height * 0.5)
+    )
+    vertical_line = transform(_line, theta=math.pi / 2)
+    strokes += transform(vertical_line, s=height, x=(width * 0.5), y=-(height * 0.5))
+    strokes += transform(vertical_line, s=height, x=-(width * 0.5), y=-(height * 0.5))
+
+    return strokes
+
+
 ### Transformations over objects. Original source from https://github.com/ellisk42/ec/blob/draw/dreamcoder/domains/draw/primitives.py
 def set_default_if_none(arg, default):
     return arg if arg is not None else default

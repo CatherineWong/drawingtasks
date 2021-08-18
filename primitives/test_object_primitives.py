@@ -11,7 +11,7 @@ SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)"]
 
 def _test_parse_render_save_programs(program_strings, tmpdir):
     export_dir = tmpdir
-    for program_id, program_string in enumerate(program_strings):
+    for program_id, program_string in enumerate(sprogram_strings):
         try:
             # Can it parse the program?
             p = Program.parse(program_string)
@@ -179,3 +179,42 @@ def test_connect():
     transformation_program = "(connect circle line)"
 
     assert_equal_program_array(transformation_program, p1 + p2)
+
+
+def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
+    for program_id, s in enumerate(stroke_arrays):
+        # Can it render the program?
+
+        canvas_size = to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT
+        rendered = to_test.render_stroke_arrays_to_canvas(
+            s,
+            stroke_width_height=4 * to_test.XYLIM,
+            canvas_width_height=canvas_size,
+        )
+        assert not no_blanks or np.sum(rendered) > 0
+        # Can it save the program?
+        saved_file = to_test.export_rendered_program(
+            rendered, program_id, export_dir=export_dir
+        )
+        print(f"Saving to id {program_id}")
+        assert os.path.exists(saved_file)
+
+
+DESKTOP = "/Users/catwong/Desktop/test"  # Internal for testing purposes.
+
+
+def test_polygon():
+    test_strokes = []
+
+    for n_sides in range(3, 7):
+        test_strokes.append(to_test.polygon(n_sides))
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+
+
+def test_rectangle():
+    test_strokes = []
+
+    for width in to_test.SCALES:
+        for height in to_test.SCALES:
+            test_strokes.append(to_test.rectangle(width=width, height=height))
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)

@@ -50,6 +50,8 @@ long_vline = T(object_primitives._line, theta=math.pi / 2, s=LONG_LINE_LENGTH, y
 # Short horizontal line
 short_hline = T(object_primitives._line, x=-0.5)
 
+BASE_CENTER = 0.0
+
 
 @TasksGeneratorRegistry.register
 class SimpleDialTasksGenerator(AbstractTasksGenerator):
@@ -75,7 +77,11 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
         dial_angle=DIAL_VERTICAL,
     ):
         # Circular dials: number of dials to draw left to right, n-nested circles, radius of inner-most circle, length of the dial hand (or NONE), and angle of the dial hand.
-        x_grid = make_x_grid(n=n_objects * 2, x_min=DIAL_X_MIN, x_shift=DIAL_SCALE_UNIT)
+        x_grid = make_x_grid(
+            n=n_objects * 2,
+            x_min=-(n_objects * DIAL_SCALE_UNIT),
+            x_shift=DIAL_SCALE_UNIT,
+        )
 
         c = object_primitives._circle
         l = short_hline
@@ -85,7 +91,8 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
         if circle_size > DIAL_NONE:
             for circle_idx in range(n_circles):
                 circle = T(c, s=circle_size + (circle_idx * DIAL_SCALE_UNIT))
-                object_strokes += T_grid_idx(circle, 0, x_grid=x_grid)
+                # object_strokes += T_grid_idx(circle, 0, x_grid=x_grid)
+                object_strokes += circle
 
         if dial_size > DIAL_NONE:
             dial_length = dial_size
@@ -95,26 +102,90 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
                 x=dial_length * 0.5 * math.cos(dial_angle),
                 y=dial_length * 0.5 * math.sin(dial_angle),
             )
-            object_strokes += T_grid_idx(dial_hand, 0, x_grid=x_grid)
+            # object_strokes += T_grid_idx(dial_hand, 0, x_grid=x_grid)
+            object_strokes += dial_hand
 
         return [object_strokes]
 
-    def _generate_strokes_for_stimuli(self, max_dials=3):
+    def _generate_bases(
+        self,
+        base_columns=3,
+        max_rows=1,
+        base_width=DIAL_LARGE,
+        base_height=DIAL_LARGE,
+        n_tiers=1,
+        base_center=BASE_CENTER,
+    ):
+        strokes = []
+        margins = 4 * DIAL_SCALE_UNIT
+        for tier_idx in range(n_tiers):
+            tier_width = base_columns * (base_width + DIAL_SCALE_UNIT) + margins
+            tier_height = max_rows * (base_height + DIAL_SCALE_UNIT) + margins
+
+            strokes += T(
+                object_primitives.rectangle(width=tier_width, height=tier_height),
+                y=0.5 * BASE_CENTER,
+            )
+        return strokes, tier_width, tier_height
+
+    def _generate_centered_grid_locations(
+        self, max_objects=3, spacing=DIAL_LARGE + DIAL_SCALE_UNIT
+    ):
+        """Generates a grid of x_locations consistent with alternatingly placing objects at spacing distances around the center."""
+        x_locations = []
+        for obj_idx in range(max_objects):
+            # Alternate placing them over the center.
+            x_offset = -obj_idx / 2 if obj_idx % 2 == 0 else int(obj_idx / 2) + 1
+            x_location = x_offset * spacing
+            x_locations.append(x_location)
+
+        return sorted(x_locations)
+
+    def _generate_strokes_for_stimuli(
+        self, max_dials=3, spacing=DIAL_LARGE + DIAL_SCALE_UNIT
+    ):
         assert max_dials <= 3
         n_grating = max_dials * 2
         x_grid = make_x_grid(n=n_grating)
 
-        # TODO
-        BASE_CENTER = -4.0
-
         strokes = []
+        x_locations = self._generate_centered_grid_locations(
+            max_objects=max_dials, spacing=spacing
+        )
 
         def place_n_dials(
-            n_dials, n_circles, circle_size, dial_size, dial_angle, n_dial_rows=1
+            n_dials,
+            n_circles,
+            circle_size,
+            dial_size,
+            dial_angle,
+            n_dial_rows=1,
+            base_width=DIAL_LARGE,
+            base_height=DIAL_LARGE,
+            base_columns=max_dials,
+            n_base_tiers=1,
+            centered=False,
         ):
             stimuli = make_grating_with_objects(
                 [[] for _ in range(n_grating)], n_vertical_grating_lines=0
             )
+
+            row_locations = self._generate_centered_grid_locations(
+                max_objects=n_dial_rows
+            )
+
+            base, base_width, base_height = self._generate_bases(
+                base_width=base_width,
+                base_height=base_height,
+                base_columns=base_columns,
+                max_rows=n_dial_rows,
+            )
+            stimuli += base
+
+            row_y_offset = BASE_CENTER
+            if n_dial_rows > 1:
+                row_y_offset += -(spacing * 0.5)
+
             for row_idx in range(n_dial_rows):
                 for dial_idx in range(total_dials):
                     nested_circles = n_circles
@@ -127,10 +198,16 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
                         dial_angle=dial_angle,
                     )[0]
 
+                    x_location = (
+                        x_locations[dial_idx]
+                        if not centered
+                        else x_locations[int(dial_idx / 2)]
+                    )
+
                     stimuli += T(
                         base_dial,
-                        y=BASE_CENTER + row_idx * (DIAL_LARGE + DIAL_SCALE_UNIT),
-                        x=dial_idx * (DIAL_LARGE + DIAL_SCALE_UNIT),
+                        y=row_y_offset + row_locations[row_idx],
+                        x=x_location,
                     )
             return stimuli
 
