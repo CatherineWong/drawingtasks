@@ -66,12 +66,7 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
         )
 
     def _generate_stacked_antenna(
-        self,
-        n_objects=4,
-        n_lines=1,
-        antenna_size=ANTENNA_SMALL,
-        base_size=ANTENNA_SMALL,
-        antenna_angle=ANTENNA_VERTICAL,
+        self, n_wires=3, antenna_size=ANTENNA_SMALL,
     ):
         x_grid = make_x_grid(n=4)
 

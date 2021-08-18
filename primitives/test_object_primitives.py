@@ -6,7 +6,7 @@ import numpy as np
 from dreamcoder.program import Program
 import primitives.object_primitives as to_test
 
-SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)"]
+SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)", "(rectangle)"]
 
 
 def _test_parse_render_save_programs(program_strings, tmpdir):

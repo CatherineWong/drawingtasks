@@ -70,12 +70,16 @@ _circle = [
         ]
     )
 ]
+_rectangle = [
+    np.array([(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5), (-0.5, -0.5)])
+]
 
 _emptystroke = []
 objects = [
     Primitive("emptystroke", tstroke, _emptystroke),
     Primitive("line", tstroke, _line),
     Primitive("circle", tstroke, _circle),
+    Primitive("rectangle", tstroke, _rectangle),
 ]
 
 # Higher order utility functions. These are composed of lines.
