@@ -103,9 +103,7 @@ class ManualCurriculumTasksGenerator(AbstractTasksGenerator):
             return intersect_generator_name
 
         rendering_intersection = defaultdict(list)
-        import pdb
 
-        pdb.set_trace()
         for task_set in task_sets:
             for task in task_set:
                 hashable_rendering = task.rendering.tostring()
