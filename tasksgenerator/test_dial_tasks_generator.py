@@ -17,10 +17,12 @@ DESKTOP = "/Users/catwong/Desktop/test"  # Internal for testing purposes.
 def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
     for program_id, s in enumerate(stroke_arrays):
         # Can it render the program?
-        rendered = object_primitives.render_stroke_arrays_to_canvas(s)
-        assert rendered.shape == (
-            object_primitives.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
-            object_primitives.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
+
+        canvas_size = object_primitives.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT
+        rendered = object_primitives.render_stroke_arrays_to_canvas(
+            s,
+            stroke_width_height=4 * object_primitives.XYLIM,
+            canvas_width_height=canvas_size,
         )
         assert not no_blanks or np.sum(rendered) > 0
         # Can it save the program?
@@ -56,3 +58,11 @@ def test_dial_tasks_generator_generate_nested_circle_dials():
                 )
 
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+
+
+def test_dial_tasks_generator_generate_strokes_for_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.SimpleDialTasksGenerator.name]
+    all_objects = generator._generate_strokes_for_stimuli()
+    _test_render_save_programs(
+        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+    )
