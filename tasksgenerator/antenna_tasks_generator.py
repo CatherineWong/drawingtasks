@@ -79,7 +79,7 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
             line = T(l, s=antenna_size)
             object_strokes += T_grid_idx(line, 0, x_grid=x_grid)
 
-            for a_idx in range(n_objects):
+            for a_idx in range(n_wires):
                 antenna_length = antenna_size
                 antenna_wires = T(w, s=antenna_length - a_idx + 1)
                 object_strokes += T_grid_idx(
@@ -90,7 +90,7 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
 
     def _generate_stacked_antenna_with_end_shapes(
         self,
-        n_objects=4,
+        n_wires=4,
         n_lines=1,
         antenna_size=ANTENNA_SMALL,
         end_shape=object_primitives._circle,
@@ -107,7 +107,7 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
             line = T(l, s=antenna_size)
             object_strokes += T_grid_idx(line, 0, x_grid=x_grid)
 
-            for a_idx in range(n_objects):
+            for a_idx in range(n_wires):
                 antenna_length = antenna_size
                 antenna_wires = T(w, s=antenna_length / (a_idx + 1) * 2)
                 object_strokes += T_grid_idx(
