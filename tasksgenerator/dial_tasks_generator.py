@@ -109,26 +109,29 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
 
         strokes = []
 
-        def place_n_dials(n_dials, n_circles, circle_size, dial_size, dial_angle):
+        def place_n_dials(
+            n_dials, n_circles, circle_size, dial_size, dial_angle, n_dial_rows=1
+        ):
             stimuli = make_grating_with_objects(
                 [[] for _ in range(n_grating)], n_vertical_grating_lines=0
             )
-            for dial_idx in range(total_dials):
-                nested_circles = n_circles
-                if type(n_circles) is not int:
-                    nested_circles = n_circles(dial_idx)
-                base_dial = self._generate_nested_circle_dials(
-                    n_circles=nested_circles,
-                    circle_size=circle_size,
-                    dial_size=dial_size,
-                    dial_angle=dial_angle,
-                )[0]
+            for row_idx in range(n_dial_rows):
+                for dial_idx in range(total_dials):
+                    nested_circles = n_circles
+                    if type(n_circles) is not int:
+                        nested_circles = n_circles(dial_idx)
+                    base_dial = self._generate_nested_circle_dials(
+                        n_circles=nested_circles,
+                        circle_size=circle_size,
+                        dial_size=dial_size,
+                        dial_angle=dial_angle,
+                    )[0]
 
-                stimuli += T(
-                    base_dial,
-                    y=BASE_CENTER,
-                    x=(dial_idx * (DIAL_LARGE + DIAL_SCALE_UNIT)),
-                )
+                    stimuli += T(
+                        base_dial,
+                        y=BASE_CENTER + row_idx * (DIAL_LARGE + DIAL_SCALE_UNIT),
+                        x=dial_idx * (DIAL_LARGE + DIAL_SCALE_UNIT),
+                    )
             return stimuli
 
         # Small and large dials with the lever sticking out.
@@ -144,7 +147,7 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
                     )
                     strokes.append(stimuli)
 
-        # Large dials with the lever sticking out.
+        # Large dials with the lever contained.
         for total_dials in range(1, max_dials + 1):
             stimuli = place_n_dials(
                 n_dials=total_dials,
@@ -154,6 +157,16 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
                 dial_angle=DIAL_LEFT,
             )
             strokes.append(stimuli)
+            if total_dials >= max_dials:
+                stimuli = place_n_dials(
+                    n_dials=total_dials,
+                    n_circles=1,
+                    dial_size=DIAL_SMALL,
+                    circle_size=DIAL_LARGE,
+                    dial_angle=DIAL_LEFT,
+                    n_dial_rows=2,
+                )
+                strokes.append(stimuli)
 
         # Nested dials of the same size -- something weird with the nesting
         for n_circles in range(2, max_dials + 1):
@@ -167,6 +180,16 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
                     dial_angle=DIAL_RIGHT,
                 )
                 strokes.append(stimuli)
+                if total_dials >= max_dials:
+                    stimuli = place_n_dials(
+                        n_dials=total_dials,
+                        n_circles=n_circles,
+                        circle_size=DIAL_SMALL,
+                        dial_size=dial_size,
+                        dial_angle=DIAL_RIGHT,
+                        n_dial_rows=2,
+                    )
+                    strokes.append(stimuli)
 
         # Nested dials without hands in reverse order.
         for total_dials in range(1, max_dials + 1):
