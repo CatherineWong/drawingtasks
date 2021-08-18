@@ -129,7 +129,7 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
         return strokes, tier_width, tier_height
 
     def _generate_centered_grid_locations(
-        self, max_objects=3, spacing=DIAL_LARGE + DIAL_SCALE_UNIT
+        self, max_objects=3, spacing=DIAL_LARGE + DIAL_SCALE_UNIT, centered=False
     ):
         """Generates a grid of x_locations consistent with alternatingly placing objects at spacing distances around the center."""
         x_locations = []
@@ -139,7 +139,10 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
             x_location = x_offset * spacing
             x_locations.append(x_location)
 
-        return sorted(x_locations)
+        if centered:
+            return x_locations
+        else:
+            return sorted(x_locations)
 
     def _generate_strokes_for_stimuli(
         self, max_dials=3, spacing=DIAL_LARGE + DIAL_SCALE_UNIT
@@ -149,9 +152,6 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
         x_grid = make_x_grid(n=n_grating)
 
         strokes = []
-        x_locations = self._generate_centered_grid_locations(
-            max_objects=max_dials, spacing=spacing
-        )
 
         def place_n_dials(
             n_dials,
@@ -166,6 +166,10 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
             n_base_tiers=1,
             centered=False,
         ):
+            x_locations = self._generate_centered_grid_locations(
+                max_objects=max_dials, spacing=spacing, centered=centered
+            )
+
             stimuli = make_grating_with_objects(
                 [[] for _ in range(n_grating)], n_vertical_grating_lines=0
             )
@@ -198,93 +202,102 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
                         dial_angle=dial_angle,
                     )[0]
 
-                    x_location = (
-                        x_locations[dial_idx]
-                        if not centered
-                        else x_locations[int(dial_idx / 2)]
-                    )
-
                     stimuli += T(
                         base_dial,
                         y=row_y_offset + row_locations[row_idx],
-                        x=x_location,
+                        x=x_locations[dial_idx],
                     )
             return stimuli
 
-        # Small and large dials with the lever sticking out.
-        for dial_size in [DIAL_SMALL, DIAL_LARGE]:
-            for dial_angle in [DIAL_VERTICAL, DIAL_RIGHT]:
-                for total_dials in range(1, max_dials + 1):
-                    stimuli = place_n_dials(
-                        n_dials=total_dials,
-                        n_circles=1,
-                        dial_size=dial_size,
-                        circle_size=dial_size,
-                        dial_angle=dial_angle,
-                    )
-                    strokes.append(stimuli)
-
-        # Large dials with the lever contained.
         for total_dials in range(1, max_dials + 1):
-            stimuli = place_n_dials(
-                n_dials=total_dials,
-                n_circles=1,
-                dial_size=DIAL_SMALL,
-                circle_size=DIAL_LARGE,
-                dial_angle=DIAL_LEFT,
-            )
-            strokes.append(stimuli)
-            if total_dials >= max_dials:
-                stimuli = place_n_dials(
-                    n_dials=total_dials,
-                    n_circles=1,
-                    dial_size=DIAL_SMALL,
-                    circle_size=DIAL_LARGE,
-                    dial_angle=DIAL_LEFT,
-                    n_dial_rows=2,
-                )
-                strokes.append(stimuli)
+            # Varying bases for the single small dials.
+            for base_columns in [1, max_dials]:
+                for base_heights in [1, max_dials]:
+                    for rows in [1, 2]:
+                        if base_heights < rows:
+                            continue
+                        base_height = base_heights * DIAL_LARGE
+                        if rows > 1:  # We already take care of sizing the rows.
+                            base_height = DIAL_LARGE
+                        if base_columns < total_dials:
+                            continue
 
-        # Nested dials of the same size -- something weird with the nesting
-        for n_circles in range(2, max_dials + 1):
-            for total_dials in range(1, max_dials + 1):
-                dial_size = DIAL_SMALL if n_circles <= 2 else DIAL_MEDIUM
-                stimuli = place_n_dials(
-                    n_dials=total_dials,
-                    n_circles=n_circles,
-                    circle_size=DIAL_SMALL,
-                    dial_size=dial_size,
-                    dial_angle=DIAL_RIGHT,
-                )
-                strokes.append(stimuli)
-                if total_dials >= max_dials:
-                    stimuli = place_n_dials(
-                        n_dials=total_dials,
-                        n_circles=n_circles,
-                        circle_size=DIAL_SMALL,
-                        dial_size=dial_size,
-                        dial_angle=DIAL_RIGHT,
-                        n_dial_rows=2,
-                    )
-                    strokes.append(stimuli)
+                        centered = total_dials % 2 != 0
+                        # Small and large dials with the lever sticking out
+                        for dial_size in [DIAL_SMALL, DIAL_LARGE]:
+                            for dial_angle in [DIAL_VERTICAL, DIAL_RIGHT]:
+                                if (
+                                    dial_size == DIAL_LARGE
+                                    and dial_angle == DIAL_VERTICAL
+                                ):
+                                    continue
+                                stimuli = place_n_dials(
+                                    n_dials=total_dials,
+                                    n_circles=1,
+                                    dial_size=dial_size,
+                                    circle_size=dial_size,
+                                    dial_angle=dial_angle,
+                                    base_columns=base_columns,
+                                    base_height=base_height,
+                                    centered=centered,
+                                    n_dial_rows=rows,
+                                )
+                                strokes.append(stimuli)
+                        # Large dials with a contained lever.
+                        stimuli = place_n_dials(
+                            n_dials=total_dials,
+                            n_circles=1,
+                            dial_size=DIAL_SMALL,
+                            circle_size=DIAL_LARGE,
+                            dial_angle=DIAL_LEFT,
+                            base_columns=base_columns,
+                            base_height=base_height,
+                            centered=centered,
+                            n_dial_rows=rows,
+                        )
+                        strokes.append(stimuli)
 
-        # Nested dials without hands in reverse order.
-        for total_dials in range(1, max_dials + 1):
-            stimuli = place_n_dials(
-                n_dials=total_dials,
-                n_circles=lambda n: n + 1,
-                dial_size=DIAL_NONE,
-                circle_size=DIAL_SMALL,
-                dial_angle=DIAL_LEFT,
-            )
-            strokes.append(stimuli)
-            stimuli = place_n_dials(
-                n_dials=total_dials,
-                n_circles=lambda n: max_dials - n,
-                dial_size=DIAL_NONE,
-                circle_size=DIAL_SMALL,
-                dial_angle=DIAL_LEFT,
-            )
-            strokes.append(stimuli)
+                        # Nested circles
+                        for n_circles in range(2, max_dials + 1):
+                            dial_size = DIAL_SMALL if n_circles <= 2 else DIAL_MEDIUM
+                            stimuli = place_n_dials(
+                                n_dials=total_dials,
+                                n_circles=n_circles,
+                                circle_size=DIAL_SMALL,
+                                dial_size=dial_size,
+                                dial_angle=DIAL_RIGHT,
+                                base_columns=base_columns,
+                                base_height=base_height,
+                                centered=centered,
+                                n_dial_rows=rows,
+                            )
+                            strokes.append(stimuli)
+
+                        # Nested dials without hands in reverse order.
+                        centered = True if total_dials == 1 else False
+                        stimuli = place_n_dials(
+                            n_dials=total_dials,
+                            n_circles=lambda n: n + 1,
+                            dial_size=DIAL_NONE,
+                            circle_size=DIAL_SMALL,
+                            dial_angle=DIAL_LEFT,
+                            base_columns=base_columns,
+                            base_height=base_height,
+                            n_dial_rows=rows,
+                            centered=centered,
+                        )
+                        strokes.append(stimuli)
+                        stimuli = place_n_dials(
+                            n_dials=total_dials,
+                            n_circles=lambda n: max_dials - n,
+                            dial_size=DIAL_NONE,
+                            circle_size=DIAL_SMALL,
+                            dial_angle=DIAL_LEFT,
+                            base_columns=base_columns,
+                            base_height=base_height,
+                            n_dial_rows=rows,
+                            centered=centered,
+                        )
+                        strokes.append(stimuli)
 
         return strokes
