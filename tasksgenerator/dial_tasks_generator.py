@@ -173,10 +173,8 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
         antenna_primitives = []
         for n_wires in range(1, max_antenna_wires):
             for end_shape in [object_primitives._circle, object_primitives._rectangle]:
-                antenna_primitives += (
-                    antenna_generator._generate_stacked_antenna_with_end_shapes(
-                        n_wires=n_wires, end_shape=end_shape
-                    )
+                antenna_primitives += antenna_generator._generate_stacked_antenna_with_end_shapes(
+                    n_wires=n_wires, end_shape=end_shape
                 )
 
         for antenna_primitive in antenna_primitives:

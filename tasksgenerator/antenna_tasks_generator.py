@@ -66,65 +66,33 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
         )
 
     def _generate_stacked_antenna(
-        self, n_wires=3, antenna_size=ANTENNA_SMALL,
+        self, n_wires=3, antenna_size=ANTENNA_SMALL, scale_wires=True, end_shape=None,
     ):
-        x_grid = make_x_grid(n=4)
-
         l = long_vline
         w = short_hline
 
         object_strokes = []
 
         if antenna_size > ANTENNA_NONE:
-            line = T(l, s=antenna_size)
-            object_strokes += T_grid_idx(line, 0, x_grid=x_grid)
+            line = T(l, s=antenna_size, x=0)
+            object_strokes += T(line, x=0)
 
             for a_idx in range(n_wires):
                 antenna_length = antenna_size
-                antenna_wires = T(w, s=antenna_length - a_idx + 1)
-                object_strokes += T_grid_idx(
-                    antenna_wires, 0, y=antenna_length * 2 - a_idx, x_grid=x_grid
-                )
+                if scale_wires == True:
+                    s = antenna_length * 2 - a_idx
+                else:
+                    s = antenna_length * 2
+
+                antenna_wires = T(w, s=s)
+                object_strokes += T(antenna_wires, y=antenna_length * 2 - a_idx)
+
+        if end_shape:
+            end_shapes_strokes = (
+                T(end_shape, x=-antenna_length - 0.5, y=antenna_length),
+                T(end_shape, x=antenna_length + 0.5, y=antenna_length),
+            )
+            object_strokes += T(end_shapes_strokes[0], y=antenna_length)
+            object_strokes += T(end_shapes_strokes[1], y=antenna_length)
 
         return [object_strokes]
-
-    def _generate_stacked_antenna_with_end_shapes(
-        self,
-        n_wires=4,
-        n_lines=1,
-        antenna_size=ANTENNA_SMALL,
-        end_shape=object_primitives._circle,
-        antenna_angle=ANTENNA_VERTICAL,
-    ):
-        x_grid = make_x_grid(n=4)
-
-        l = long_vline
-        w = short_hline
-
-        object_strokes = []
-
-        if antenna_size > ANTENNA_NONE:
-            line = T(l, s=antenna_size)
-            object_strokes += T_grid_idx(line, 0, x_grid=x_grid)
-
-            for a_idx in range(n_wires):
-                antenna_length = antenna_size
-                antenna_wires = T(w, s=antenna_length / (a_idx + 1) * 2)
-                object_strokes += T_grid_idx(
-                    antenna_wires, 0, y=antenna_length * 2 - a_idx, x_grid=x_grid
-                )
-
-                if a_idx == 0:
-                    end_shapes = (
-                        T(end_shape, x=-antenna_length - 0.5, y=antenna_length),
-                        T(end_shape, x=antenna_length + 0.5, y=antenna_length),
-                    )
-                    object_strokes += T_grid_idx(
-                        end_shapes[0], 0, y=antenna_length, x_grid=x_grid
-                    )
-                    object_strokes += T_grid_idx(
-                        end_shapes[1], 0, y=antenna_length, x_grid=x_grid
-                    )
-
-        return [object_strokes]
-
