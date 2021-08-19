@@ -12,6 +12,7 @@ from tasksgenerator.tasks_generator import (
     TaskCurriculum,
     DrawingTask,
 )
+import numpy as np
 
 # Graphics primitives.
 from tasksgenerator.s12_s13_tasks_generator import (
@@ -174,27 +175,52 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
     def _add_antenna_to_stimuli(
         self,
         stimuli,
-        n_antenna,
         base_width,
         base_height,
+        n_antenna=3,
         spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
         antenna_scale=ANTENNA_DIAL_SCALE_DOWN,
         max_antenna_wires=MAX_ANTENNA_WIRES,
+        antenna_end_shapes=[
+            None,
+            object_primitives._circle,
+            object_primitives._rectangle,
+        ],
     ):
         antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
 
         stimuli_with_antenna = []
 
         antenna_primitives = []
-        for n_wires in range(1, max_antenna_wires):
-            for end_shape in [object_primitives._circle, object_primitives._rectangle]:
-                antenna_primitives += antenna_generator._generate_stacked_antenna_with_end_shapes(
-                    n_wires=n_wires, end_shape=end_shape
-                )
+        for n_wires in [1, 2, 3]:
+            for scale_wires in [True, False]:
+                for end_shape in antenna_end_shapes:
+                    antenna_primitives += antenna_generator._generate_stacked_antenna(
+                        n_wires=n_wires,
+                        scale_wires=scale_wires,
+                        end_shape=end_shape,
+                    )
 
-        for antenna_primitive in antenna_primitives:
-            antenna_primitive = T(antenna_primitive, y=base_height)
+        x_locations = self._generate_centered_grid_locations(
+            max_objects=3, spacing=(base_width * 0.25), centered=False
+        )
+        for base_antenna_primitive in antenna_primitives:
+            antenna_primitive = T(base_antenna_primitive, y=base_height)
             stimuli_with_antenna.append(stimuli + antenna_primitive)
+
+            stimuli_with_antenna.append(
+                stimuli + T(base_antenna_primitive, y=base_height, x=x_locations[0])
+            )
+            stimuli_with_antenna.append(
+                stimuli + T(base_antenna_primitive, y=base_height, x=x_locations[-1])
+            )
+
+            if base_width > base_height:
+                stimuli_with_antenna.append(
+                    stimuli
+                    + T(base_antenna_primitive, y=base_height, x=x_locations[0])
+                    + T(base_antenna_primitive, y=base_height, x=x_locations[-1]),
+                )
 
         return stimuli_with_antenna
 
@@ -298,8 +324,8 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                             ):
                                 (
                                     stimuli,
-                                    base_width,
-                                    base_height,
+                                    total_base_width,
+                                    total_base_height,
                                 ) = self._generate_base_with_dials(
                                     n_dials=0,
                                     n_circles=1,
@@ -314,8 +340,8 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                                 antenna_stimuli = self._add_antenna_to_stimuli(
                                     stimuli,
                                     n_antenna=1,
-                                    base_width=base_width,
-                                    base_height=base_height,
+                                    base_width=total_base_width,
+                                    base_height=total_base_height,
                                     spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
                                 )
                                 strokes += antenna_stimuli
@@ -328,7 +354,11 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                                         and dial_angle == DIAL_VERTICAL
                                     ):
                                         continue
-                                    stimuli, _, _ = self._generate_base_with_dials(
+                                    (
+                                        stimuli,
+                                        total_base_width,
+                                        total_base_height,
+                                    ) = self._generate_base_with_dials(
                                         max_dials=max_dials,
                                         n_dials=total_dials,
                                         n_circles=1,
@@ -343,71 +373,90 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                                         spacing=spacing,
                                     )
                                     strokes.append(stimuli)
-                            # # Large dials with a contained lever.
-                            # stimuli, _, _ = self._generate_base_with_dials(
-                            #     max_dials=max_dials,
-                            #     n_dials=total_dials,
-                            #     n_circles=1,
-                            #     dial_size=DIAL_SMALL,
-                            #     circle_size=DIAL_LARGE,
-                            #     dial_angle=DIAL_LEFT,
-                            #     base_columns=base_columns,
-                            #     base_height=base_height,
-                            #     centered=centered,
-                            #     n_dial_rows=rows,
-                            #     spacing=spacing,
-                            # )
-                            # strokes.append(stimuli)
-                            #
-                            # # Nested circles
-                            # for n_circles in range(2, max_dials + 1):
-                            #     dial_size = (
-                            #         DIAL_SMALL if n_circles <= 2 else DIAL_MEDIUM
-                            #     )
-                            #     stimuli, _, _ = self._generate_base_with_dials(
-                            #         max_dials=max_dials,
-                            #         n_dials=total_dials,
-                            #         n_circles=n_circles,
-                            #         circle_size=DIAL_SMALL,
-                            #         dial_size=dial_size,
-                            #         dial_angle=DIAL_RIGHT,
-                            #         base_columns=base_columns,
-                            #         base_height=base_height,
-                            #         centered=centered,
-                            #         n_dial_rows=rows,
-                            #         spacing=spacing,
-                            #     )
-                            #     strokes.append(stimuli)
-                            #
-                            # # Nested dials without hands in reverse order.
-                            # centered = True if total_dials == 1 else False
-                            # stimuli, _, _ = self._generate_base_with_dials(
-                            #     max_dials=max_dials,
-                            #     n_dials=total_dials,
-                            #     n_circles=lambda n: n + 1,
-                            #     dial_size=DIAL_NONE,
-                            #     circle_size=DIAL_SMALL,
-                            #     dial_angle=DIAL_LEFT,
-                            #     base_columns=base_columns,
-                            #     base_height=base_height,
-                            #     n_dial_rows=rows,
-                            #     centered=centered,
-                            #     spacing=spacing,
-                            # )
-                            # strokes.append(stimuli)
-                            # stimuli, _, _ = self._generate_base_with_dials(
-                            #     max_dials=max_dials,
-                            #     n_dials=total_dials,
-                            #     n_circles=lambda n: max_dials - n,
-                            #     dial_size=DIAL_NONE,
-                            #     circle_size=DIAL_SMALL,
-                            #     dial_angle=DIAL_LEFT,
-                            #     base_columns=base_columns,
-                            #     base_height=base_height,
-                            #     n_dial_rows=rows,
-                            #     centered=centered,
-                            #     spacing=spacing,
-                            # )
-                            # strokes.append(stimuli)
+
+                            # Large dials with a contained lever.
+                            (
+                                stimuli,
+                                total_base_width,
+                                total_base_height,
+                            ) = self._generate_base_with_dials(
+                                max_dials=max_dials,
+                                n_dials=total_dials,
+                                n_circles=1,
+                                dial_size=DIAL_SMALL,
+                                circle_size=DIAL_LARGE,
+                                dial_angle=DIAL_LEFT,
+                                base_columns=base_columns,
+                                base_height=base_height,
+                                centered=centered,
+                                n_dial_rows=rows,
+                                spacing=spacing,
+                            )
+                            strokes.append(stimuli)
+
+                            # Nested circles
+                            for n_circles in range(2, max_dials + 1):
+                                dial_size = (
+                                    DIAL_SMALL if n_circles <= 2 else DIAL_MEDIUM
+                                )
+                                (
+                                    stimuli,
+                                    total_base_width,
+                                    total_base_height,
+                                ) = self._generate_base_with_dials(
+                                    max_dials=max_dials,
+                                    n_dials=total_dials,
+                                    n_circles=n_circles,
+                                    circle_size=DIAL_SMALL,
+                                    dial_size=dial_size,
+                                    dial_angle=DIAL_RIGHT,
+                                    base_columns=base_columns,
+                                    base_height=base_height,
+                                    centered=centered,
+                                    n_dial_rows=rows,
+                                    spacing=spacing,
+                                )
+                                strokes.append(stimuli)
+
+                                if base_heights <= 1 and tiers == 1:
+                                    antenna_stimuli = self._add_antenna_to_stimuli(
+                                        stimuli,
+                                        n_antenna=1,
+                                        base_width=total_base_width,
+                                        base_height=total_base_height,
+                                        spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
+                                    )
+                                    strokes += antenna_stimuli
+
+                            # Nested dials without hands in reverse order.
+                            centered = True if total_dials == 1 else False
+                            stimuli, _, _ = self._generate_base_with_dials(
+                                max_dials=max_dials,
+                                n_dials=total_dials,
+                                n_circles=lambda n: n + 1,
+                                dial_size=DIAL_NONE,
+                                circle_size=DIAL_SMALL,
+                                dial_angle=DIAL_LEFT,
+                                base_columns=base_columns,
+                                base_height=base_height,
+                                n_dial_rows=rows,
+                                centered=centered,
+                                spacing=spacing,
+                            )
+                            strokes.append(stimuli)
+                            stimuli, _, _ = self._generate_base_with_dials(
+                                max_dials=max_dials,
+                                n_dials=total_dials,
+                                n_circles=lambda n: max_dials - n,
+                                dial_size=DIAL_NONE,
+                                circle_size=DIAL_SMALL,
+                                dial_angle=DIAL_LEFT,
+                                base_columns=base_columns,
+                                base_height=base_height,
+                                n_dial_rows=rows,
+                                centered=centered,
+                                spacing=spacing,
+                            )
+                            strokes.append(stimuli)
 
         return strokes
