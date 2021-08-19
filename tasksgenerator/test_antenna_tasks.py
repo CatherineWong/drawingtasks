@@ -48,10 +48,18 @@ def test_antenna_tasks_generator_generate_stacked_antenna():
             to_test.ANTENNA_MEDIUM,
             to_test.ANTENNA_LARGE,
         ]:
-            for primitive in [object_primitives._circle, object_primitives._rectangle]:
-                test_strokes += generator._generate_stacked_antenna_with_end_shapes(
-                    n_wires=n_wires, antenna_size=antenna_size, end_shape=primitive
-                )
+            for scale_wires in [True, False]:
+                for primitive in [
+                    None,
+                    object_primitives._circle,
+                    object_primitives._rectangle,
+                ]:
+                    test_strokes += generator._generate_stacked_antenna(
+                        n_wires=n_wires,
+                        antenna_size=antenna_size,
+                        scale_wires=scale_wires,
+                        end_shape=primitive,
+                    )
 
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
