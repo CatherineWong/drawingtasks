@@ -44,9 +44,11 @@ ANTENNA_VERTICAL, ANTENNA_RIGHT, ANTENNA_LEFT = (
     2 * math.pi - (math.pi / 4),
 )
 
+ANTENNA_BASE_HEIGHT = LONG_LINE_LENGTH * 0.75
+
 # Long vertical line
 long_vline = T(
-    object_primitives._line, theta=math.pi / 2, s=LONG_LINE_LENGTH * 0.75, y=-2.0
+    object_primitives._line, theta=math.pi / 2, s=ANTENNA_BASE_HEIGHT, y=-2.0
 )
 # Short horizontal line
 short_hline = T(object_primitives._line, x=-0.5)
@@ -68,7 +70,11 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
         )
 
     def _generate_stacked_antenna(
-        self, n_wires=3, antenna_size=ANTENNA_SMALL, scale_wires=True, end_shape=None,
+        self,
+        n_wires=3,
+        antenna_size=ANTENNA_SMALL,
+        scale_wires=True,
+        end_shape=None,
     ):
         l = long_vline
         w = short_hline
