@@ -21,7 +21,7 @@ def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
         canvas_size = object_primitives.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT
         rendered = object_primitives.render_stroke_arrays_to_canvas(
             s,
-            stroke_width_height=4 * object_primitives.XYLIM,
+            stroke_width_height=6 * object_primitives.XYLIM,
             canvas_width_height=canvas_size,
         )
         assert not no_blanks or np.sum(rendered) > 0
