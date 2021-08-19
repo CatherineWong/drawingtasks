@@ -68,11 +68,7 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
         )
 
     def _generate_stacked_antenna(
-        self,
-        n_wires=3,
-        antenna_size=ANTENNA_SMALL,
-        scale_wires=True,
-        end_shape=None,
+        self, n_wires=3, antenna_size=ANTENNA_SMALL, scale_wires=True, end_shape=None,
     ):
         l = long_vline
         w = short_hline
@@ -85,20 +81,21 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
 
             for a_idx in range(n_wires):
                 antenna_length = antenna_size
+                antenna_height = antenna_size * 0.5
                 if scale_wires == True:
                     s = antenna_length * 2 - a_idx
                 else:
                     s = antenna_length * 2
 
                 antenna_wires = T(w, s=s)
-                object_strokes += T(antenna_wires, y=antenna_length * 2 - a_idx)
+                object_strokes += T(antenna_wires, y=antenna_height * 2 - a_idx)
 
         if end_shape:
             end_shapes_strokes = (
-                T(end_shape, x=-antenna_length - 0.5, y=antenna_length),
-                T(end_shape, x=antenna_length + 0.5, y=antenna_length),
+                T(end_shape, x=-antenna_length - 0.5, y=antenna_height),
+                T(end_shape, x=antenna_length + 0.5, y=antenna_height),
             )
-            object_strokes += T(end_shapes_strokes[0], y=antenna_length)
-            object_strokes += T(end_shapes_strokes[1], y=antenna_length)
+            object_strokes += T(end_shapes_strokes[0], y=antenna_height)
+            object_strokes += T(end_shapes_strokes[1], y=antenna_height)
 
         return [object_strokes]

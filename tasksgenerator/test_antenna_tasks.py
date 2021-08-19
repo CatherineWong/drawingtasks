@@ -42,7 +42,7 @@ def test_antenna_tasks_generator_generate_stacked_antenna():
 
     generator = TasksGeneratorRegistry[to_test.SimpleAntennaTasksGenerator.name]
 
-    for n_wires in [1, 2, 3]:
+    for n_wires in range(1, 4):
         for antenna_size in [
             to_test.ANTENNA_SMALL,
             to_test.ANTENNA_MEDIUM,
