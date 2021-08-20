@@ -51,9 +51,9 @@ def test_bases_parts_tasks_generator_generate_basic_n_segment_bases(tmpdir):
             [to_test.RECTANGLE],
             [to_test.CIRCLE],
         ]:
-            for base_widths in [[to_test.LARGE]]:
+            for base_widths in [[to_test.SMALL], [to_test.LARGE], [to_test.LARGE * 2]]:
                 for base_heights in [[to_test.MEDIUM]]:
-                    for filial_widths in [[to_test.LARGE]]:
+                    for filial_widths in [[to_test.SMALL], [to_test.LARGE]]:
                         for filial_heights in [[to_test.MEDIUM]]:
                             for base_float_locations in [
                                 [to_test.FLOAT_TOP],
