@@ -35,12 +35,11 @@ from tasksgenerator.s12_s13_tasks_generator import (
 )
 
 import tasksgenerator.antenna_tasks_generator as antenna_tasks_generator
+import tasksgenerator.dial_tasks_generator as dial_tasks_generator
 
 random.seed(RANDOM_SEED)
 
 # Size constants
-RECTANGLE_SHORT, RECTANGLE_MEDIUM, RECTANGLE_LARGE = 0.5, 1.25, 2.0
-
 DIAL_NONE, DIAL_SMALL, DIAL_MEDIUM, DIAL_LARGE = 0.0, 1.0, 1.5, 2.0
 DIAL_SCALE_UNIT = 0.5
 DIAL_VERTICAL, DIAL_RIGHT, DIAL_LEFT = (
@@ -75,85 +74,6 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
             + object_primitives.objects
             + object_primitives.transformations
         )
-
-    def _generate_perforated_shapes(
-        self,
-        outer_shapes=[object_primitives._circle],
-        outer_shapes_min_size=DIAL_LARGE,
-        inner_shapes=[object_primitives._circle],
-        inner_shapes_max_size=DIAL_SMALL,
-        nesting_scale_unit=0.25,
-        decorator_shape=object_primitives._circle,
-        n_decorators=4,
-        decorator_size=0.25,
-        decorator_displacement=0.75,
-        decorator_start_angle=np.pi / 4,
-        n_spokes=0,
-        spoke_angle=np.pi / 4,
-        spoke_length=1.0,
-    ):
-        """Generates primitive parts for nested shapes 
-        with holes in the center, and optional decorator
-        shapes in the remaining area.
-
-        outer_shapes (list): list of shapes to nest on the outer rim
-        outer_shapes_min_size (float): min size of outer rim
-        inner_shapes (list): list of shapes to nest on the inner rim
-        inner_shape_max_size (float): max size of inner rim
-        nesting_scale_unit (float): how much space to leave between nested shapes
-        decorator_shape (generator): type of shape to decorate area between inner and outer rim
-        n_decorators (int): how many decorators to place 
-        decorator_size (float): size of decorators
-        decorator_displacement (float): how close/far to place the decorators relative to the center of the shape,
-        decorator_start_angle (float): starting point to place decorators -- will be placed with radial symmetry from there
-        n_spokes (int): lines pointing out of the outer rim
-        spoke_angle (float): starting point to place spokes -- will be placed with radial symmetry from there
-        spoke_length (float): length of spokes
-        """
-
-        object_strokes = []
-
-        # Place outer shapes
-        outer_shape_size = outer_shapes_min_size
-        for i, shape in enumerate(outer_shapes):
-            object_strokes += T(shape, s=outer_shape_size)
-            outer_shape_size += nesting_scale_unit
-
-        # Place inner shapes
-        inner_shape_size = inner_shapes_max_size
-        for i, shape in enumerate(inner_shapes):
-            object_strokes += T(shape, s=inner_shape_size)
-            inner_shape_size -= nesting_scale_unit
-
-        # Place decorators and spokes along evenly divided segments of a circle
-        decorator_angle = decorator_start_angle
-        decorator_surface = outer_shapes_min_size - inner_shapes_max_size
-        for i in range(n_decorators):
-            object_strokes += T(
-                decorator_shape,
-                s=decorator_size,
-                x=np.cos(decorator_angle) * decorator_displacement,
-                y=np.sin(decorator_angle) * decorator_displacement,
-            )
-
-            decorator_angle = (decorator_angle + 2 * np.pi / n_decorators) % (2 * np.pi)
-
-        # Place spokes
-        l = short_hline
-        if spoke_length > DIAL_NONE:
-            for i in range(n_spokes):
-                spoke = T(l, theta=spoke_angle, s=spoke_length)
-                spoke = T(
-                    spoke,
-                    x=spoke_length * 0.5 * math.cos(spoke_angle),
-                    y=spoke_length * 0.5 * math.sin(spoke_angle),
-                )
-
-                spoke_angle = (spoke_angle + 2 * np.pi / n_spokes) % (2 * np.pi)
-
-                object_strokes += spoke
-
-        return [object_strokes]
 
     def _generate_nested_circle_dials(
         self,

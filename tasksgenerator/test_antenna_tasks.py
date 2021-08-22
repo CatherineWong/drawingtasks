@@ -6,6 +6,7 @@ from tasksgenerator.tasks_generator import (
 )
 import tasksgenerator.antenna_tasks_generator as to_test
 import primitives.object_primitives as object_primitives
+import tasksgenerator.dial_tasks_generator as to_test_2
 
 DESKTOP = "/Users/yoni/Desktop/test"  # Internal for testing purposes.
 
@@ -37,37 +38,53 @@ def _test_save_tasks(tasks, export_dir):
         assert os.path.exists(saved_file)
 
 
-def test_antenna_tasks_generator_generate_stacked_antenna():
+def test_perforated_shapes():
     test_strokes = []
+    generator = TasksGeneratorRegistry[to_test_2.SimpleDialTasksGenerator.name]
 
-    generator = TasksGeneratorRegistry[to_test.SimpleAntennaTasksGenerator.name]
+    c = object_primitives._circle
+    r = object_primitives._rectangle
+    p = object_primitives.polygon(n=6)
 
-    for n_wires in range(1, 4):
-        for antenna_size in [
-            to_test.ANTENNA_SMALL,
-            to_test.ANTENNA_MEDIUM,
-            to_test.ANTENNA_LARGE,
-        ]:
-            for scale_wires in [True, False]:
-                for primitive in [
-                    None,
-                    object_primitives._circle,
-                    object_primitives._rectangle,
-                ]:
-                    test_strokes += generator._generate_stacked_antenna(
-                        n_wires=n_wires,
-                        antenna_size=antenna_size,
-                        scale_wires=scale_wires,
-                        end_shape=primitive,
+    for outer_rim in ([c], [r], [p], [c, c], [r, r], [p, p]):
+        for inner_rim in ([c], [r], [p], [c, c], [r, r], [p, p]):
+            for n_decorators in [2, 4, 8]:
+                for n_spokes in [0, 1, 4, 8]:
+                    strokes = generator._generate_perforated_shapes(
+                        outer_shapes=outer_rim,
+                        inner_shapes=inner_rim,
+                        n_spokes=n_spokes,
+                        n_decorators=n_decorators,
                     )
+
+                    test_strokes += strokes
 
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
 
-def test_antenna_tasks_generator_generate_strokes_for_stimuli(tmpdir):
-    generator = TasksGeneratorRegistry[to_test.SimpleAntennaTasksGenerator.name]
-    all_objects = generator._generate_strokes_for_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+# def test_antenna_tasks_generator_generate_stacked_antenna():
+#     test_strokes = []
+
+#     generator = TasksGeneratorRegistry[to_test.SimpleAntennaTasksGenerator.name]
+
+#     for n_wires in range(1, 4):
+#         for antenna_size in [
+#             to_test.ANTENNA_SMALL,
+#             to_test.ANTENNA_MEDIUM,
+#             to_test.ANTENNA_LARGE,
+#         ]:
+#             for scale_wires in [True, False]:
+#                 for primitive in [
+#                     None,
+#                     object_primitives._circle,
+#                     object_primitives._rectangle,
+#                 ]:
+#                     test_strokes += generator._generate_stacked_antenna(
+#                         n_wires=n_wires,
+#                         antenna_size=antenna_size,
+#                         scale_wires=scale_wires,
+#                         end_shape=primitive,
+#                     )
+
+#     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
