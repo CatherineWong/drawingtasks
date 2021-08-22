@@ -62,7 +62,7 @@ MAX_ANTENNA_WIRES = 4
 
 
 @TasksGeneratorRegistry.register
-class SimpleTasksGenerator(AbstractTasksGenerator):
+class SimpleDialTasksGenerator(AbstractTasksGenerator):
     """Generates gadget tasks containing a base and a set of 'dials' placed at positions along the base."""
 
     name = "simple_dial"

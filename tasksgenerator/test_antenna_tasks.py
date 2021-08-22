@@ -47,7 +47,7 @@ def test_perforated_shapes():
     p = object_primitives.polygon(n=6)
 
     for outer_rim in ([c], [r], [p], [c, c], [r, r], [p, p]):
-        for inner_rim in ([c], [r], [p], [c, c], [r, r], [p, p]):
+        for inner_rim in ([c], [r], [p], [c, c], [r, r]):
             for n_decorators in [2, 4, 8]:
                 for n_spokes in [0, 1, 4, 8]:
                     strokes = generator._generate_perforated_shapes(
