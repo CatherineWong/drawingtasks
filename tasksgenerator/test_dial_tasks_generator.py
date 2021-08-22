@@ -66,9 +66,9 @@ def _test_save_tasks(tasks, export_dir):
 #     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
 
-def test_complex_dial_tasks_generator_generate_strokes_for_stimuli(tmpdir):
-    generator = TasksGeneratorRegistry[to_test.ComplexDialTasksGenerator.name]
-    all_objects = generator._generate_strokes_for_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+# def test_complex_dial_tasks_generator_generate_strokes_for_stimuli(tmpdir):
+#     generator = TasksGeneratorRegistry[to_test.ComplexDialTasksGenerator.name]
+#     all_objects = generator._generate_strokes_for_stimuli()
+#     _test_render_save_programs(
+#         stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+#     )
