@@ -145,16 +145,50 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
 
         return [all_strokes], min_x, max_x, min_y, max_y
 
-    def _generate_two_tiered_bases():
+    def _generate_object_on_location(
+        self,
+        object,
+        object_center,
+        object_height,
+        object_width,
+        location,
+        float_location,
+        x_margin,
+        y_margin,
+    ):
+        """
+        Utility function for transforming an object to place it at a location.
+        This is specified via:
+            object: the strokes to be placed.
+            object_center, object_height, object_width: (x,y tuple); float, float.
+            location: (x, y) tuple for placing the object.
+            float_location [TOP, CENTER, BOTTOM]: where to float the object wrt the location.
+            x_margin, y_margin: float, float for adding an additional margin wrt the location.
+        Returns:
+            strokes, min_x, max_x, min_y, max_y of the strokes. If a margin is specified this will return the coordinates of the object, not including the margin.
+        """
         pass
 
-    def _generate_nested_part_rows_on_base():
+    def _generate_n_objects_on_grid_x_y_limits(
+        self,
+        object,
+        min_x,
+        max_x,
+        min_y,
+        max_y,
+        n_rows,
+        n_columns,
+        float_location,
+        grid_indices,
+    ):
         """
-        Given a base and a nested part, generates a repetitive set of nested parts on it in common locations.
-        (eg. for handles or radio dials.)
+        Utility function for placing n objects on the indices of a grid.
+        This is specified via:
+            object: the strokes to be placed.
+            object_center, object_height, object_width: (x,y tuple); float, float.
+            min_x, max_x, min_y, max_y: the x and y limits of the desired grid.
+            n_rows, n_columns: (int, int). number of rows and columns for the grid.
+            float_location: [TOP, CENTER, BOTTOM]: where to float the object wrt the coordinates of the grid.
+            grid_indices: a list of the numbered indices on the grid to place the object, ordered from 0 ... n_rows x n_columns moving L-> R and top to bottom.
         """
-        pass
-
-    def _generate_nested_parts_below_base():
-        """Generalized wheels and legs?"""
         pass
