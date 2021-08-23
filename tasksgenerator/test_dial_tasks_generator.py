@@ -41,34 +41,34 @@ def _test_save_tasks(tasks, export_dir):
         assert os.path.exists(saved_file)
 
 
-# def test_dial_tasks_generator_generate_nested_circle_dials(tmpdir):
-#     test_strokes = []
-#     c = object_primitives._circle
-#     r = object_primitives._rectangle
-#
-#     generator = TasksGeneratorRegistry[to_test.SimpleDialTasksGenerator.name]
-#
-#     for n_circles in [1, 2, 3]:
-#         for dial_size in [to_test.DIAL_SMALL, to_test.DIAL_MEDIUM, to_test.DIAL_LARGE]:
-#             for dial_angle in [
-#                 to_test.DIAL_VERTICAL,
-#                 to_test.DIAL_RIGHT,
-#                 to_test.DIAL_LEFT,
-#             ]:
-#                 for shape_specification in [None, [c, r], [c, r, r], [r, r, r]]:
-#                     test_strokes += generator._generate_nested_circle_dials(
-#                         n_circles=n_circles,
-#                         dial_size=dial_size,
-#                         dial_angle=dial_angle,
-#                         shape_specification=shape_specification,
-#                     )
-#
-#     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+def test_dial_tasks_generator_generate_nested_circle_dials(tmpdir):
+    test_strokes = []
+    c = object_primitives._circle
+    r = object_primitives._rectangle
+
+    generator = TasksGeneratorRegistry[to_test.SimpleDialTasksGenerator.name]
+
+    for n_circles in [1, 2, 3]:
+        for dial_size in [to_test.DIAL_SMALL, to_test.DIAL_MEDIUM, to_test.DIAL_LARGE]:
+            for dial_angle in [
+                to_test.DIAL_VERTICAL,
+                to_test.DIAL_RIGHT,
+                to_test.DIAL_LEFT,
+            ]:
+                for shape_specification in [None, [c, r], [c, r, r], [r, r, r]]:
+                    test_strokes += generator._generate_nested_circle_dials(
+                        n_circles=n_circles,
+                        dial_size=dial_size,
+                        dial_angle=dial_angle,
+                        shape_specification=shape_specification,
+                    )
+
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
 
-# def test_complex_dial_tasks_generator_generate_strokes_for_stimuli(tmpdir):
-#     generator = TasksGeneratorRegistry[to_test.ComplexDialTasksGenerator.name]
-#     all_objects = generator._generate_strokes_for_stimuli()
-#     _test_render_save_programs(
-#         stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-#     )
+def test_complex_dial_tasks_generator_generate_strokes_for_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.ComplexDialTasksGenerator.name]
+    all_objects = generator._generate_strokes_for_stimuli()
+    _test_render_save_programs(
+        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+    )

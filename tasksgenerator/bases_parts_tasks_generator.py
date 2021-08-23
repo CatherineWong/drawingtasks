@@ -145,6 +145,25 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
 
         return [all_strokes], min_x, max_x, min_y, max_y
 
+    def _calculate_float_offset(
+        self, object_center, object_height, object_width, float_location
+    ):
+        """Utility function for calculating float offsets. Currently supports vertical floating: CENTER, TOP, BOTTOM"""
+        object_center_x, object_center_y = object_center
+        if float_location == FLOAT_CENTER:
+            float_offset = -object_center_y
+            object_max_y, object_min_y = object_height * 0.5, -object_height * 0.5
+        elif float_location == FLOAT_TOP:
+            float_offset = -object_center_y + (object_height * 0.5)
+            object_max_y, object_min_y = object_height, 0
+        elif float_location == FLOAT_BOTTOM:
+            float_offset = -object_center_y + (object_height * -0.5)
+            object_max_y, object_min_y = 0, -object_height
+        else:
+            assert False
+
+        return float_offset, object_max_y, object_min_y
+
     def _generate_object_on_location(
         self,
         object,
@@ -172,6 +191,9 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
     def _generate_n_objects_on_grid_x_y_limits(
         self,
         object,
+        object_center,
+        object_height,
+        object_width,
         min_x,
         max_x,
         min_y,
@@ -182,13 +204,48 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
         grid_indices,
     ):
         """
-        Utility function for placing n objects on the indices of a grid.
+        Utility function for placing n objects on the indices of a grid. Currently supports y_floating and places objects so that they are x_centered.
         This is specified via:
             object: the strokes to be placed.
             object_center, object_height, object_width: (x,y tuple); float, float.
             min_x, max_x, min_y, max_y: the x and y limits of the desired grid.
             n_rows, n_columns: (int, int). number of rows and columns for the grid.
             float_location: [TOP, CENTER, BOTTOM]: where to float the object wrt the coordinates of the grid.
-            grid_indices: a list of the numbered indices on the grid to place the object, ordered from 0 ... n_rows x n_columns moving L-> R and top to bottom.
+            grid_indices: array of the numbered indices on the grid to place the object, ordered from 0 ... n_rows x n_columns moving L-> R and top to bottom.
+        Returns:
+            strokes, min_x, max_x, min_y, max_y of the strokes.
         """
-        pass
+        all_strokes = []
+        min_x, max_x, min_y, max_y = min_x, max_x, min_y, max_y
+
+        # Generate the base grid locations
+        x_locations = np.linspace(start=min_x, stop=max_x, num=n_columns)
+        y_locations = np.linspace(start=min_y, stop=max_y, num=n_rows)
+
+        # Calculate the float offset.
+        y_float_offset, object_max_y, object_min_y = self._calculate_float_offset(
+            object_center, object_height, object_width, float_location
+        )
+
+        for x_idx, x_value in enumerate(x_locations):
+            for y_idx, y_value in enumerate(y_locations):
+                grid_idx = int((y_idx * len(y_locations)) + x_idx)
+                if not grid_idx in grid_indices:
+                    continue
+                y_value += y_float_offset
+
+                grid_primitive = T(object, x=x_value, y=y_value)
+
+                object_max_y += y_value
+                object_min_y += y_value
+                object_min_x = x_value - (0.5 * object_width)
+                object_max_x = x_value + (0.5 * object_width)
+
+                all_strokes += grid_primitive
+
+                min_x = min(object_min_x, min_x)
+                max_x = max(object_max_x, max_x)
+                min_y = min(object_min_y, min_y)
+                max_y = max(object_max_y, max_y)
+
+        return [all_strokes], min_x, max_x, min_y, max_y
