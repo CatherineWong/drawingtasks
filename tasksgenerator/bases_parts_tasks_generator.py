@@ -176,7 +176,7 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
         y_margin,
     ):
         """
-        Utility function for transforming an object to place it at a location.
+        Utility function for transforming an object to place it at a location. Currently supports y_floating and places objects so that they are x_centered.
         This is specified via:
             object: the strokes to be placed.
             object_center, object_height, object_width: (x,y tuple); float, float.
@@ -186,7 +186,25 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
         Returns:
             strokes, min_x, max_x, min_y, max_y of the strokes. If a margin is specified this will return the coordinates of the object, not including the margin.
         """
-        pass
+        all_strokes = []
+
+        location_x, location_y = location
+        # Calculate the float offset.
+        y_float_offset, object_max_y, object_min_y = self._calculate_float_offset(
+            object_center, object_height, object_width, float_location
+        )
+
+        x_value = location_x + x_margin
+        y_value = location_y + y_float_offset + y_margin
+        placed_primitive = T(object, x=x_value, y=y_value)
+
+        all_strokes += placed_primitive
+
+        min_y = object_min_y + location_y + y_margin
+        max_y = object_max_y + location_y + y_margin
+        min_x, max_x = x_value - (object_width * 0.5), x_value + (object_width * 0.5)
+
+        return [all_strokes], min_x, max_x, min_y, max_y
 
     def _generate_n_objects_on_grid_x_y_limits(
         self,
@@ -237,7 +255,7 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
                 grid_primitive = T(object, x=x_value, y=y_value)
 
                 object_max_y += y_value
-                object_min_y += y_value
+                object_min_y += min_y_value
                 object_min_x = x_value - (0.5 * object_width)
                 object_max_x = x_value + (0.5 * object_width)
 

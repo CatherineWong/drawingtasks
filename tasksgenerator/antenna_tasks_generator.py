@@ -70,7 +70,11 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
         )
 
     def _generate_stacked_antenna(
-        self, n_wires=3, antenna_size=ANTENNA_SMALL, scale_wires=True, end_shape=None,
+        self,
+        n_wires=3,
+        antenna_size=ANTENNA_SMALL,
+        scale_wires=True,
+        end_shape=None,
     ):
         l = long_vline
         w = short_hline
