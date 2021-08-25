@@ -92,7 +92,7 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
         spoke_angle=np.pi / 4,
         spoke_length=1.0,
     ):
-        """Generates primitive parts for nested shapes 
+        """Generates primitive parts for nested shapes
         with holes in the center, and optional decorator
         shapes in the remaining area.
 
@@ -102,7 +102,7 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
         inner_shape_max_size (float): max size of inner rim
         nesting_scale_unit (float): how much space to leave between nested shapes
         decorator_shape (generator): type of shape to decorate area between inner and outer rim
-        n_decorators (int): how many decorators to place 
+        n_decorators (int): how many decorators to place
         decorator_size (float): size of decorators
         decorator_displacement (float): how close/far to place the decorators relative to the center of the shape,
         decorator_start_angle (float): starting point to place decorators -- will be placed with radial symmetry from there
@@ -153,7 +153,8 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
 
                 object_strokes += spoke
 
-        return [object_strokes]
+        height = outer_shape_size
+        return [object_strokes], height
 
     def _generate_nested_circle_dials(
         self,
@@ -323,13 +324,17 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
             for scale_wires in [True, False]:
                 for end_shape in antenna_end_shapes:
                     antenna_primitives += antenna_generator._generate_stacked_antenna(
-                        n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape,
+                        n_wires=n_wires,
+                        scale_wires=scale_wires,
+                        end_shape=end_shape,
                     )
 
         sideways_antenna_primitives = []
         for n_wires in [2, 3]:
             sideways_antenna_primitives += antenna_generator._generate_stacked_antenna(
-                n_wires=n_wires, scale_wires=False, end_shape=None,
+                n_wires=n_wires,
+                scale_wires=False,
+                end_shape=None,
             )
 
         for base_antenna_primitive in antenna_primitives:

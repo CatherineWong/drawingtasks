@@ -42,6 +42,8 @@ FLOAT_TOP, FLOAT_CENTER, FLOAT_BOTTOM = "FLOAT_TOP", "FLOAT_CENTER", "FLOAT_BOTT
 
 NONE, SMALL, MEDIUM, LARGE = 0.0, 1.0, 1.5, 2.0
 SCALE_UNIT = 0.5
+QUARTER_SCALE = 0.25
+THREE_QUARTER_SCALE = 0.75
 VERTICAL, RIGHT, LEFT = (
     math.pi / 2,
     math.pi / 4,
@@ -255,7 +257,7 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
                 grid_primitive = T(object, x=x_value, y=y_value)
 
                 object_max_y += y_value
-                object_min_y += min_y_value
+                object_min_y += y_value
                 object_min_x = x_value - (0.5 * object_width)
                 object_max_x = x_value + (0.5 * object_width)
 
