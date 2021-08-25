@@ -59,14 +59,15 @@ def test_wheeled_vehicles_tasks_generator_generate_train_stimuli(tmpdir):
     )
 
 
-# def test_wheeled_vehicles_tasks_generator_generate_truck_stimuli(tmpdir):
-#     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
-#     all_objects = generator._generate_truck_stimuli()
-#     _test_render_save_programs(
-#         stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-#     )
+def test_wheeled_vehicles_tasks_generator_generate_truck_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
+    all_objects = generator._generate_truck_stimuli()
+    _test_render_save_programs(
+        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+    )
 
 
+#
 # def test_wheeled_vehicles_tasks_generator_generate_buggy_stimuli(tmpdir):
 #     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
 #     all_objects = generator._generate_buggy_stimuli()
