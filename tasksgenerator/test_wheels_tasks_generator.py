@@ -31,7 +31,7 @@ def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
         canvas_size = object_primitives.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT
         rendered = object_primitives.render_stroke_arrays_to_canvas(
             s,
-            stroke_width_height=6 * object_primitives.XYLIM,
+            stroke_width_height=8 * object_primitives.XYLIM,
             canvas_width_height=canvas_size,
         )
         assert not no_blanks or np.sum(rendered) > 0
@@ -51,6 +51,14 @@ def _test_save_tasks(tasks, export_dir):
         assert os.path.exists(saved_file)
 
 
+def test_wheeled_vehicles_tasks_generator_generate_train_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
+    all_objects = generator._generate_train_stimuli()
+    _test_render_save_programs(
+        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+    )
+
+
 # def test_wheeled_vehicles_tasks_generator_generate_truck_stimuli(tmpdir):
 #     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
 #     all_objects = generator._generate_truck_stimuli()
@@ -59,12 +67,12 @@ def _test_save_tasks(tasks, export_dir):
 #     )
 
 
-def test_wheeled_vehicles_tasks_generator_generate_buggy_stimuli(tmpdir):
-    generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
-    all_objects = generator._generate_buggy_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+# def test_wheeled_vehicles_tasks_generator_generate_buggy_stimuli(tmpdir):
+#     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
+#     all_objects = generator._generate_buggy_stimuli()
+#     _test_render_save_programs(
+#         stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+#     )
 
 
 # def test_wheeled_vehicles_tasks_generator_generate_row_of_wheels():
