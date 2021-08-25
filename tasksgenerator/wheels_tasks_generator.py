@@ -87,6 +87,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         body_floats,
         body_repetitions,
         car_margins,
+        show_doors=False,
     ):
         """Generates 'trains' comprised of a caboose at each end and one or more repeated body segments.
         reflect_caboose_for_head: we reverse the order of the head.
@@ -115,7 +116,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         ] * body_repetitions
         head_margin = [0] * len(caboose_primitives)
 
-        return self._generate_basic_n_segment_bases(
+        (strokes, min_x, max_x, min_y, max_y,) = self._generate_basic_n_segment_bases(
             primitives=caboose_primitives
             + body_primitives * body_repetitions
             + head_primitives,
@@ -126,6 +127,27 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
             + head_floats,
             right_margins=caboose_margin + body_margin + head_margin,
         )
+
+        if show_doors:
+            window = T(object_primitives._rectangle, s=(MEDIUM))
+            n_windows = 2 * body_repetitions
+            (new_strokes, _, _, _, _,) = self._generate_n_objects_on_grid_x_y_limits(
+                object=window,
+                object_center=(0, 0),
+                object_height=1,
+                object_width=1,
+                min_x=-body_widths[0] * body_repetitions * 0.5 + MEDIUM,
+                max_x=body_widths[0] * body_repetitions * 0.5 - MEDIUM,
+                min_y=body_heights[0] * 0.5,
+                max_y=body_heights[0] * 0.5,
+                n_rows=1,
+                n_columns=n_windows,
+                float_location=FLOAT_CENTER,
+                grid_indices=range(n_windows),
+            )
+            strokes = [strokes[0] + new_strokes[0]]
+
+        return strokes, min_x, max_x, min_y, max_y
 
     def _generate_buggy_bases(
         self,
@@ -234,21 +256,22 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         max_x,
         paired_wheels,
         n_wheels,
+        wheel_scale=1.0,
         float_location=FLOAT_BOTTOM,
     ):
         """Generates a row of wheels floated below the central axis."""
         dialgenerator = SimpleDialTasksGenerator()
         base_wheel, wheel_height = dialgenerator._generate_perforated_shapes(
             outer_shapes=outer_shapes,
-            outer_shapes_min_size=outer_shapes_min_size,
+            outer_shapes_min_size=outer_shapes_min_size * wheel_scale,
             inner_shapes=inner_shapes,
-            inner_shapes_max_size=inner_shapes_max_size,
+            inner_shapes_max_size=inner_shapes_max_size * wheel_scale,
             nesting_scale_unit=0.5,
             decorator_shape=object_primitives._circle,
             n_decorators=n_decorators,
             n_spokes=n_spokes,
             spoke_angle=np.pi,
-            spoke_length=outer_shapes_min_size * 0.5,
+            spoke_length=outer_shapes_min_size * 0.5 * wheel_scale,
         )
 
         grid_indices = (
@@ -273,7 +296,13 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         )
 
     def _generate_wheels_iterator(
-        self, min_x, max_x, n_wheels, paired_wheels=False, float_location=FLOAT_BOTTOM
+        self,
+        min_x,
+        max_x,
+        n_wheels,
+        paired_wheels=False,
+        float_location=FLOAT_BOTTOM,
+        wheel_scale=1.0,
     ):
         c = object_primitives._circle
         r = object_primitives._rectangle
@@ -294,6 +323,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                                 paired_wheels=paired_wheels,
                                 n_wheels=n_wheels,
                                 float_location=float_location,
+                                wheel_scale=wheel_scale,
                             )
 
     def _generate_truck_stimuli(self):
@@ -344,7 +374,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
     def _generate_train_stimuli(self):
         all_train_stimuli = []
 
-        body_height = SMALL * 4
+        body_height = SMALL * 5
         caboose_width = MEDIUM
         caboose_height = body_height * THREE_QUARTER_SCALE
         caboose_primitives, caboose_heights, caboose_widths, caboose_floats = (
@@ -364,111 +394,121 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                 body_repetitions = [2] if body_widths > small_width else [2, 3]
                 for body_repetitions in body_repetitions:
                     for car_margins in [QUARTER_SCALE]:
-                        (
-                            base_strokes,
-                            base_min_x,
-                            base_max_x,
-                            base_min_y,
-                            base_max_y,
-                        ) = self._generate_train_bases(
-                            caboose_primitives=caboose_primitives,
-                            caboose_heights=caboose_heights,
-                            caboose_widths=caboose_widths,
-                            caboose_floats=caboose_floats,
-                            reflect_caboose_for_head=True,
-                            body_primitives=[RECTANGLE],
-                            body_heights=[body_heights],
-                            body_widths=[body_widths],
-                            body_floats=[FLOAT_TOP],
-                            body_repetitions=body_repetitions,
-                            car_margins=car_margins,
-                        )
-                        n_wheels_types = [3] if body_repetitions == 2 else [6]
-                        for n_wheels in n_wheels_types:
-                            wheels_iterator = self._generate_wheels_iterator(
-                                base_min_x,
-                                base_max_x,
-                                n_wheels=n_wheels,
-                            )
-                            for (
-                                wheels_strokes,
-                                wheels_min_x,
-                                wheels_max_x,
-                                wheels_min_y,
-                                wheels_max_y,
-                            ) in wheels_iterator:
-                                train_strokes = [base_strokes[0] + wheels_strokes[0]]
-                                all_train_stimuli += train_strokes
-        return all_train_stimuli
-
-    def _generate_buggy_stimuli(self):
-        antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
-        n_wires = 3
-        antenna_object = antenna_generator._generate_stacked_antenna(
-            n_wires=n_wires,
-            scale_wires=True,
-            end_shape=None,
-        )[0]
-        antenna_height = antenna_tasks_generator.ANTENNA_BASE_HEIGHT + (
-            antenna_tasks_generator.ANTENNA_SMALL * (n_wires - 1)
-        )
-
-        buggy_stimuli = []
-        for first_tier_height, second_tier_height in [
-            (MEDIUM * 3, SMALL),
-        ]:
-            small_width = LARGE * 7
-            for first_tier_width in [LARGE * n for n in [5, 8]]:
-                for nose_tail_heights, nose_tail_widths in [
-                    (0, 0),
-                    (
-                        first_tier_height * THREE_QUARTER_SCALE,
-                        LARGE,
-                    ),
-                ]:
-                    for antenna in [antenna_object, None]:
-                        n_wheel_sets = (
-                            [2] if first_tier_width <= small_width else [2, 6]
-                        )
-                        for n_wheels in n_wheel_sets:
+                        for show_doors in [True, False]:
                             (
                                 base_strokes,
                                 base_min_x,
                                 base_max_x,
                                 base_min_y,
                                 base_max_y,
-                            ) = self._generate_buggy_bases(
-                                tier_heights=[
-                                    first_tier_height,
-                                    second_tier_height,
-                                ],
-                                tier_widths=[
-                                    first_tier_width,
-                                    first_tier_width * THREE_QUARTER_SCALE,
-                                ],
-                                nose_tail_heights=[nose_tail_heights],
-                                nose_tail_widths=[nose_tail_widths],
-                                antenna=antenna,
-                                antenna_height=antenna_height,
-                                n_windows=0,
+                            ) = self._generate_train_bases(
+                                caboose_primitives=caboose_primitives,
+                                caboose_heights=caboose_heights,
+                                caboose_widths=caboose_widths,
+                                caboose_floats=caboose_floats,
+                                reflect_caboose_for_head=True,
+                                body_primitives=[RECTANGLE],
+                                body_heights=[body_heights],
+                                body_widths=[body_widths],
+                                body_floats=[FLOAT_TOP],
+                                body_repetitions=body_repetitions,
+                                car_margins=car_margins,
+                                show_doors=show_doors,
                             )
-                            wheels_iterator = self._generate_wheels_iterator(
-                                base_min_x + nose_tail_widths,
-                                base_max_x - nose_tail_widths,
-                                n_wheels=n_wheels,
-                                float_location=FLOAT_CENTER,
-                            )
-                            for (
-                                wheels_strokes,
-                                wheels_min_x,
-                                wheels_max_x,
-                                wheels_min_y,
-                                wheels_max_y,
-                            ) in wheels_iterator:
-                                buggy_strokes = [base_strokes[0] + wheels_strokes[0]]
-                                buggy_stimuli += buggy_strokes
+                            n_wheels_types = [body_repetitions * 2]
+                            for n_wheels in n_wheels_types:
+                                wheels_iterator = self._generate_wheels_iterator(
+                                    base_min_x,
+                                    base_max_x,
+                                    n_wheels=n_wheels,
+                                    float_location=FLOAT_CENTER,
+                                    wheel_scale=THREE_QUARTER_SCALE,
+                                )
+                                for (
+                                    wheels_strokes,
+                                    wheels_min_x,
+                                    wheels_max_x,
+                                    wheels_min_y,
+                                    wheels_max_y,
+                                ) in wheels_iterator:
+                                    train_strokes = [
+                                        base_strokes[0] + wheels_strokes[0]
+                                    ]
+                                    all_train_stimuli += train_strokes
+        return all_train_stimuli
 
-            return buggy_stimuli
+    def _generate_buggy_stimuli(self):
+
+        buggy_stimuli = []
+        for scale_wires in [True, False]:
+            antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
+            n_wires = 3
+            antenna_object = antenna_generator._generate_stacked_antenna(
+                n_wires=n_wires,
+                scale_wires=scale_wires,
+                end_shape=None,
+            )[0]
+            antenna_height = antenna_tasks_generator.ANTENNA_BASE_HEIGHT + (
+                antenna_tasks_generator.ANTENNA_SMALL * (n_wires - 1)
+            )
+
+            for first_tier_height, second_tier_height in [
+                (MEDIUM * 3, SMALL),
+            ]:
+                small_width = LARGE * 7
+                for first_tier_width in [LARGE * n for n in [5, 8]]:
+                    for nose_tail_heights, nose_tail_widths in [
+                        (0, 0),
+                        (
+                            first_tier_height * THREE_QUARTER_SCALE,
+                            LARGE,
+                        ),
+                    ]:
+                        for antenna in [antenna_object, None]:
+                            n_wheel_sets = (
+                                [2] if first_tier_width <= small_width else [2, 6]
+                            )
+                            for n_wheels in n_wheel_sets:
+                                (
+                                    base_strokes,
+                                    base_min_x,
+                                    base_max_x,
+                                    base_min_y,
+                                    base_max_y,
+                                ) = self._generate_buggy_bases(
+                                    tier_heights=[
+                                        first_tier_height,
+                                        second_tier_height,
+                                    ],
+                                    tier_widths=[
+                                        first_tier_width,
+                                        first_tier_width * THREE_QUARTER_SCALE,
+                                    ],
+                                    nose_tail_heights=[nose_tail_heights],
+                                    nose_tail_widths=[nose_tail_widths],
+                                    antenna=antenna,
+                                    antenna_height=antenna_height,
+                                    n_windows=0,
+                                )
+                                wheels_iterator = self._generate_wheels_iterator(
+                                    base_min_x + nose_tail_widths,
+                                    base_max_x - nose_tail_widths,
+                                    n_wheels=n_wheels,
+                                    float_location=FLOAT_CENTER,
+                                )
+                                for (
+                                    wheels_strokes,
+                                    wheels_min_x,
+                                    wheels_max_x,
+                                    wheels_min_y,
+                                    wheels_max_y,
+                                ) in wheels_iterator:
+                                    buggy_strokes = [
+                                        base_strokes[0] + wheels_strokes[0]
+                                    ]
+                                    buggy_stimuli += buggy_strokes
+
+        return buggy_stimuli
 
     def _generate_strokes_for_stimuli(
         self,

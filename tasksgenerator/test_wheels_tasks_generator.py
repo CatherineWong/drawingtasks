@@ -51,6 +51,14 @@ def _test_save_tasks(tasks, export_dir):
         assert os.path.exists(saved_file)
 
 
+def test_wheeled_vehicles_tasks_generator_generate_strokes_for_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
+    all_objects = generator._generate_strokes_for_stimuli()
+    _test_render_save_programs(
+        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+    )
+
+
 def test_wheeled_vehicles_tasks_generator_generate_train_stimuli(tmpdir):
     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
     all_objects = generator._generate_train_stimuli()
