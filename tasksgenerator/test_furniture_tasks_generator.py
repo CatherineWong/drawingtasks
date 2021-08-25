@@ -47,3 +47,28 @@ def _test_save_tasks(tasks, export_dir):
             task.rendering, task.name, export_dir=export_dir
         )
         assert os.path.exists(saved_file)
+
+
+def test_furniture_tasks_generator_generate_drawer_pulls_iterator():
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    test_strokes = []
+    for n_drawer_pulls in [2, 3]:
+        for (
+            strokes,
+            min_x,
+            max_x,
+            min_y,
+            max_y,
+        ) in generator._generate_drawer_pulls_iterator(
+            min_x=-5, max_x=5, n_drawer_pulls=n_drawer_pulls
+        ):
+            test_strokes += strokes
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+
+
+def test_furniture_tasks_generator_generate_drawers_iterator():
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    test_strokes = []
+    for strokes in generator._generate_drawers_iterator(total_n_drawers=1):
+        test_strokes += strokes
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
