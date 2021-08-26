@@ -210,3 +210,15 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                 ):
                     stimuli_strokes += drawer_strokes
         return stimuli_strokes
+
+    def _generate_strokes_for_stimuli(
+        self,
+        generation_probability=1.0,  # Probabilistically generate from space
+    ):
+        """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
+        all_drawer_stimuli = self._generate_drawer_stimuli()
+        ## You can add other functions here for chairs, etc.
+
+        all_stimuli = all_drawer_stimuli
+
+        return all_stimuli
