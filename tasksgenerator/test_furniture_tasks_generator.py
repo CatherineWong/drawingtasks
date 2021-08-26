@@ -52,7 +52,7 @@ def _test_save_tasks(tasks, export_dir):
 def test_furniture_tasks_generator_generate_drawer_pulls_iterator():
     generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
     test_strokes = []
-    for n_drawer_pulls in [2, 3]:
+    for n_drawer_pulls in [1, 2, 3, 4, 5]:
         for (
             strokes,
             min_x,
@@ -69,6 +69,18 @@ def test_furniture_tasks_generator_generate_drawer_pulls_iterator():
 def test_furniture_tasks_generator_generate_drawers_iterator():
     generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
     test_strokes = []
-    for strokes in generator._generate_drawers_iterator(total_n_drawers=1):
-        test_strokes += strokes
+    for n_drawers in [1, 2, 3, 4]:
+        for draw_feet in [True, False]:
+            for drawer_strokes in generator._generate_drawers_iterator(
+                n_drawers=n_drawers, draw_feet=draw_feet
+            ):
+                test_strokes += drawer_strokes
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+
+
+def test_furniture_tasks_generator_generate_drawer_stimuli():
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    all_objects = generator._generate_drawer_stimuli()
+    _test_render_save_programs(
+        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+    )

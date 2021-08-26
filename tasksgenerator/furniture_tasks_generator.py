@@ -64,7 +64,7 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         base_min_size = MEDIUM * MEDIUM
         c = object_primitives._circle
         r = object_primitives._rectangle
-        for outer_shapes in [[cc], [cc, cc], [r], [octagon]]:
+        for outer_shapes in [[cc], [cc, cc], [r], [octagon], []]:
             for outer_shapes_min_size in [base_min_size]:
                 for inner_shapes in [[c], [r]]:
                     for inner_shapes_max_size in [base_min_size * THREE_QUARTER_SCALE]:
@@ -87,12 +87,16 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                                 wheel_scale=drawer_pull_scale,
                             )
 
-    def _generate_drawers_iterator(self, total_n_drawers):
+    def _generate_drawers_iterator(self, n_drawers, draw_feet=False):
         # Generate the base drawers.
         for (base_height, base_width) in [
+            (SMALL * 3, MEDIUM * 9),
+            (SMALL * 4, SMALL * 9),
             (SMALL * 5, SMALL * 12),
-            (MEDIUM * 4, LARGE * 10),
         ]:
+            if base_height > SMALL * 4 and n_drawers > 3:
+                continue
+
             (
                 base_strokes,
                 base_min_x,
@@ -118,8 +122,91 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                 float_location=FLOAT_CENTER,
                 drawer_pull_scale=SCALE_UNIT,
             ):
+                drawer_spacing = base_height * QUARTER_SCALE
+                if drawer_pull_strokes_max_y >= (
+                    base_max_y - (drawer_spacing)
+                ) or drawer_pull_strokes_max_x >= (base_max_x - (drawer_spacing)):
+                    continue
+
                 drawer_strokes = [base_strokes[0] + drawer_pull_strokes[0]]
+
+                # Draw the grid of drawers.
+                total_height = (n_drawers - 1) * (base_height + drawer_spacing)
+                (
+                    drawer_stack_strokes,
+                    drawer_stack_strokes_min_x,
+                    drawer_stack_strokes_max_x,
+                    drawer_stack_strokes_min_y,
+                    drawer_stack_strokes_max_y,
+                ) = self._generate_n_objects_on_grid_x_y_limits(
+                    object=drawer_strokes[0],
+                    object_center=(0, 0),
+                    object_height=base_height,
+                    object_width=base_width,
+                    min_x=0,
+                    max_x=0,
+                    min_y=-total_height * 0.5,
+                    max_y=total_height * 0.5,
+                    n_rows=n_drawers,
+                    n_columns=1,
+                    float_location=FLOAT_CENTER,
+                    grid_indices=range(n_drawers * n_drawers),
+                )
+                # Draw the enclosing around them.
+                total_height = (n_drawers * base_height) + (
+                    (n_drawers + 1) * drawer_spacing
+                )
+                enclosure_width = base_width + (2 * drawer_spacing)
+                (
+                    enclosure_strokes,
+                    enclosure_min_x,
+                    enclosure_max_x,
+                    enclosure_min_y,
+                    enclosure_max_y,
+                ) = self._generate_basic_n_segment_bases(
+                    primitives=[RECTANGLE],
+                    heights=[total_height],
+                    widths=[enclosure_width],
+                    float_locations=[FLOAT_CENTER],
+                )
+                drawer_strokes = [drawer_stack_strokes[0] + enclosure_strokes[0]]
+
+                # Draw feet.
+                if draw_feet:
+                    foot_size = SMALL
+                    foot = object_primitives.rectangle(
+                        height=foot_size, width=foot_size
+                    )
+                    (
+                        feet_strokes,
+                        feet_strokes_min_x,
+                        feet_strokes_max_x,
+                        feet_strokes_min_y,
+                        feet_strokes_max_y,
+                    ) = self._generate_n_objects_on_grid_x_y_limits(
+                        object=foot,
+                        object_center=(0, 0),
+                        object_height=foot_size,
+                        object_width=foot_size,
+                        min_x=enclosure_min_x + (foot_size * 0.5),
+                        max_x=enclosure_max_x - (foot_size * 0.5),
+                        min_y=enclosure_min_y,
+                        max_y=enclosure_min_y,
+                        n_rows=1,
+                        n_columns=2,
+                        float_location=FLOAT_BOTTOM,
+                        grid_indices=range(2),
+                    )
+                    drawer_strokes = [drawer_strokes[0] + feet_strokes[0]]
+
                 yield drawer_strokes
 
-    def _generate_drawer_stimuli(self):
-        pass
+    def _generate_drawer_stimuli(self, total_drawers=4):
+        stimuli_strokes = []
+        for n_drawers in range(1, total_drawers + 1):
+            for draw_feet in [True, False]:
+                for drawer_strokes in self._generate_drawers_iterator(
+                    n_drawers=n_drawers, draw_feet=draw_feet
+                ):
+                    stimuli_strokes += drawer_strokes
+        return stimuli_strokes
