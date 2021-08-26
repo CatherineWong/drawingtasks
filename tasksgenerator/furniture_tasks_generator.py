@@ -212,8 +212,7 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         return stimuli_strokes
 
     def _generate_strokes_for_stimuli(
-        self,
-        generation_probability=1.0,  # Probabilistically generate from space
+        self, generation_probability=1.0,  # Probabilistically generate from space
     ):
         """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
         all_drawer_stimuli = self._generate_drawer_stimuli()
@@ -222,3 +221,73 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         all_stimuli = all_drawer_stimuli
 
         return all_stimuli
+
+    def _generate_seat_back(
+        self, n_segments, segment_shapes, segment_heights, segment_widths
+    ):
+        if len(segment_shapes) < n_segments:
+            repeat_shape = segment_shapes[0]
+            segment_shapes = [repeat_shape for x in range(n_segments)]
+
+        if len(segment_heights) < n_segments:
+            repeat_height = segment_heights[0]
+            segment_heights = [repeat_height for x in range(n_segments)]
+
+        if len(segment_widths) < n_segments:
+            repeat_width = segment_widths[0]
+            segment_widths = [repeat_width for x in range(n_segments)]
+
+        return self._generate_basic_n_segment_bases(
+            primitives=segment_shapes,
+            heights=segment_heights,
+            widths=segment_widths,
+            float_locations=[FLOAT_BOTTOM],
+        )
+
+    def _generate_seat_back_permutations(self, seat_width):
+        all_strokes = []
+        n_segments = [1, 3, 5]
+        heights = [SMALL, MEDIUM, LARGE]
+
+        for n in n_segments:
+            for primitive in [RECTANGLE, CIRCLE]:
+                segment_width = seat_width / n
+                for height in heights:
+                    (
+                        base_strokes,
+                        base_min_x,
+                        base_max_x,
+                        base_min_y,
+                        base_max_y,
+                    ) = self._generate_seat_back(
+                        n, [primitive], [height], [segment_width]
+                    )
+                    all_strokes += base_strokes
+
+        return all_strokes
+
+    def _generate_seats(self):
+        all_strokes = []
+        seat_base_widths = [SMALL, MEDIUM, LARGE]
+        seat_base_heights = [SMALL, MEDIUM]
+
+        for height in seat_base_heights:
+            for width in seat_base_widths:
+                (
+                    seat_base_strokes,
+                    min_x,
+                    max_x,
+                    min_y,
+                    max_y,
+                ) = self._generate_basic_n_segment_bases(
+                    [RECTANGLE],
+                    heights=[height],
+                    widths=[width],
+                    float_locations=[FLOAT_CENTER],
+                )
+
+                seat_backs = self._generate_seat_back_permutations(width)
+
+                for seat_back in seat_backs:
+                    chair = seat_base_strokes + seat_back
+
