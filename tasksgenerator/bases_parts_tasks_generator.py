@@ -117,7 +117,7 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
                     width=width, height=height
                 )
             else:
-                assert False
+                scaled_primitive = T(shape_primitive, s=width)
 
             # Float it to the right location.
             if float_location == FLOAT_CENTER:

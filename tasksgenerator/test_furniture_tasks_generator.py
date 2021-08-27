@@ -12,7 +12,7 @@ import tasksgenerator.furniture_tasks_generator as to_test
 
 import tasksgenerator.bases_parts_tasks_generator as bases_parts_tasks_generator
 
-DESKTOP = "/Users/catwong/Desktop/furniture"  # Internal for testing purposes.
+DESKTOP = "/Users/yoni/Desktop/furniture"  # Internal for testing purposes.
 
 SMALL, MEDIUM, LARGE, THREE_QUARTER_SCALE = (
     bases_parts_tasks_generator.SMALL,
@@ -29,7 +29,7 @@ def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
         canvas_size = object_primitives.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT
         rendered = object_primitives.render_stroke_arrays_to_canvas(
             s,
-            stroke_width_height=8 * object_primitives.XYLIM,
+            stroke_width_height=4 * object_primitives.XYLIM,
             canvas_width_height=canvas_size,
         )
         assert not no_blanks or np.sum(rendered) > 0
@@ -49,41 +49,41 @@ def _test_save_tasks(tasks, export_dir):
         assert os.path.exists(saved_file)
 
 
-def test_furniture_tasks_generator_generate_drawer_pulls_iterator():
-    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
-    test_strokes = []
-    for n_drawer_pulls in [1, 2, 3, 4, 5]:
-        for (
-            strokes,
-            min_x,
-            max_x,
-            min_y,
-            max_y,
-        ) in generator._generate_drawer_pulls_iterator(
-            min_x=-5, max_x=5, n_drawer_pulls=n_drawer_pulls
-        ):
-            test_strokes += strokes
-    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+# def test_furniture_tasks_generator_generate_drawer_pulls_iterator():
+#     generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+#     test_strokes = []
+#     for n_drawer_pulls in [1, 2, 3, 4, 5]:
+#         for (
+#             strokes,
+#             min_x,
+#             max_x,
+#             min_y,
+#             max_y,
+#         ) in generator._generate_drawer_pulls_iterator(
+#             min_x=-5, max_x=5, n_drawer_pulls=n_drawer_pulls
+#         ):
+#             test_strokes += strokes
+#     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
 
-def test_furniture_tasks_generator_generate_drawers_iterator():
-    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
-    test_strokes = []
-    for n_drawers in [1, 2, 3, 4]:
-        for draw_feet in [True, False]:
-            for drawer_strokes in generator._generate_drawers_iterator(
-                n_drawers=n_drawers, draw_feet=draw_feet
-            ):
-                test_strokes += drawer_strokes
-    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+# def test_furniture_tasks_generator_generate_drawers_iterator():
+#     generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+#     test_strokes = []
+#     for n_drawers in [1, 2, 3, 4]:
+#         for draw_feet in [True, False]:
+#             for drawer_strokes in generator._generate_drawers_iterator(
+#                 n_drawers=n_drawers, draw_feet=draw_feet
+#             ):
+#                 test_strokes += drawer_strokes
+#     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
 
-def test_furniture_tasks_generator_generate_drawer_stimuli():
-    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
-    all_objects = generator._generate_drawer_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+# def test_furniture_tasks_generator_generate_drawer_stimuli():
+#     generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+#     all_objects = generator._generate_drawer_stimuli()
+#     _test_render_save_programs(
+#         stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+#     )
 
 
 def test_furniture_tasks_generator_generate_seats():
