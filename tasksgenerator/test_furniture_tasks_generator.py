@@ -84,3 +84,12 @@ def test_furniture_tasks_generator_generate_drawer_stimuli():
     _test_render_save_programs(
         stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
     )
+
+
+def test_furniture_tasks_generator_generate_seats():
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    all_objects = generator._generate_seats()
+    _test_render_save_programs(
+        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
+    )
+
