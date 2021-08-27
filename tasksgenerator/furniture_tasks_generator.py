@@ -275,6 +275,14 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                 if seat_width <= MEDIUM and n_side_arms > 1:
                     continue
 
+                if n_side_arms == 2:
+                    side_arm_left = seat_back[0]
+                    side_arm_right = seat_back[2]
+                    central_section = seat_back[1]
+                    seat_back = (
+                        [side_arm_left] * 2 + [central_section] + [side_arm_right] * 2
+                    )
+
                 side_arm_widths = [seat_width / 6 for i in range(n_side_arms)]
                 seat_back_widths = (
                     side_arm_widths
@@ -301,32 +309,33 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         EVEN_LARGER = LARGE * 2
         JUST_MASSIVE = LARGE * 4
         seat_base_widths = [MEDIUM, EVEN_LARGER, JUST_MASSIVE]
-        seat_base_heights = [SMALL / 2, MEDIUM]
+        seat_height = MEDIUM
 
-        for seat_height in seat_base_heights:
-            for seat_width in seat_base_widths:
-                (
-                    seat_base_strokes,
-                    seat_base_min_x,
-                    seat_base_max_x,
-                    seat_base_min_y,
-                    seat_base_max_y,
-                ) = self._generate_basic_n_segment_bases(
-                    [RECTANGLE],
-                    heights=[seat_height],
-                    widths=[seat_width],
-                    float_locations=[FLOAT_BOTTOM],
-                )
+        for seat_width in seat_base_widths:
+            seat_backs = self._generate_seat_back_permutations(seat_width)
+            (
+                seat_base_strokes,
+                seat_base_min_x,
+                seat_base_max_x,
+                seat_base_min_y,
+                seat_base_max_y,
+            ) = self._generate_basic_n_segment_bases(
+                [RECTANGLE],
+                heights=[seat_height],
+                widths=[seat_width],
+                float_locations=[FLOAT_BOTTOM],
+            )
 
-                seat_backs = self._generate_seat_back_permutations(seat_width)
-
-                for seat_back in seat_backs:
-                    for n_legs in [2, 3, 4]:
-                        # Place Legs
-                        leg_lengths = [SMALL / 2]
-
-                        for leg_length in leg_lengths:
-                            leg = T(long_vline, s=leg_length)
+            for seat_back in seat_backs:
+                for n_legs in [2, 3, 4]:
+                    # Place Legs
+                    leg_lengths = [SMALL / 2]
+                    for leg_length in leg_lengths:
+                        leg_primitives = [
+                            T(long_vline, s=leg_length / 4),
+                            object_primitives.rectangle(leg_length / 2, leg_length),
+                        ]
+                        for leg in leg_primitives:
 
                             (
                                 leg_strokes,
@@ -339,10 +348,10 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                                 object_center=(0, 0),
                                 object_height=leg_length,
                                 object_width=seat_width,
-                                min_x=seat_base_min_x,
-                                max_x=seat_base_max_x,
-                                min_y=seat_base_min_y - leg_length * 1.5,
-                                max_y=seat_base_min_y,
+                                min_x=seat_base_min_x + leg_length * 0.25,
+                                max_x=seat_base_max_x - leg_length * 0.25,
+                                min_y=seat_base_min_y,
+                                max_y=seat_base_min_y - 0.5,
                                 n_rows=1,
                                 n_columns=n_legs,
                                 float_location=FLOAT_BOTTOM,
