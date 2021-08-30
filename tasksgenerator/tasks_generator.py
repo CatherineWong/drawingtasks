@@ -11,10 +11,92 @@ from collections import defaultdict
 from class_registry import ClassRegistry
 from dreamcoder.utilities import NEGATIVEINFINITY
 from dreamcoder.task import Task
+import math, random, itertools, copy
 
 DEFAULT_DRAWING_TASK_GENERATOR = "drawing"
 
 TasksGeneratorRegistry = ClassRegistry("name", unique=True)
+
+RANDOM_SEED = 0
+random.seed(RANDOM_SEED)
+
+
+def random_sample_ratio_ordered_array(array, train_ratio):
+    """Utility function to randomly sample a ratio from an ordered array, preserving order. Returns [train], [test]"""
+    sample_size = int(len(array) * train_ratio)
+    indices_to_sample = sorted(random.sample(range(len(array)), sample_size))
+    train, test = [], []
+    for i in range(len(array)):
+        if i in indices_to_sample:
+            train.append(array[i])
+        else:
+            test.append(array[i])
+
+    return train, test
+
+
+class TaskCurriculum:
+    """
+    TaskCurriculum: data structure for curricula of tasks.
+    curriculum : {
+        split : { condition :
+            curriculum_block : [array of tasks]
+            }
+    }
+    """
+
+    CURRICULUM_BLOCK_PREFIX = "curriculum"
+    CONDITION_BLOCK_PREFIX = "condition"
+    CONDITION_ALL = "all"
+    SPLIT_TRAIN, SPLIT_TEST = "train", "test"
+    METADATA = "metadata"
+
+    def __init__(
+        self, curriculum_id=None, task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR
+    ):
+        timestamp = datetime.datetime.now().isoformat()
+        # Escape the timestamp.
+        timestamp = timestamp.replace(":", "-")
+        timestamp = timestamp.replace(".", "-")
+
+        self.name = f"{task_generator_name}_{curriculum_id}"
+        self.timestamp = timestamp
+        self.curriculum = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+
+    def add_tasks(self, split, condition, curriculum_block, tasks):
+        condition = f"{TaskCurriculum.CONDITION_BLOCK_PREFIX}_{condition}"
+        curriculum_block = (
+            f"{TaskCurriculum.CURRICULUM_BLOCK_PREFIX}_{curriculum_block}"
+        )
+
+        self.curriculum[split][condition][curriculum_block] += tasks
+
+    def get_curriculum(self):
+        return self.curriculum
+
+    def get_all_tasks(self):
+        tasks_set = set()
+        for split in self.curriculum:
+            for condition in self.curriculum[split]:
+                for curriculum_block in self.curriculum[split][condition]:
+                    block_tasks = self.curriculum[split][condition][curriculum_block]
+                    tasks_set.update(block_tasks)
+        return tasks_set
+
+    def get_curriculum_summary(self):
+        metadata = {"name": self.name, "timestamp": self.timestamp}
+
+        curriculum_summary = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+        for split in self.curriculum:
+            for condition in self.curriculum[split]:
+                for curriculum_block in self.curriculum[split][condition]:
+                    tasks = self.curriculum[split][condition][curriculum_block]
+                    task_image_names = [task.name + ".png" for task in tasks]
+                    curriculum_summary[split][condition][
+                        curriculum_block
+                    ] += task_image_names
+        curriculum_summary[TaskCurriculum.METADATA] = metadata
+        return curriculum_summary
 
 
 class AbstractTasksGenerator:
@@ -35,11 +117,11 @@ class AbstractTasksGenerator:
         raise NotImplementedError
 
     def _get_number_tasks_to_generate_per_condition(
-        self, num_tasks_to_generate_per_condition
+        self, num_tasks_to_generate_per_condition, train_ratio
     ):
         """Helper method that returns the true number of tasks to generate and a human readable name. Generator must have defined an _generate_strokes_for_stimuli function."""
-        task_strokes_for_stimuli = self._generate_strokes_for_stimuli()
-        num_total_tasks = len(task_strokes_for_stimuli)
+        train, test = self._generate_strokes_for_stimuli(train_ratio)
+        num_total_tasks = len(train + test)
         num_to_generate = (
             num_tasks_to_generate_per_condition
             if num_tasks_to_generate_per_condition
@@ -55,26 +137,41 @@ class AbstractTasksGenerator:
         request_type,
         render_strokes_fn,
         task_generator_name,
+        train_ratio=1.0,
     ):
-        """Helper method to generate Drawing Tasks from strokes arrays."""
+        """Helper method to generate Drawing Tasks from strokes arrays. Deprecated: number to generate."""
         (
             num_to_generate,
             human_readable_num_to_generate,
         ) = self._get_number_tasks_to_generate_per_condition(
-            num_tasks_to_generate_per_condition
+            num_tasks_to_generate_per_condition, train_ratio
         )
-        task_strokes_for_stimuli = self._generate_strokes_for_stimuli()
-        tasks = [
+        train_tasks, test_tasks = self._generate_strokes_for_stimuli(train_ratio)
+
+        train_tasks = [
             DrawingTask(
                 task_id=task_idx,
                 request=request_type,
                 ground_truth_strokes=task_strokes,
                 render_strokes_fn=render_strokes_fn,
-                task_generator_name=task_generator_name,
+                task_generator_name=task_generator_name
+                + f"_{TaskCurriculum.SPLIT_TRAIN}",
             )
-            for (task_idx, task_strokes) in enumerate(task_strokes_for_stimuli)
-        ][:num_to_generate]
-        return tasks
+            for (task_idx, task_strokes) in enumerate(train_tasks)
+        ]
+
+        test_tasks = [
+            DrawingTask(
+                task_id=task_idx,
+                request=request_type,
+                ground_truth_strokes=task_strokes,
+                render_strokes_fn=render_strokes_fn,
+                task_generator_name=task_generator_name
+                + f"_{TaskCurriculum.SPLIT_TEST}",
+            )
+            for (task_idx, task_strokes) in enumerate(test_tasks)
+        ]
+        return train_tasks, test_tasks
 
 
 class ManualCurriculumTasksGenerator(AbstractTasksGenerator):
@@ -185,67 +282,3 @@ class DrawingTask(Task):
             return NEGATIVEINFINITY
         else:
             return 0.0
-
-
-class TaskCurriculum:
-    """
-    TaskCurriculum: data structure for curricula of tasks.
-    curriculum : {
-        split : { condition :
-            curriculum_block : [array of tasks]
-            }
-    }
-    """
-
-    CURRICULUM_BLOCK_PREFIX = "curriculum"
-    CONDITION_BLOCK_PREFIX = "condition"
-    CONDITION_ALL = "all"
-    SPLIT_TRAIN, SPLIT_TEST = "train", "test"
-    METADATA = "metadata"
-
-    def __init__(
-        self, curriculum_id=None, task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR
-    ):
-        timestamp = datetime.datetime.now().isoformat()
-        # Escape the timestamp.
-        timestamp = timestamp.replace(":", "-")
-        timestamp = timestamp.replace(".", "-")
-
-        self.name = f"{task_generator_name}_{curriculum_id}"
-        self.timestamp = timestamp
-        self.curriculum = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
-
-    def add_tasks(self, split, condition, curriculum_block, tasks):
-        condition = f"{TaskCurriculum.CONDITION_BLOCK_PREFIX}_{condition}"
-        curriculum_block = (
-            f"{TaskCurriculum.CURRICULUM_BLOCK_PREFIX}_{curriculum_block}"
-        )
-
-        self.curriculum[split][condition][curriculum_block] += tasks
-
-    def get_curriculum(self):
-        return self.curriculum
-
-    def get_all_tasks(self):
-        tasks_set = set()
-        for split in self.curriculum:
-            for condition in self.curriculum[split]:
-                for curriculum_block in self.curriculum[split][condition]:
-                    block_tasks = self.curriculum[split][condition][curriculum_block]
-                    tasks_set.update(block_tasks)
-        return tasks_set
-
-    def get_curriculum_summary(self):
-        metadata = {"name": self.name, "timestamp": self.timestamp}
-
-        curriculum_summary = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
-        for split in self.curriculum:
-            for condition in self.curriculum[split]:
-                for curriculum_block in self.curriculum[split][condition]:
-                    tasks = self.curriculum[split][condition][curriculum_block]
-                    task_image_names = [task.name + ".png" for task in tasks]
-                    curriculum_summary[split][condition][
-                        curriculum_block
-                    ] += task_image_names
-        curriculum_summary[TaskCurriculum.METADATA] = metadata
-        return curriculum_summary

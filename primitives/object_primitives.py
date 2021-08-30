@@ -231,7 +231,7 @@ relations = [
 # Utilities for rendering.
 def render_stroke_arrays_to_canvas(
     stroke_arrays,
-    stroke_width_height=2 * XYLIM,
+    stroke_width_height=8 * XYLIM,
     canvas_width_height=SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
 ):
     """See original source: prog2pxl https://github.com/ellisk42/ec/blob/draw/dreamcoder/domains/draw/primitives.py"""

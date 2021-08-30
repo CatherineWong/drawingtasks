@@ -28,6 +28,8 @@ import tasksgenerator.s12_s13_tasks_generator
 import tasksgenerator.s14_s15_tasks_generator
 import tasksgenerator.s16_s17_tasks_generator
 
+import tasksgenerator.nuts_bolts_tasks_generator
+
 DEFAULT_EXPORT_DIR = "data"
 DEFAULT_SYNTHESIS_TASKS_SUBDIR = "synthesis"
 DEFAULT_RENDERS_SUBDIR = "renders"
@@ -61,6 +63,11 @@ parser.add_argument(
     help="If included, enumerate only a set number of tasks from the generator.",
 )
 parser.add_argument(
+    "--train_ratio",
+    default=1.0,
+    help="If included, split between train and test qt thsi ratio.",
+)
+parser.add_argument(
     "--no_synthesis_tasks",
     action="store_true",
     help="If included, does not export any synthesis tasks.",
@@ -76,7 +83,9 @@ def generate_tasks_curriculum(args):
     print(f"Generating task curriculum from: {args.tasks_generator}...")
     print(f"Generating {args.num_tasks_per_condition} tasks per condition...")
     generator = tasks_generator.TasksGeneratorRegistry[args.tasks_generator]
-    tasks_curriculum = generator.generate_tasks_curriculum(args.num_tasks_per_condition)
+    tasks_curriculum = generator.generate_tasks_curriculum(
+        args.num_tasks_per_condition, float(args.train_ratio)
+    )
     return tasks_curriculum
 
 
