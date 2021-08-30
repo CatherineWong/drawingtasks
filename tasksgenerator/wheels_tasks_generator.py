@@ -11,6 +11,7 @@ from tasksgenerator.tasks_generator import (
     TasksGeneratorRegistry,
     TaskCurriculum,
     DrawingTask,
+    random_sample_ratio_ordered_array,
 )
 
 from tasksgenerator.bases_parts_tasks_generator import *
@@ -41,7 +42,7 @@ from tasksgenerator.s12_s13_tasks_generator import (
 class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
     """Generates vehicle tasks consisting of a base and a set of wheels placed at positions along the base. We generate trains, cars, and buggies."""
 
-    name = "wheeled_vehicles"
+    name = "wheels"
 
     def __init__(self):
         super().__init__()
@@ -326,7 +327,38 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                                 wheel_scale=wheel_scale,
                             )
 
-    def _generate_truck_stimuli(self):
+    def _generate_parts_stimuli(self, train_ratio=1.0):
+        all_parts_stimuli = []
+        # Generate wheels.
+        n_wheels_types = [1, 4]
+        for n_wheels in n_wheels_types:
+            wheels_iterator = self._generate_wheels_iterator(
+                -LARGE * 4,
+                LARGE * 4,
+                n_wheels=n_wheels,
+                float_location=FLOAT_CENTER,
+                paired_wheels=False,
+            )
+            for (
+                wheels_strokes,
+                wheels_min_x,
+                wheels_max_x,
+                wheels_min_y,
+                wheels_max_y,
+            ) in wheels_iterator:
+                all_parts_stimuli += wheels_strokes
+        for scale_wires in [True, False]:
+            antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
+            n_wires = 3
+            antenna_object = antenna_generator._generate_stacked_antenna(
+                n_wires=n_wires,
+                scale_wires=scale_wires,
+                end_shape=None,
+            )
+            all_parts_stimuli += antenna_object
+        return random_sample_ratio_ordered_array(all_parts_stimuli, train_ratio)
+
+    def _generate_truck_stimuli(self, train_ratio=1.0):
         big_width = LARGE * 8
         all_truck_stimuli = []
         for head_width in [LARGE]:
@@ -369,9 +401,9 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                         ) in wheels_iterator:
                             truck_strokes = [base_strokes[0] + wheels_strokes[0]]
                             all_truck_stimuli += truck_strokes
-        return all_truck_stimuli
+        return random_sample_ratio_ordered_array(all_truck_stimuli, train_ratio)
 
-    def _generate_train_stimuli(self):
+    def _generate_train_stimuli(self, train_ratio=1.0):
         all_train_stimuli = []
 
         body_height = SMALL * 5
@@ -415,7 +447,10 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                                 car_margins=car_margins,
                                 show_doors=show_doors,
                             )
-                            n_wheels_types = [body_repetitions * 2]
+                            n_wheels_types = [
+                                body_repetitions * 2,
+                                body_repetitions * 3,
+                            ]
                             for n_wheels in n_wheels_types:
                                 wheels_iterator = self._generate_wheels_iterator(
                                     base_min_x,
@@ -435,9 +470,9 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                                         base_strokes[0] + wheels_strokes[0]
                                     ]
                                     all_train_stimuli += train_strokes
-        return all_train_stimuli
+        return random_sample_ratio_ordered_array(all_train_stimuli, train_ratio)
 
-    def _generate_buggy_stimuli(self):
+    def _generate_buggy_stimuli(self, train_ratio=1.0, generation_probability=0.80):
 
         buggy_stimuli = []
         for scale_wires in [True, False]:
@@ -506,19 +541,82 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                                     buggy_strokes = [
                                         base_strokes[0] + wheels_strokes[0]
                                     ]
+                                    if random.uniform(0, 1) > generation_probability:
+                                        continue
                                     buggy_stimuli += buggy_strokes
 
-        return buggy_stimuli
+        return random_sample_ratio_ordered_array(buggy_stimuli, train_ratio)
 
     def _generate_strokes_for_stimuli(
         self,
+        train_ratio=0.8,
         generation_probability=1.0,  # Probabilistically generate from space
     ):
         """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
-        all_truck_stimuli = self._generate_truck_stimuli()
-        all_buggy_stimuli = self._generate_buggy_stimuli()
-        all_train_stimuli = self._generate_train_stimuli()
+        train, test = [], []
+        for generator_fn in [
+            self._generate_parts_stimuli,
+            self._generate_truck_stimuli,
+            self._generate_buggy_stimuli,
+            self._generate_train_stimuli,
+        ]:
+            generator_train, generator_test = generator_fn(train_ratio)
+            train += generator_train
+            test += generator_test
 
-        all_stimuli = all_truck_stimuli + all_buggy_stimuli + all_train_stimuli
+        return train, test
 
-        return all_stimuli
+    def _generate_train_test_tasks(
+        self,
+        num_tasks_to_generate_per_condition=AbstractTasksGenerator.GENERATE_ALL,
+        train_ratio=0.8,
+        max_train=200,
+        max_test=50,
+    ):
+        # Currently generates all tasks as single entities. Does not generate a curriculum.
+        train_tasks, test_tasks = self._generate_drawing_tasks_from_strokes(
+            num_tasks_to_generate_per_condition,
+            request_type=object_primitives.tstroke,
+            render_strokes_fn=object_primitives.render_stroke_arrays_to_canvas,
+            task_generator_name=self.name,
+            train_ratio=train_ratio,
+        )
+        max_train = len(train_tasks) if max_train == None else max_train
+        max_test = len(test_tasks) if max_test == None else max_test
+        return train_tasks[:max_train], test_tasks[:max_test]
+
+    def generate_tasks_curriculum(
+        self, num_tasks_to_generate_per_condition, train_ratio=0.8
+    ):
+        """:ret: a curriculum that randomly samples among the train ratio for the simple and complex stimuli."""
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition, train_ratio
+        )
+        task_curriculum = TaskCurriculum(
+            curriculum_id=human_readable,
+            task_generator_name=self.name,
+        )
+
+        train_tasks, test_tasks = self._generate_train_test_tasks(
+            num_tasks_to_generate_per_condition, train_ratio=train_ratio
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TRAIN,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=train_tasks,
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TEST,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=test_tasks,
+        )
+        return task_curriculum

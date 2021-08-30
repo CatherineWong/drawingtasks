@@ -14,7 +14,7 @@ import tasksgenerator.bases_parts_tasks_generator as bases_parts_tasks_generator
 import tasksgenerator.dial_tasks_generator as dial_tasks_generator
 import tasksgenerator.antenna_tasks_generator as antenna_tasks_generator
 
-DESKTOP = "/Users/catwong/Desktop/wheels"  # Internal for testing purposes.
+DESKTOP = "/Users/catwong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/wheels"  # Internal for testing purposes.
 
 SMALL, MEDIUM, LARGE, THREE_QUARTER_SCALE = (
     bases_parts_tasks_generator.SMALL,
@@ -24,7 +24,9 @@ SMALL, MEDIUM, LARGE, THREE_QUARTER_SCALE = (
 )
 
 
-def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
+def _test_render_save_programs(
+    stroke_arrays, export_dir, no_blanks=True, split="train"
+):
     for program_id, s in enumerate(stroke_arrays):
         # Can it render the program?
 
@@ -37,7 +39,7 @@ def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
         assert not no_blanks or np.sum(rendered) > 0
         # Can it save the program?
         saved_file = object_primitives.export_rendered_program(
-            rendered, program_id, export_dir=export_dir
+            rendered, f"{split}_{program_id}", export_dir=export_dir
         )
         print(f"Saving to id {program_id}")
         assert os.path.exists(saved_file)
@@ -51,36 +53,49 @@ def _test_save_tasks(tasks, export_dir):
         assert os.path.exists(saved_file)
 
 
-def test_wheeled_vehicles_tasks_generator_generate_strokes_for_stimuli(tmpdir):
+def test_nutsbolts_tasks_generator_generate_strokes_for_stimuli(tmpdir):
     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
-    all_objects = generator._generate_strokes_for_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+    train, test = generator._generate_strokes_for_stimuli(train_ratio=0.8)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
+
+
+def test_nutsbolts_tasks_generator_generate_parts_for_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
+    train, test = generator._generate_parts_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
 
 
 def test_wheeled_vehicles_tasks_generator_generate_train_stimuli(tmpdir):
     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
-    all_objects = generator._generate_train_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+    train, test = generator._generate_train_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
 
 
 def test_wheeled_vehicles_tasks_generator_generate_truck_stimuli(tmpdir):
     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
-    all_objects = generator._generate_truck_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+    train, test = generator._generate_truck_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
 
 
 def test_wheeled_vehicles_tasks_generator_generate_buggy_stimuli(tmpdir):
     generator = TasksGeneratorRegistry[to_test.WheeledVehiclesTasksGenerator.name]
-    all_objects = generator._generate_buggy_stimuli()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
+    train, test = generator._generate_buggy_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
 
 
 def test_wheeled_vehicles_tasks_generator_generate_row_of_wheels():
