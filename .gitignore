@@ -11,5 +11,6 @@
 __pycache__
 _build
 drawingtasksvenv
-data
+data/renders
+data/synthesis
 ec

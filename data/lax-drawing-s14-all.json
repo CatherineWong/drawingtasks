@@ -1,0 +1,1 @@
+{"config_name": "lax-drawing-s14-all", "metadata": {}, "domain": "drawing", "experiment_type": "", "experiment_parameters": {"conditions": [], "stimuli_batch_size": "all", "s3_bucket": "lax-drawing-s14-all", "s3_stimuli_path_format": "lax-drawing-s14-all-000.png", "s3_bucket_total_stimuli": 64}, "experiment_trial_parameters": [], "development_flags": {}}

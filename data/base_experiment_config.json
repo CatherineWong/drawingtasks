@@ -1,0 +1,14 @@
+{
+  "config_name": "",
+  "metadata": {},
+  "domain": "drawing",
+  "experiment_type": "",
+  "experiment_parameters": {
+    "conditions": [],
+    "stimuli_batch_size": "all",
+    "s3_bucket": "",
+    "s3_stimuli_path_format": ""
+  },
+  "experiment_trial_parameters": [],
+  "development_flags": {}
+}

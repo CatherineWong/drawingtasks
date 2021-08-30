@@ -1,0 +1,26 @@
+{
+"test": {
+"condition_all": {
+"curriculum_0": [
+"S12_S13_test_0.png",
+"S12_S13_test_1.png",
+"S12_S13_test_2.png",
+"S12_S13_test_3.png",
+"S12_S13_test_4.png",
+"S12_S13_test_5.png",
+"S12_S13_test_6.png",
+"S12_S13_test_7.png",
+"S12_S13_test_8.png",
+"S12_S13_test_9.png",
+"S12_S13_test_10.png",
+"S12_S13_test_11.png",
+"S12_S13_test_12.png"
+]
+}
+},
+"metadata": {
+"name": "S12_S13_test_all",
+"timestamp": "2021-06-30T14-30-55-830574",
+"generating_command": "python generate_drawing_tasks.py --task_export_dir data --synthesis_export_dir None --renders_export_dir None --tasks_generator S12_S13_test --num_tasks_per_condition all --no_synthesis_tasks False --no_render False"
+}
+}
