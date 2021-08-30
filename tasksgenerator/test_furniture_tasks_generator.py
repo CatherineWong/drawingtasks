@@ -12,7 +12,7 @@ import tasksgenerator.furniture_tasks_generator as to_test
 
 import tasksgenerator.bases_parts_tasks_generator as bases_parts_tasks_generator
 
-DESKTOP = "/Users/yoni/Desktop/furniture"  # Internal for testing purposes.
+DESKTOP = "/Users/catwong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/furniture"  # Internal for testing purposes.
 
 SMALL, MEDIUM, LARGE, THREE_QUARTER_SCALE = (
     bases_parts_tasks_generator.SMALL,
@@ -22,20 +22,22 @@ SMALL, MEDIUM, LARGE, THREE_QUARTER_SCALE = (
 )
 
 
-def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
+def _test_render_save_programs(
+    stroke_arrays, export_dir, no_blanks=True, split="train"
+):
     for program_id, s in enumerate(stroke_arrays):
         # Can it render the program?
 
         canvas_size = object_primitives.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT
         rendered = object_primitives.render_stroke_arrays_to_canvas(
             s,
-            stroke_width_height=4 * object_primitives.XYLIM,
+            stroke_width_height=8 * object_primitives.XYLIM,
             canvas_width_height=canvas_size,
         )
         assert not no_blanks or np.sum(rendered) > 0
         # Can it save the program?
         saved_file = object_primitives.export_rendered_program(
-            rendered, program_id, export_dir=export_dir
+            rendered, f"{split}_{program_id}", export_dir=export_dir
         )
         print(f"Saving to id {program_id}")
         assert os.path.exists(saved_file)
@@ -47,6 +49,42 @@ def _test_save_tasks(tasks, export_dir):
             task.rendering, task.name, export_dir=export_dir
         )
         assert os.path.exists(saved_file)
+
+
+def test_furniture_tasks_generator_generate_parts_for_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    train, test = generator._generate_parts_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
+
+
+def test_furniture_tasks_generator_generate_drawer_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    train, test = generator._generate_drawer_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
+
+
+def test_furniture_tasks_generator_generate_seat_stimuli():
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    train, test = generator._generate_seat_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
+
+
+def test_furniture_tasks_generator_generate_strokes_for_stimuli():
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    train, test = generator._generate_strokes_for_stimuli(train_ratio=0.8)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
 
 
 # def test_furniture_tasks_generator_generate_drawer_pulls_iterator():
@@ -84,12 +122,3 @@ def _test_save_tasks(tasks, export_dir):
 #     _test_render_save_programs(
 #         stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
 #     )
-
-
-def test_furniture_tasks_generator_generate_seats():
-    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
-    all_objects = generator._generate_seats()
-    _test_render_save_programs(
-        stroke_arrays=all_objects, export_dir=DESKTOP, no_blanks=False
-    )
-
