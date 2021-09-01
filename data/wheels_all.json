@@ -263,7 +263,7 @@
 },
 "metadata": {
 "name": "wheels_all",
-"timestamp": "2021-08-30T16-50-54-898059",
+"timestamp": "2021-08-31T15-38-16-186755",
 "generating_command": "python generate_drawing_tasks.py --task_export_dir data --synthesis_export_dir None --renders_export_dir None --tasks_generator wheels --num_tasks_per_condition all --train_ratio 0.8 --no_synthesis_tasks False --no_render False"
 }
 }

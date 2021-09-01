@@ -34,10 +34,7 @@ from tasksgenerator.s12_s13_tasks_generator import (
     hl,
 )
 
-CIRCLE, RECTANGLE, = (
-    "CIRCLE",
-    "RECTANGLE",
-)
+CIRCLE, RECTANGLE, LINE = ("CIRCLE", "RECTANGLE", "LINE")
 FLOAT_TOP, FLOAT_CENTER, FLOAT_BOTTOM = "FLOAT_TOP", "FLOAT_CENTER", "FLOAT_BOTTOM"
 
 NONE, SMALL, MEDIUM, LARGE = 0.0, 1.0, 1.5, 2.0
@@ -74,6 +71,7 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
         widths=[LARGE],
         float_locations=[FLOAT_TOP],
         right_margins=[0],
+        scale_special_shapes=True,
     ):
         """
         Generates a base comprised of n segments. This can be used as a tier in multi-tiered bases (eg. chairs, trucks, and robots). The base will be generated from left to right starting from the - TOTAL_WIDTH / 2 position (so symmetrical bases will be centered automatically.)
@@ -117,7 +115,10 @@ class AbstractBasesAndPartsTasksGenerator(AbstractTasksGenerator):
                     width=width, height=height
                 )
             else:
-                scaled_primitive = T(shape_primitive, s=width)
+                if scale_special_shapes:
+                    scaled_primitive = T(shape_primitive, s=width)
+                else:
+                    scaled_primitive = shape_primitive
 
             # Float it to the right location.
             if float_location == FLOAT_CENTER:

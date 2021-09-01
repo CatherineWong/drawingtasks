@@ -11,6 +11,7 @@ from tasksgenerator.tasks_generator import (
     TasksGeneratorRegistry,
     TaskCurriculum,
     DrawingTask,
+    random_sample_ratio_ordered_array,
 )
 import numpy as np
 
@@ -286,10 +287,10 @@ class SimpleDialTasksGenerator(AbstractTasksGenerator):
 
 
 @TasksGeneratorRegistry.register
-class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
+class DialsTasksGenerator(SimpleDialTasksGenerator):
     """Generates gadget tasks containing a base and a set of 'dials' placed at positions along the base."""
 
-    name = "complex_dial"
+    name = "dials"
 
     def _add_antenna_to_stimuli(
         self,
@@ -308,10 +309,13 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
         add_double_antenna=False,
         add_side_antenna=False,
         generation_probability=1.0,
+        antenna_generation_probability=0.25,
     ):
         if random.uniform(0, 1) > generation_probability:
             return None
         antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
+
+        generation_probability *= antenna_generation_probability
 
         stimuli_with_antenna = []
 
@@ -385,6 +389,7 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
         max_dials=3,
         base_end_filials=False,
         shape_specification=None,
+        no_base=False,
     ):
         n_grating = max_dials * 2
         x_grid = make_x_grid(n=n_grating)
@@ -403,15 +408,16 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
         if n_dial_rows > 1:
             row_y_offset += -(spacing * 0.5)
 
-        base, base_width, base_height = self._generate_bases(
-            base_width=base_width,
-            base_height=base_height,
-            base_columns=base_columns,
-            max_rows=n_dial_rows,
-            n_tiers=n_base_tiers,
-            base_end_filials=base_end_filials,
-        )
-        stimuli += base
+        if not no_base:
+            base, base_width, base_height = self._generate_bases(
+                base_width=base_width,
+                base_height=base_height,
+                base_columns=base_columns,
+                max_rows=n_dial_rows,
+                n_tiers=n_base_tiers,
+                base_end_filials=base_end_filials,
+            )
+            stimuli += base
 
         for row_idx in range(n_dial_rows):
             for dial_idx in range(n_dials):
@@ -433,11 +439,111 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                 )
         return stimuli, base_width, base_height
 
-    def _generate_strokes_for_stimuli(
+    def _generate_parts_stimuli(
         self,
         max_dials=5,
+        train_ratio=1.0,
         spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
-        generation_probability=1.0,  # Probabilistically generate from space
+        generation_probability=0.2,
+    ):
+        c = object_primitives._circle
+        r = object_primitives._rectangle
+
+        all_parts_stimuli = []
+        # Generate antenna.
+        antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
+
+        stimuli_with_antenna = []
+
+        antenna_end_shapes = [
+            None,
+            object_primitives._circle,
+            object_primitives._rectangle,
+        ]
+
+        antenna_primitives = []
+        for n_wires in [1, 2, 3]:
+            for scale_wires in [True, False]:
+                for end_shape in antenna_end_shapes:
+                    all_parts_stimuli += antenna_generator._generate_stacked_antenna(
+                        n_wires=n_wires,
+                        scale_wires=scale_wires,
+                        end_shape=end_shape,
+                    )
+
+        # Generate dials
+        for total_dials in [1, max_dials + 1]:
+            # Varying bases for the single small dials.
+            for base_columns in [1, max_dials + 1]:
+                for base_heights in [1, max_dials]:
+                    for rows in [1, 2]:
+                        if base_heights < rows:
+                            continue
+                        base_height = base_heights * DIAL_LARGE
+                        if rows > 1:  # We already take care of sizing the rows.
+                            base_height = DIAL_LARGE
+                        if base_columns < total_dials:
+                            continue
+
+                        centered = total_dials % 2 != 0
+
+                        # Small and large dials with the lever sticking out
+                        for dial_size in [DIAL_SMALL, DIAL_LARGE]:
+                            for dial_angle in [DIAL_VERTICAL, DIAL_RIGHT]:
+                                for shape_specification in [
+                                    None,
+                                    [c, r],
+                                    [c, c],
+                                ]:
+                                    if (
+                                        dial_size == DIAL_LARGE
+                                        and dial_angle == DIAL_VERTICAL
+                                    ):
+                                        continue
+                                    if (
+                                        dial_size == DIAL_LARGE
+                                        and shape_specification == [c, c, c]
+                                    ):
+                                        continue
+
+                                    (
+                                        stimuli,
+                                        total_base_width,
+                                        total_base_height,
+                                    ) = self._generate_base_with_dials(
+                                        max_dials=total_dials,
+                                        n_dials=total_dials,
+                                        n_circles=1,
+                                        dial_size=dial_size,
+                                        circle_size=dial_size,
+                                        dial_angle=dial_angle,
+                                        base_columns=base_columns,
+                                        base_height=base_height,
+                                        centered=centered,
+                                        n_dial_rows=rows,
+                                        n_base_tiers=0,
+                                        spacing=spacing,
+                                        base_end_filials=False,
+                                        shape_specification=shape_specification,
+                                        no_base=True,
+                                    )
+                                    if total_dials > 1 or rows > 1:
+                                        if (
+                                            random.uniform(0, 1)
+                                            > generation_probability
+                                        ):
+                                            continue
+
+                                    all_parts_stimuli.append(stimuli)
+
+        return random_sample_ratio_ordered_array(all_parts_stimuli, train_ratio)
+
+    def _generate_strokes_for_stimuli(
+        self,
+        train_ratio=1.0,
+        max_dials=5,
+        spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
+        generation_probability=0.14,  # Probabilistically generate from space
     ):
         """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
 
@@ -448,9 +554,13 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
         MAX_BASE_COLUMNS_FOR_ANTENNA = 3
 
         # Loop over the full cross product of dials / antenna / stimuli / tiers
-        for total_dials in range(1, max_dials + 1):
+        total_dials_range = list(range(1, max_dials + 1))
+        random.shuffle(total_dials_range)
+        for total_dials in total_dials_range:
+            total_columns_range = list(range(1, max_dials + 1, 2))
+            random.shuffle(total_columns_range)
             # Varying bases for the single small dials.
-            for base_columns in range(1, max_dials + 1, 2):
+            for base_columns in total_columns_range:
                 for base_heights in [1, max_dials]:
                     for rows in [1, 2]:
                         for tiers in [1, 2]:
@@ -504,7 +614,8 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                                         base_width=total_base_width,
                                         base_height=total_base_height,
                                         spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
-                                        generation_probability=generation_probability,
+                                        generation_probability=1.0,
+                                        antenna_generation_probability=0.5,
                                     )
                                     if antenna_stimuli is not None:
                                         strokes += antenna_stimuli
@@ -516,7 +627,6 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                                             None,
                                             [c, r],
                                             [c, c],
-                                            [c, c, c],
                                         ]:
                                             if (
                                                 dial_size == DIAL_LARGE
@@ -576,4 +686,66 @@ class ComplexDialTasksGenerator(SimpleDialTasksGenerator):
                                             )
                                             if antenna_stimuli is not None:
                                                 strokes += antenna_stimuli
-        return strokes
+
+        train_parts, test_parts = self._generate_parts_stimuli(
+            train_ratio=0.95
+        )  # Mostly in training.
+
+        train_main, test_main = random_sample_ratio_ordered_array(strokes, train_ratio)
+
+        return train_parts + train_main, test_parts + test_main
+
+    def _generate_train_test_tasks(
+        self,
+        num_tasks_to_generate_per_condition=AbstractTasksGenerator.GENERATE_ALL,
+        train_ratio=0.8,
+        max_train=200,
+        max_test=50,
+    ):
+        # Currently generates all tasks as single entities. Does not generate a curriculum.
+        train_tasks, test_tasks = self._generate_drawing_tasks_from_strokes(
+            num_tasks_to_generate_per_condition,
+            request_type=object_primitives.tstroke,
+            render_strokes_fn=object_primitives.render_stroke_arrays_to_canvas,
+            task_generator_name=self.name,
+            train_ratio=train_ratio,
+        )
+        max_train = len(train_tasks) if max_train == None else max_train
+        max_test = len(test_tasks) if max_test == None else max_test
+        return train_tasks[:max_train], test_tasks[:max_test]
+
+    def generate_tasks_curriculum(
+        self, num_tasks_to_generate_per_condition, train_ratio=0.8
+    ):
+        """:ret: a curriculum that randomly samples among the train ratio for the simple and complex stimuli."""
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition, train_ratio
+        )
+        task_curriculum = TaskCurriculum(
+            curriculum_id=human_readable,
+            task_generator_name=self.name,
+        )
+
+        train_tasks, test_tasks = self._generate_train_test_tasks(
+            num_tasks_to_generate_per_condition, train_ratio=train_ratio
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TRAIN,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=train_tasks,
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TEST,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=test_tasks,
+        )
+        return task_curriculum

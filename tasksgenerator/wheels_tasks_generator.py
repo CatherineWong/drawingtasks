@@ -557,8 +557,8 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         for generator_fn in [
             self._generate_parts_stimuli,
             self._generate_truck_stimuli,
-            self._generate_buggy_stimuli,
             self._generate_train_stimuli,
+            self._generate_buggy_stimuli,
         ]:
             generator_train, generator_test = generator_fn(train_ratio)
             train += generator_train
