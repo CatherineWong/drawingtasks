@@ -87,3 +87,21 @@ def test_furniture_tasks_generator_generate_lounges_stimuli(tmpdir):
         _test_render_save_programs(
             stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
         )
+
+
+def test_furniture_tasks_generator_generate_seat_drawers_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    train, test = generator._generate_seat_drawers_stimuli(train_ratio=1.0)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
+
+
+def test_furniture_tasks_generator_generate_strokes_for_stimuli():
+    generator = TasksGeneratorRegistry[to_test.FurnitureTasksGenerator.name]
+    train, test = generator._generate_strokes_for_stimuli(train_ratio=0.8)
+    for split, objects in [("train", train), ("test", test)]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )

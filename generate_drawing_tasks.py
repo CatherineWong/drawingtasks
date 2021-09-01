@@ -17,6 +17,7 @@ Usage:
     		--tasks_generator : name of the task generator to use.
     		--num_tasks_per_condition: if included, enumerate only a set number of tasks from the generator.	
             --no_render: if included, does not render any images (and leaves the human directory blank.)
+			--train_ratio 0.8 : if included, train test split ratio.
 """
 
 import os, json, argparse, dill
