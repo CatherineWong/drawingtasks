@@ -11,7 +11,7 @@ SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)", "(rectangle)"]
 
 def _test_parse_render_save_programs(program_strings, tmpdir):
     export_dir = tmpdir
-    for program_id, program_string in enumerate(sprogram_strings):
+    for program_id, program_string in enumerate(program_strings):
         try:
             # Can it parse the program?
             p = Program.parse(program_string)

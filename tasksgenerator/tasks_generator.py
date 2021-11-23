@@ -98,6 +98,32 @@ class TaskCurriculum:
         curriculum_summary[TaskCurriculum.METADATA] = metadata
         return curriculum_summary
 
+    def cleaned_name(self, name):
+        # Cleans characters for S3.
+        name = name.lower()
+        for escaped_character in ["_", ","]:
+            name = name.replace(escaped_character, "-")
+        return name
+
+    def get_curriculum_tasks_csv_summary(self):
+        """
+        Generates a flattened summary of the tasks that can be written out to a CSV. This contains information specific to the upload version on S3.
+        """
+        all_tasks = []
+        for split in self.curriculum:
+            for condition in self.curriculum[split]:
+                for curriculum_block in self.curriculum[split][condition]:
+                    tasks = self.curriculum[split][condition][curriculum_block]
+                    task_summaries = [task.task_summary() for task in tasks]
+                    all_tasks += task_summaries
+        # FWIW, add back in the canonical indexing from S3.
+        canonical_name = self.cleaned_name(self.name)
+        for idx, task_dict in enumerate(all_tasks):
+            s3_idx = str.zfill(str(idx), 3)
+            s3_name = f"lax-drawing-{canonical_name}-{s3_idx}.png"
+            task_dict["s3_stimuli"] = s3_name
+        return all_tasks
+
 
 class AbstractTasksGenerator:
     """TasksGenerators should define the 'name' class attribute and register using TasksGeneratoryRegistry.register"""
@@ -270,15 +296,49 @@ class DrawingTask(Task):
                 self.rendering = render_strokes_fn(ground_truth_strokes)
         assert self.rendering is not None
 
+    def task_summary(self):
+        strokes = (
+            self.ground_truth_strokes if self.ground_truth_strokes is not None else []
+        )
+        program = (
+            self.ground_truth_program if self.ground_truth_program is not None else ""
+        )
+        return {
+            "task_name": self.name,
+            "task_generator": self.task_generator_name,
+            "dreamcoder_program": str(program),
+            "ground_truth_strokes": [strokes],
+            "n_strokes": len(strokes),
+        }
+
     def _normalized_pixel_loss(self, img1, img2):
         return np.linalg.norm(img2 - img1)
 
-    def logLikelihood(self, parsed_program, timeout=None):
+    def logLikelihood(
+        self,
+        parsed_program,
+        timeout=None,
+        loss_fn=None,
+        min_threshold=0.1,
+    ):
+        """Log likelihood function for programs."""
         if not hasattr(parsed_program, "rendering"):
             parsed_program.rendering = self.render_parsed_program(parsed_program)
 
-        loss = self._normalized_pixel_loss(self.rendering, parsed_program.rendering)
-        if loss > 0.1:
+        loss = loss_fn(self.rendering, parsed_program.rendering)
+        if loss > min_threshold:
             return NEGATIVEINFINITY
         else:
             return 0.0
+
+    def _show_and_evaluate_program_for_task(
+        self,
+        parsed_program_or_program_string,
+        timeout=None,
+        loss_fn=None,
+        min_threshold=0.1,
+        output_directory=None,
+    ):
+        """Helper function for verifying potential programs for a task."""
+        # TODO
+        pass

@@ -34,6 +34,7 @@ import tasksgenerator.wheels_tasks_generator
 import tasksgenerator.furniture_tasks_generator
 
 DEFAULT_EXPORT_DIR = "data"
+DEFAULT_SUMMARIES_SUBDIR = "summaries"
 DEFAULT_SYNTHESIS_TASKS_SUBDIR = "synthesis"
 DEFAULT_RENDERS_SUBDIR = "renders"
 GENERATING_COMMAND = "generating_command"
@@ -49,6 +50,11 @@ parser.add_argument(
     "--synthesis_export_dir",
     default=None,
     help="If provided, alternate directory to write out the synthesis tasks.",
+)
+parser.add_argument(
+    "--summaries_export_dir",
+    default=None,
+    help="If provided, alternate directory to write out summaries of tasks.",
 )
 parser.add_argument(
     "--renders_export_dir",
@@ -79,6 +85,11 @@ parser.add_argument(
     "--no_render",
     action="store_true",
     help="If included, does not render any images.",
+)
+parser.add_argument(
+    "--task_summaries",
+    action="store_true",
+    help="If included, writes out a task summary csv.",
 )
 
 
@@ -112,6 +123,30 @@ def export_curriculum_summary(args, tasks_curriculum):
     )
     with open(curriculum_summary_file, "w") as f:
         json.dump(curriculum_summary, f, indent="")
+    return curriculum_summary_file
+
+
+def export_task_summary(args, tasks_curriculum):
+    summaries_export_dir = (
+        args.summaries_export_dir
+        if args.summaries_export_dir
+        else os.path.join(args.task_export_dir, DEFAULT_SUMMARIES_SUBDIR)
+    )
+    tasks_summaries = tasks_curriculum.get_curriculum_tasks_csv_summary()
+    num_tasks = args.num_tasks_per_condition
+    curriculum_summary_name = f"{args.tasks_generator}_{num_tasks}"
+    curriculum_summary_file = os.path.join(
+        summaries_export_dir, curriculum_summary_name + ".csv"
+    )
+    import csv
+
+    with open(curriculum_summary_file, "w", encoding="utf8", newline="") as f:
+        fc = csv.DictWriter(
+            f,
+            fieldnames=tasks_summaries[0].keys(),
+        )
+        fc.writeheader()
+        fc.writerows(tasks_summaries)
     return curriculum_summary_file
 
 
@@ -149,6 +184,9 @@ def export_rendered_images(args, tasks_curriculum):
 
 def export_tasks_curriculum_data(args, tasks_curriculum):
     export_curriculum_summary(args, tasks_curriculum)
+
+    if args.task_summaries:
+        export_task_summary(args, tasks_curriculum)
 
     if not args.no_synthesis_tasks:
         export_tasks(args, tasks_curriculum)
