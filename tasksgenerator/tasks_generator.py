@@ -21,16 +21,25 @@ RANDOM_SEED = 0
 random.seed(RANDOM_SEED)
 
 
-def random_sample_ratio_ordered_array(array, train_ratio):
-    """Utility function to randomly sample a ratio from an ordered array, preserving order. Returns [train], [test]"""
+def random_sample_ratio_ordered_array(array, train_ratio, strings_array=None):
+    """Utility function to randomly sample a ratio from an ordered array, preserving order.
+    Optionally can be paseed a set of strings as well.
+    Returns [train], [test]"""
     sample_size = int(len(array) * train_ratio)
     indices_to_sample = sorted(random.sample(range(len(array)), sample_size))
     train, test = [], []
+    train_strings, test_strings = [], []
     for i in range(len(array)):
         if i in indices_to_sample:
             train.append(array[i])
+            if strings_array is not None:
+                train_strings.append(strings_array[i])
         else:
             test.append(array[i])
+            if strings_array is not None:
+                test_strings.append(strings_array[i])
+    if strings_array is not None:
+        return train, test, train_strings, test_strings
 
     return train, test
 

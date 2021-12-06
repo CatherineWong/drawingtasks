@@ -9,14 +9,16 @@ import primitives.object_primitives as to_test
 SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)", "(rectangle)"]
 
 
-def _test_parse_render_save_programs(program_strings, tmpdir):
+def _test_parse_render_save_programs(program_strings, tmpdir, split="train"):
     export_dir = tmpdir
     for program_id, program_string in enumerate(program_strings):
         try:
             # Can it parse the program?
             p = Program.parse(program_string)
             # Can it render the program?
-            rendered = to_test.render_parsed_program(p)
+            rendered = to_test.render_parsed_program(
+                p, stroke_width_height=8 * to_test.XYLIM
+            )
             assert rendered.shape == (
                 to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
                 to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
@@ -24,7 +26,7 @@ def _test_parse_render_save_programs(program_strings, tmpdir):
             assert np.sum(rendered) > 0
             # Can it save the program?
             saved_file = to_test.export_rendered_program(
-                rendered, program_id, export_dir=export_dir
+                rendered, f"{split}_{program_id}", export_dir=export_dir
             )
             assert os.path.exists(saved_file)
         except Exception as e:

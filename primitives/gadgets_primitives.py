@@ -34,7 +34,7 @@ tfloat = baseType("tfloat")
 
 
 ## Mathematical operations.
-SCALES = np.arange(0.5, 4.25, 0.25)  # Scaling constants
+SCALES = np.arange(0.5, 10, 0.25)  # Scaling constants
 DISTS = np.arange(-3.0, 3.25, 0.25)  # Distances
 INTEGERS = range(0, 13)  # General scaling constants
 numeric_constants = set(list(SCALES) + list(DISTS) + list(INTEGERS))
@@ -91,12 +91,23 @@ transformations = [
         "T", arrow(tstroke, ttransmat, tstroke), Curried(_tform_once)
     ),  # Transform: applies a transformation to a stroke array
     Primitive(
-        "connect", arrow(tstroke, tstroke, tstroke), Curried(_connect)
+        "C", arrow(tstroke, tstroke, tstroke), Curried(_connect)
     ),  # Connects two strokes into a single new primitive
     Primitive(
         "repeat", arrow(tstroke, tfloat, ttransmat, tstroke), Curried(_repeat)
     ),  # Repeats a transformation n times against a base primitive.
 ]
+
+
+def connect_strokes(stroke_strings):
+    # Utility function to connect several strings into a single stroke. This could be replaced later with a continuation.
+    if len(stroke_strings) == 1:
+        return stroke_strings[0]
+
+    connected = f"(C {stroke_strings[0]} {stroke_strings[1]})"
+    for i in range(2, len(stroke_strings)):
+        connected = f"(C {connected} {stroke_strings[i]})"
+    return connected
 
 
 ### Basic graphics objects
@@ -160,4 +171,14 @@ def polygon_string(n):
     _, rotation = M_string(theta=theta)
 
     polygon_string = f"(repeat {base_line} {n} {rotation})"
-    return polygon_string
+    return peval(polygon_string), polygon_string
+
+
+c_string = (
+    _circle,
+    "c",
+)  # Circle
+r_string = (_rectangle, "r")  # Rectangle
+cc_string = T_string(c_string[0], c_string[-1], s="2")  # Double scaled circle
+hexagon_string = polygon_string(6)
+octagon_string = polygon_string(8)

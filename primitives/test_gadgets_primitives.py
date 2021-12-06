@@ -63,5 +63,17 @@ def test_polygon():
     test_programs = []
 
     for n_sides in range(3, 7):
-        test_programs.append(to_test.polygon_string(n_sides))
+        test_programs.append(to_test.polygon_string(n_sides)[-1])
+    _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
+
+
+def test_object_constants():
+    test_programs = []
+    for strokes, stroke_string in [
+        to_test.c_string,
+        to_test.cc_string,
+        to_test.hexagon_string,
+        to_test.octagon_string,
+    ]:
+        test_programs += [stroke_string]
     _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
