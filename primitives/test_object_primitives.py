@@ -27,8 +27,8 @@ def _test_parse_render_save_programs(program_strings, tmpdir):
                 rendered, program_id, export_dir=export_dir
             )
             assert os.path.exists(saved_file)
-        except:
-            print(f"Failed to evaluate: {program_string}")
+        except Exception as e:
+            print(f"Failed to evaluate: {program_string}, {str(e)}")
             assert False
 
 

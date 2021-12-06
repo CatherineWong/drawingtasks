@@ -208,7 +208,7 @@ def _repeat(p, n, transformation_matrix):
     Takes a base primitive p and returns a list of n primitives, each which transforms the n-1 primitive in the list by the transformation_matrix.
     """
     p_out = []
-    for i in range(n):
+    for i in range(int(n)):
         if i > 0:
             p = _tform_once(p, transformation_matrix)  # apply transformation
         pthis = [np.copy(pp) for pp in p]  # copy current state, and append
@@ -254,9 +254,15 @@ def render_stroke_arrays_to_canvas(
     return np.flip(canvas_array, 0) / (canvas_width_height * 2)
 
 
-def render_parsed_program(program):
+def render_parsed_program(
+    program,
+    stroke_width_height=4 * XYLIM,
+    canvas_width_height=SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
+):
     if not hasattr(program, "rendering"):
-        program.rendering = render_stroke_arrays_to_canvas(program.evaluate([]))
+        program.rendering = render_stroke_arrays_to_canvas(
+            program.evaluate([]), stroke_width_height, canvas_width_height
+        )
     return program.rendering
 
 
