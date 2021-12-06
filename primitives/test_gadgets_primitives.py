@@ -77,3 +77,18 @@ def test_object_constants():
     ]:
         test_programs += [stroke_string]
     _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
+
+
+def test_rotate_axis():
+    test_programs = []
+    for strokes, stroke_string in [
+        to_test.c_string,
+        to_test.hexagon_string,
+        to_test.octagon_string,
+    ]:
+        for n_sides in range(3, 7):
+            rotated, rotation_string = to_test.rotation_string(
+                strokes, stroke_string, n_sides, displacement="1"
+            )
+            test_programs += [rotation_string]
+    _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)

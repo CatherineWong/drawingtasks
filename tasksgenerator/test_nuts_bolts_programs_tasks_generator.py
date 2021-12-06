@@ -30,3 +30,17 @@ def test_generate_simple_nuts_stimuli_strings(tmpdir):
         _test_parse_render_save_programs(
             program_strings=objects, tmpdir=DESKTOP, split=split
         )
+
+
+def test_generate_perforated_nuts_stimuli_strings(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.NutsBoltsProgramsTasksGenerator.name]
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_perforated_nuts_stimuli_strings(train_ratio=0.8)
+    for split, objects in [("train", train_strings), ("test", test_strings)]:
+        _test_parse_render_save_programs(
+            program_strings=objects, tmpdir=DESKTOP, split=split
+        )

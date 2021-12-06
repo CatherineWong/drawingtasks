@@ -59,6 +59,7 @@ def _division(x):
 
 
 math_operations = [
+    Primitive("-", arrow(tfloat, tfloat, tfloat), _subtraction),
     Primitive("+", arrow(tfloat, tfloat, tfloat), _addition),
     Primitive("*", arrow(tfloat, tfloat, tfloat), _multiplication),
     Primitive("/", arrow(tfloat, tfloat, tfloat), _division),
@@ -172,6 +173,23 @@ def polygon_string(n):
 
     polygon_string = f"(repeat {base_line} {n} {rotation})"
     return peval(polygon_string), polygon_string
+
+
+def rotation_string(
+    p, p_string, n, displacement="0.5", decorator_start_angle="(/ pi 4)"
+):
+    y = f"(* {displacement} (sin {decorator_start_angle}))"
+    x = f"(* {displacement} (cos {decorator_start_angle}))"
+    theta = f"(/ (* 2 pi) {n})"
+
+    # Base line that forms the side.
+    _, base_object = T_string(p, p_string, x=x, y=y)
+
+    # Rotation
+    _, rotation = M_string(theta=theta)
+
+    rotated_object_string = f"(repeat {base_object} {n} {rotation})"
+    return peval(rotated_object_string), rotated_object_string
 
 
 c_string = (
