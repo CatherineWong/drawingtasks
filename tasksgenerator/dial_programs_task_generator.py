@@ -51,7 +51,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         # Generate the x grid.
         # TODO.
         if not no_base:
-            base, base_width, base_height = self._generate_bases_string(
+            base, base_string, base_width, base_height = self._generate_bases_string(
                 base_width=base_width,
                 base_height=base_height,
                 base_columns=base_columns,
@@ -61,6 +61,47 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             )
             stimuli += base
 
+    def _generate_nested_circle_dials_string(
+        self,
+        n_circles=str(1),
+        circle_size=str(SMALL),
+        dial_size=str(SMALL),
+        dial_angle=STR_VERTICAL,
+        shape_specification=None 
+    ):
+        """
+        Generates primitive parts for circular dials: parameterized by
+        number of dials to draw left to right, n-nested circles, radius of inner-most circle,
+        length of the dial hand (or NONE), and angle of the dial hand.
+        Shape specification: array of shapes to draw the dial from.
+        
+        :ret: dial_strokes, dial_strokes_string
+        """
+        strokes, stroke_strings = [], []
+        if circle_size != STR_ZERO and not shape_specification:
+            # Draw nested circles.
+            scale_factor = f"(+ {circle_size} {SCALE_UNIT})"
+            circle_strokes, circle_strings = nested_scaling_string(c_string[-1], n_circles, scale_factor)
+            strokes += circle_strokes
+            stroke_strings.append(circle_strings)
+        # Shape specification - we don't really do this one correctly.
+        if shape_specification:
+            for shape_idx, (shape, shape_string) in enumerate(shape_specification):
+                scale_factor = f"(+ {circle_size} (* {shape_idx} {SCALE_UNIT}))"
+                object_stroke, object_string = T_string(shape, shape_string, s=scale_factor)
+                strokes += object_stroke
+                stroke_strings.append(object_string)
+        
+        # Dials.
+        if dial_size != STR_ZERO:
+            dial_hand, dial_hand_string = T_string(short_l_string[0], short_l_string[-1], theta=dial_angle, s=dial_size)
+            dial_x = f"(* {dial_size} (* {SCALE_UNIT} (cos {dial_angle})))"
+            dial_y = f"(* {dial_size} (* {SCALE_UNIT} (sin {dial_angle})))"
+            dial_hand, dial_hand_string = T_string(dial_hand, dial_hand_string,x=dial_x, y=dial_y)
+            strokes += dial_hand 
+            stroke_strings.append(dial_hand_string)
+        
+        return [strokes], connect_strokes(stroke_strings)
 
     def _generate_bases_string(
         self,
@@ -133,12 +174,3 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         return strokes, connect_strokes(stroke_strings), total_base_width, total_base_height
 
 
-
-    def _generate_nested_circle_dials():
-        # See nuts bolts program strings for implementation.
-        pass
-
-
-    # _add_antenna_to_stimuli
-
-    # 

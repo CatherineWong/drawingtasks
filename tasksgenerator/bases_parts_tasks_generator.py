@@ -49,6 +49,10 @@ VERTICAL, RIGHT, LEFT = (
     math.pi - (math.pi / 4),
 )
 short_hline = T(object_primitives._line, x=-0.5)
+STR_ZERO = "0"
+STR_VERTICAL, STR_RIGHT, STR_LEFT = (
+    "(/ pi 2)", "(/ pi 4)", "(- pi (/ pi 4))"
+)
 
 
 @TasksGeneratorRegistry.register

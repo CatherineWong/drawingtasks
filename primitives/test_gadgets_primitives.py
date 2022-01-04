@@ -10,6 +10,8 @@ from primitives.test_object_primitives import (
     _test_parse_render_save_programs,
     _test_render_save_programs,
 )
+from tasksgenerator.bases_parts_tasks_generator import *
+from tasksgenerator.dial_tasks_generator import DIAL_SMALL
 
 DESKTOP = "/Users/catherinewong/Desktop/test"  # Internal for testing purposes.
 
@@ -77,6 +79,14 @@ def test_scaled_rectangle_strokes():
     for (w, h) in [(1, 1), (1, 2), (2, 1), (2, 3)]:
         test_strokes.append(to_test.scaled_rectangle_string(w, h)[0])
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+
+def test_nested_scaling_string():
+    test_programs = []
+    for n in range(1,3):
+        _, shape_string = to_test.c_string
+        scale_factor = f"(+ {SMALL} {SCALE_UNIT})"
+        test_programs.append(to_test.nested_scaling_string(shape_string, n, scale_factor=scale_factor)[-1])
+    _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
 
 def test_object_constants():
     test_programs = []

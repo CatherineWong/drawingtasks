@@ -198,6 +198,13 @@ def polygon_string(n):
     polygon_string = f"(repeat {base_line} {n} {rotation})"
     return peval(polygon_string), polygon_string
 
+def nested_scaling_string(shape_string, n, scale_factor):
+    # Scale factor 
+    _, scale = M_string(s=scale_factor)
+    nested_scaling_string = f"(repeat {shape_string} {n} {scale})"
+
+    return peval(nested_scaling_string), nested_scaling_string
+
 
 def rotation_string(
     p, p_string, n, displacement="0.5", decorator_start_angle="(/ pi 4)"
@@ -224,3 +231,6 @@ r_string = (_rectangle, "r")  # Rectangle
 cc_string = T_string(c_string[0], c_string[-1], s="2")  # Double scaled circle
 hexagon_string = polygon_string(6)
 octagon_string = polygon_string(8)
+l_string = (_line, "l")
+short_l_string = T_string(l_string[0], l_string[-1], x="(- 0 0.5)")
+
