@@ -21,6 +21,7 @@ from tasksgenerator.bases_parts_tasks_generator import *
 
 from tasksgenerator.s12_s13_tasks_generator import RANDOM_SEED
 
+
 @TasksGeneratorRegistry.register
 class DialProgramsTasksGenerator(AbstractTasksGenerator):
     name = "dial_programs"
@@ -37,7 +38,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         dial_size,
         dial_angle,
         n_dial_rows=1,
-        spacing=LARGE + SCALE_UNIT,
+        spacing=f"(+ {LARGE} {SCALE_UNIT})",
         base_width=LARGE,
         base_height=LARGE,
         base_columns=None,
@@ -48,8 +49,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         shape_specification=None,
         no_base=False,
     ):
-        # Generate the x grid.
-        # TODO.
+        strokes, stroke_strings = [], []
         if not no_base:
             base, base_string, base_width, base_height = self._generate_bases_string(
                 base_width=base_width,
@@ -59,7 +59,53 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 n_tiers=n_base_tiers,
                 base_end_filials=base_end_filials,
             )
-            stimuli += base
+            strokes += base
+            stroke_strings.append(base_string)
+
+        if n_dials > 0:
+            # Generate the base dial.
+            base_dial, base_dial_string = self._generate_nested_circle_dials_string(
+                n_circles=str(n_circles),
+                circle_size=circle_size,
+                dial_size=dial_size,
+                dial_angle=dial_angle,
+                shape_specification=shape_specification,
+            )
+            # Generate the row of dials.
+            row_of_dials, row_of_dials_string = self._generate_rows_of_dials(
+                n_dial_rows=str(n_dial_rows),
+                n_dials=str(n_dials),
+                x_spacing=spacing,
+                dial_shape=base_dial,
+                dial_shape_string=base_dial_string,
+            )
+
+            # Offset them with respect to the base.
+            x_offset = f"(- 0 (* 0.5 (* {max_dials} {spacing})))"
+            y_offset = f"(- 0 (* 0.5 (* {n_dial_rows} {spacing})))"
+            row_of_dials, row_of_dials_string = T_string(
+                row_of_dials, row_of_dials_string, x=x_offset, y=y_offset
+            )
+
+            strokes += row_of_dials
+            stroke_strings.append(row_of_dials_string)
+
+        return strokes, connect_strokes(stroke_strings), base_width, base_height
+
+    def _generate_rows_of_dials(
+        self,
+        n_dial_rows=str(1),
+        n_dials=str(1),
+        x_spacing=f"(+ {LARGE} {SCALE_UNIT})",
+        dial_shape=None,
+        dial_shape_string=None,
+    ):
+        # Generate a row of dials.
+        _, x_shift = M_string(x=x_spacing)
+        _, y_shift = M_string(y=f"(- 0 {x_spacing})")
+        row_of_dials_string = f"(repeat {dial_shape_string} {n_dials} {x_shift})"
+        row_of_rows_string = f"(repeat {row_of_dials_string} {n_dial_rows} {y_shift})"
+        return peval(row_of_rows_string), row_of_rows_string
 
     def _generate_nested_circle_dials_string(
         self,
@@ -67,40 +113,48 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         circle_size=str(SMALL),
         dial_size=str(SMALL),
         dial_angle=STR_VERTICAL,
-        shape_specification=None 
+        shape_specification=None,
     ):
         """
         Generates primitive parts for circular dials: parameterized by
         number of dials to draw left to right, n-nested circles, radius of inner-most circle,
         length of the dial hand (or NONE), and angle of the dial hand.
         Shape specification: array of shapes to draw the dial from.
-        
+
         :ret: dial_strokes, dial_strokes_string
         """
         strokes, stroke_strings = [], []
         if circle_size != STR_ZERO and not shape_specification:
             # Draw nested circles.
             scale_factor = f"(+ {circle_size} {SCALE_UNIT})"
-            circle_strokes, circle_strings = nested_scaling_string(c_string[-1], n_circles, scale_factor)
+            circle_strokes, circle_strings = nested_scaling_string(
+                c_string[-1], n_circles, scale_factor
+            )
             strokes += circle_strokes
             stroke_strings.append(circle_strings)
         # Shape specification - we don't really do this one correctly.
         if shape_specification:
             for shape_idx, (shape, shape_string) in enumerate(shape_specification):
                 scale_factor = f"(+ {circle_size} (* {shape_idx} {SCALE_UNIT}))"
-                object_stroke, object_string = T_string(shape, shape_string, s=scale_factor)
+                object_stroke, object_string = T_string(
+                    shape, shape_string, s=scale_factor
+                )
                 strokes += object_stroke
                 stroke_strings.append(object_string)
-        
+
         # Dials.
         if dial_size != STR_ZERO:
-            dial_hand, dial_hand_string = T_string(short_l_string[0], short_l_string[-1], theta=dial_angle, s=dial_size)
+            dial_hand, dial_hand_string = T_string(
+                short_l_string[0], short_l_string[-1], theta=dial_angle, s=dial_size
+            )
             dial_x = f"(* {dial_size} (* {SCALE_UNIT} (cos {dial_angle})))"
             dial_y = f"(* {dial_size} (* {SCALE_UNIT} (sin {dial_angle})))"
-            dial_hand, dial_hand_string = T_string(dial_hand, dial_hand_string,x=dial_x, y=dial_y)
-            strokes += dial_hand 
+            dial_hand, dial_hand_string = T_string(
+                dial_hand, dial_hand_string, x=dial_x, y=dial_y
+            )
+            strokes += dial_hand
             stroke_strings.append(dial_hand_string)
-        
+
         return [strokes], connect_strokes(stroke_strings)
 
     def _generate_bases_string(
@@ -112,13 +166,13 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         n_tiers=str(1),
         base_center=str(BASE_CENTER),
         tier_scaling=str(SCALE_UNIT),
-        base_end_filials=False
+        base_end_filials=False,
     ):
         """
         Generates bases and a string program that can be evaluated to generate the resulting base.
         See dial_tasks_generator.generate_bases for the original implementation.
 
-        :ret: base, base_string, base_width, base_width_string, base_height, base_height_string. 
+        :ret: base, base_string, base_width, base_width_string, base_height, base_height_string.
         """
         strokes, stroke_strings = [], []
         margins = f"(* 4 {tier_scaling})"
@@ -129,7 +183,9 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         # Place tiers. Note that we don't currently express the looped computation in a loop.
         first_tier_width, first_tier_height = None, None
         for tier_idx in range(peval(n_tiers)):
-            tier_width = f"(+ (* {base_columns} (+ {base_width} {SCALE_UNIT})) {margins})"
+            tier_width = (
+                f"(+ (* {base_columns} (+ {base_width} {SCALE_UNIT})) {margins})"
+            )
             tier_width = f"(- {tier_width} (* {tier_idx} {margins}))"
 
             tier_height = f"(+ (* {max_rows} (+ {base_width} {SCALE_UNIT})) {margins})"
@@ -138,10 +194,14 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             # Hacky: only allows two tiers
             if tier_idx > 0:
                 tier_offset = f"(* {SCALE_UNIT} (+ {tier_height} {first_tier_height}))"
-            
+
             tier_y = f"(+ (* 0.5 {base_center}) {tier_offset})"
-            tier_rect, tier_rect_string = scaled_rectangle_string(tier_width, tier_height)
-            tier_rect, tier_rect_string = T_string(tier_rect, tier_rect_string, y=tier_y)
+            tier_rect, tier_rect_string = scaled_rectangle_string(
+                tier_width, tier_height
+            )
+            tier_rect, tier_rect_string = T_string(
+                tier_rect, tier_rect_string, y=tier_y
+            )
             strokes += tier_rect
             stroke_strings.append(tier_rect_string)
 
@@ -152,25 +212,34 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 total_base_height = f"(+ (* 0.5 {tier_height}) {total_base_height})"
             else:
                 total_base_height = f"(+ {tier_height} {total_base_height})"
-        
+
         # Add decorative finials.
         if base_end_filials:
             filial_width = f"(* 2 {SCALE_UNIT})"
             filial_height = f"(* {first_tier_height} {SCALE_UNIT})"
-            filial_rect, filial_rect_string = scaled_rectangle_string(w=filial_width, h=filial_height)
+            filial_rect, filial_rect_string = scaled_rectangle_string(
+                w=filial_width, h=filial_height
+            )
             x_shift = f"(* 0.5 (+ {first_tier_width} {filial_width}))"
-            first_filial, first_filial_string = T_string(filial_rect, filial_rect_string, x=x_shift)
+            first_filial, first_filial_string = T_string(
+                filial_rect, filial_rect_string, x=x_shift
+            )
 
             strokes += first_filial
             stroke_strings.append(first_filial_string)
 
             x_shift = f"(- 0 {x_shift})"
-            scd_filial, scd_filial_string = T_string(filial_rect, filial_rect_string, x=x_shift)
+            scd_filial, scd_filial_string = T_string(
+                filial_rect, filial_rect_string, x=x_shift
+            )
             strokes += scd_filial
             stroke_strings.append(scd_filial_string)
 
             total_base_width = f"(+ {total_base_width} (* 2 {filial_width}))"
 
-        return strokes, connect_strokes(stroke_strings), total_base_width, total_base_height
-
-
+        return (
+            strokes,
+            connect_strokes(stroke_strings),
+            total_base_width,
+            total_base_height,
+        )
