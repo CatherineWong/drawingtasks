@@ -119,7 +119,7 @@ class TaskCurriculum:
         Generates a flattened summary of the tasks that can be written out to a CSV. This contains information specific to the upload version on S3.
         """
         all_tasks = []
-        for split in self.curriculum:
+        for split in ["test", "train"]:
             for condition in self.curriculum[split]:
                 for curriculum_block in self.curriculum[split][condition]:
                     tasks = self.curriculum[split][condition][curriculum_block]

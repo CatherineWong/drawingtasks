@@ -263,7 +263,7 @@
 },
 "metadata": {
 "name": "dials_all",
-"timestamp": "2021-11-23T16-28-22-967857",
-"generating_command": "python generate_drawing_tasks.py --task_export_dir data --synthesis_export_dir data/synthesis --summaries_export_dir None --renders_export_dir None --tasks_generator dials --num_tasks_per_condition all --train_ratio 0.8 --no_synthesis_tasks False --no_render True --task_summaries True"
+"timestamp": "2022-01-04T11-33-32-031620",
+"generating_command": "python generate_drawing_tasks.py --task_export_dir data --synthesis_export_dir None --summaries_export_dir None --renders_export_dir None --tasks_generator dials --num_tasks_per_condition all --train_ratio 0.8 --no_synthesis_tasks False --no_render False --task_summaries True"
 }
 }

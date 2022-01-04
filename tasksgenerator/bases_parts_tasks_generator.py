@@ -5,6 +5,7 @@ Defines an abstract bases generator that creates classes of common reusable part
 import math, random, itertools
 import primitives.object_primitives as object_primitives
 from dreamcoder.grammar import Grammar
+from tasksgenerator.dial_tasks_generator import BASE_CENTER
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -36,8 +37,9 @@ from tasksgenerator.s12_s13_tasks_generator import (
 
 CIRCLE, RECTANGLE, LINE = ("CIRCLE", "RECTANGLE", "LINE")
 FLOAT_TOP, FLOAT_CENTER, FLOAT_BOTTOM = "FLOAT_TOP", "FLOAT_CENTER", "FLOAT_BOTTOM"
+BASE_CENTER=0
 
-NONE, SMALL, MEDIUM, LARGE = 0.0, 1.0, 1.5, 2.0
+NONE, SMALL, MEDIUM, LARGE = 0, 1, 1.5, 2
 SCALE_UNIT = 0.5
 QUARTER_SCALE = 0.25
 THREE_QUARTER_SCALE = 0.75

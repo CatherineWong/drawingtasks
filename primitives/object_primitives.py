@@ -256,7 +256,7 @@ def render_stroke_arrays_to_canvas(
 
 def render_parsed_program(
     program,
-    stroke_width_height=4 * XYLIM,
+    stroke_width_height=8 * XYLIM,
     canvas_width_height=SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
 ):
     if not hasattr(program, "rendering"):

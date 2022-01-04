@@ -11,7 +11,7 @@ from primitives.test_object_primitives import (
     _test_render_save_programs,
 )
 
-DESKTOP = "/Users/catwong/Desktop/test"  # Internal for testing purposes.
+DESKTOP = "/Users/catherinewong/Desktop/test"  # Internal for testing purposes.
 
 
 def assert_evaluation_same(program_string, ground_truth):
@@ -66,6 +66,17 @@ def test_polygon():
         test_programs.append(to_test.polygon_string(n_sides)[-1])
     _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
 
+def test_scaled_rectangle_strings():
+    test_programs = []
+    for (w, h) in [(1, 1), (1, 2), (2, 1), (2, 3)]:
+        test_programs.append(to_test.scaled_rectangle_string(w, h)[-1])
+    _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
+
+def test_scaled_rectangle_strokes():
+    test_strokes = []
+    for (w, h) in [(1, 1), (1, 2), (2, 1), (2, 3)]:
+        test_strokes.append(to_test.scaled_rectangle_string(w, h)[0])
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
 def test_object_constants():
     test_programs = []
