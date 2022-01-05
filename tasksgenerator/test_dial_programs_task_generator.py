@@ -113,3 +113,19 @@ def test_generate_row_of_dials():
     _test_parse_render_save_programs(
         program_strings=test_stroke_strings, tmpdir=DESKTOP
     )
+
+
+def test_generate_stacked_antenna_strings():
+    test_strokes, test_stroke_strings = [], []
+    for n_wires in ["1", "2", "3"]:
+        for scale_wires in [True, False]:
+            for end_shape in [None, c_string, r_string]:
+                (strokes, stroke_strings) = generator._generate_stacked_antenna_strings(
+                    n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape
+                )
+                test_strokes += strokes
+                test_stroke_strings.append(stroke_strings)
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+    _test_parse_render_save_programs(
+        program_strings=test_stroke_strings, tmpdir=DESKTOP
+    )

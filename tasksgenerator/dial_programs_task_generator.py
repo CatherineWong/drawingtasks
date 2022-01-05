@@ -243,3 +243,109 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             total_base_width,
             total_base_height,
         )
+
+    def _generate_stacked_antenna_strings(
+        self, n_wires=str(3), antenna_size=str(SMALL), scale_wires=True, end_shape=None
+    ):
+        """
+        Generates stacked antenna. See SimpleAntennaTasksGenerator for original implementation.
+        """
+        strokes, stroke_strings = [], []
+
+        antenna_base_height = "3"
+        long_vl_string = T_string(
+            l_string[0],
+            l_string[-1],
+            theta=STR_VERTICAL,
+            s=antenna_base_height,
+            y="(- 0 2)",
+        )
+
+        if antenna_size != STR_ZERO:
+            base_line, base_line_string = T_string(
+                long_vl_string[0], long_vl_string[-1], s=antenna_size, x=STR_ZERO
+            )
+            base_line, base_line_string = T_string(
+                base_line, base_line_string, x=STR_ZERO
+            )
+
+            strokes += base_line
+            stroke_strings.append(base_line_string)
+
+            for a_idx in range(peval(n_wires)):
+                antenna_length = antenna_size
+                antenna_height = f"(* 0.5 {antenna_size})"
+                if scale_wires:
+                    s = f"(- (* {antenna_length} 2) {a_idx})"
+                else:
+                    s = f"(* {antenna_length} 2)"
+                antenna_wire, antenna_wire_string = T_string(
+                    short_l_string[0], short_l_string[-1], s=s
+                )
+                antenna_wire, antenna_wire_string = T_string(
+                    antenna_wire,
+                    antenna_wire_string,
+                    y=f"(- (* {antenna_height} 2) {a_idx})",
+                )
+                strokes += antenna_wire
+                stroke_strings.append(antenna_wire_string)
+
+        if end_shape:
+            # Add end finials
+            x_shift = f"(+ {SCALE_UNIT} {antenna_length})"
+            finial, finial_string = T_string(
+                end_shape[0], end_shape[1], x=f"(- 0 {x_shift})", y=antenna_height
+            )
+            finial, finial_string = T_string(finial, finial_string, y=antenna_height)
+            strokes += finial
+            stroke_strings.append(finial_string)
+
+            finial, finial_string = T_string(
+                end_shape[0], end_shape[1], x=x_shift, y=antenna_height
+            )
+            finial, finial_string = T_string(finial, finial_string, y=antenna_height)
+            strokes += finial
+            stroke_strings.append(finial_string)
+        return [strokes], connect_strokes(stroke_strings)
+
+    def _generate_parts_strings_for_stimuli(
+        self,
+        max_dials=5,
+        train_ratio=1.0,
+        spacing=f"(+ {LARGE} {SCALE_UNIT})",
+        generation_probability=0.2,
+    ):
+        """
+        Generator function for drawing the individual parts in the domain.
+        See dials_task_generator.generate_parts_stimuli for original implementation.
+        """
+        strokes, stroke_strings = [], []
+
+        # Generate antenna.
+
+        # Generate dials.
+
+        # Randomly sample them.
+
+    def _generate_strokes_strings_for_stimuli(
+        self,
+        train_ratio=1.0,
+        max_dials=5,
+        spacing=f"(+ {LARGE} {SCALE_UNIT})",
+        generation_probability=0.14,  # Probabilistically generate from space
+    ):
+        """
+        Main generator function. Returns strokes and strings for stimuli.
+
+        See dials_task_generator.generate_strokes_for_stimuli for original implementation.
+        """
+        strokes, stroke_strings = [], []
+
+        # Loop over the full cross product of dials / antenna / stimuli / tiers
+        total_dials_range = list(range(1, max_dials + 1))
+        random.shuffle(total_dials_range)
+        for total_dials in total_dials_range:
+            total_columns_range = list(range(1, max_dials + 1, 2))
+            random.shuffle(total_columns_range)
+
+            # TODO.

@@ -28,7 +28,7 @@ from primitives.object_primitives import (
     some_none,
     _repeat,
     _connect,
-    transform
+    transform,
 )
 
 tfloat = baseType("tfloat")
@@ -57,6 +57,7 @@ def _multiplication(x):
 
 def _division(x):
     return lambda y: x / y
+
 
 def _pow(x):
     return lambda y: x ** y
@@ -133,6 +134,7 @@ _rectangle = [
     np.array([(-0.5, -0.5), (0.5, -0.5), (0.5, 0.5), (-0.5, 0.5), (-0.5, -0.5)])
 ]
 
+
 def __scaled_rectangle(width, height):
     strokes = transform(_line, s=width, x=-(width * 0.5), y=height * 0.5) + transform(
         _line, s=width, x=-(width * 0.5), y=-(height * 0.5)
@@ -143,7 +145,10 @@ def __scaled_rectangle(width, height):
 
     return strokes
 
-def _scaled_rectangle(w) : return lambda h: __scaled_rectangle(w, h)
+
+def _scaled_rectangle(w):
+    return lambda h: __scaled_rectangle(w, h)
+
 
 _emptystroke = []
 objects = [
@@ -151,7 +156,7 @@ objects = [
     Primitive("l", tstroke, _line),
     Primitive("c", tstroke, _circle),
     Primitive("r", tstroke, _rectangle),
-    Primitive("r_s", arrow(tfloat, tfloat, tstroke), _scaled_rectangle)
+    Primitive("r_s", arrow(tfloat, tfloat, tstroke), _scaled_rectangle),
 ]
 
 ## Higher order utility functions for generating program strings simultaneously with stroke primitives.
@@ -181,9 +186,11 @@ def T_string(p, p_string, s="1", theta="0", x="0", y="0"):
     t_string = f"(T {p_string} {m_string})"
     return p, t_string
 
+
 def scaled_rectangle_string(w, h):
     scaled_rectangle_string = f"(r_s {w} {h})"
     return peval(scaled_rectangle_string), scaled_rectangle_string
+
 
 def polygon_string(n):
     y = f"(/ 0.5 (tan (/ pi {n})))"
@@ -198,8 +205,9 @@ def polygon_string(n):
     polygon_string = f"(repeat {base_line} {n} {rotation})"
     return peval(polygon_string), polygon_string
 
+
 def nested_scaling_string(shape_string, n, scale_factor):
-    # Scale factor 
+    # Scale factor
     _, scale = M_string(s=scale_factor)
     nested_scaling_string = f"(repeat {shape_string} {n} {scale})"
 
@@ -232,5 +240,6 @@ cc_string = T_string(c_string[0], c_string[-1], s="2")  # Double scaled circle
 hexagon_string = polygon_string(6)
 octagon_string = polygon_string(8)
 l_string = (_line, "l")
-short_l_string = T_string(l_string[0], l_string[-1], x="(- 0 0.5)")
-
+short_l_string = T_string(
+    l_string[0], l_string[-1], x="(- 0 0.5)"
+)  # Short horizontal line
