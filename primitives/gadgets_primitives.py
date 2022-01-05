@@ -63,6 +63,14 @@ def _pow(x):
     return lambda y: x ** y
 
 
+def _max(x):
+    return lambda y: max(x, y)
+
+
+def _min(x):
+    return lambda y: min(x, y)
+
+
 math_operations = [
     Primitive("-", arrow(tfloat, tfloat, tfloat), _subtraction),
     Primitive("+", arrow(tfloat, tfloat, tfloat), _addition),
@@ -72,8 +80,8 @@ math_operations = [
     Primitive("sin", arrow(tfloat, tfloat), math.sin),
     Primitive("cos", arrow(tfloat, tfloat), math.cos),
     Primitive("tan", arrow(tfloat, tfloat), math.tan),
-    Primitive("max", arrow(tfloat, tfloat, tfloat), max),
-    Primitive("min", arrow(tfloat, tfloat, tfloat), min),
+    Primitive("max", arrow(tfloat, tfloat, tfloat), _max),
+    Primitive("min", arrow(tfloat, tfloat, tfloat), _min),
 ]
 
 ### Basic transform.

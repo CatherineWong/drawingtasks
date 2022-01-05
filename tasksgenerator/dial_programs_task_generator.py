@@ -8,7 +8,11 @@ import math, random, itertools, copy
 from primitives.gadgets_primitives import *
 from dreamcoder.grammar import Grammar
 from primitives.object_primitives import rectangle
-from tasksgenerator.dial_tasks_generator import DIAL_SCALE_UNIT
+from tasksgenerator.dial_tasks_generator import (
+    ANTENNA_DIAL_SCALE_DOWN,
+    DIAL_SCALE_UNIT,
+    MAX_ANTENNA_WIRES,
+)
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -29,7 +33,6 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
     def __init__(self):
         super().__init__(grammar=constants + some_none + objects + transformations)
 
-    # _generate_base_with_dials
     def _generate_base_with_dials(
         self,
         n_dials,
@@ -205,7 +208,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes += tier_rect
             stroke_strings.append(tier_rect_string)
 
-            total_base_width = "(max {total_base_width} {tier_width})"
+            total_base_width = f"(max {total_base_width} {tier_width})"
 
             if tier_idx == 0:
                 first_tier_width, first_tier_height = tier_width, tier_height
@@ -307,6 +310,107 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes += finial
             stroke_strings.append(finial_string)
         return [strokes], connect_strokes(stroke_strings)
+
+    def _add_antenna_to_stimuli(
+        self,
+        stimuli,
+        stimuli_string,
+        base_width,
+        base_height,
+        antenna_end_shapes=[None, c_string, r_string],
+        add_double_antenna=False,
+        add_side_antenna=False,
+        generation_probability=1.0,
+        antenna_generation_probability=0.25,
+    ):
+        if random.uniform(0, 1) > generation_probability:
+            return None
+        generation_probability *= antenna_generation_probability
+
+        strokes, stroke_strings = [], []
+        antenna_strokes, antenna_strings = [], []
+        for n_wires in ["1", "2", "3"]:
+            for scale_wires in [True, False]:
+                for end_shape in antenna_end_shapes:
+                    stroke, stroke_string = self._generate_stacked_antenna_strings(
+                        n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape
+                    )
+                    antenna_strokes += stroke
+                    antenna_strings.append(stroke_string)
+
+        sideways_antenna_strokes, sideways_antenna_strings = [], []
+        for n_wires in ["2", "3"]:
+            stroke, stroke_string = self._generate_stacked_antenna_strings(
+                n_wires=n_wires, scale_wires=False, end_shape=None
+            )
+            sideways_antenna_strokes += stroke
+            sideways_antenna_strings.append(stroke_string)
+
+        for base_antenna_primitive, base_antenna_string in zip(
+            antenna_strokes, antenna_strings
+        ):
+            y_shift = f"(+ {LARGE} {base_height})"
+            antenna_primitive, antenna_primitive_string = T_string(
+                base_antenna_primitive, base_antenna_string, y=y_shift
+            )
+            if random.uniform(0, 1) < generation_probability:
+                strokes.append(stimuli + antenna_primitive)
+                stroke_strings.append(
+                    connect_strokes([stimuli_string, antenna_primitive_string])
+                )
+
+            if random.uniform(0, 1) < generation_probability:
+                if peval(base_width) > peval(base_height) and add_double_antenna:
+                    x_shift = f"(* {base_width} 0.25)"
+                    finial_right = T_string(
+                        base_antenna_primitive,
+                        base_antenna_string,
+                        y=y_shift,
+                        x=x_shift,
+                    )
+                    finial_left = T_string(
+                        base_antenna_primitive,
+                        base_antenna_string,
+                        y=y_shift,
+                        x=f"(- 0 {x_shift})",
+                    )
+                    strokes.append(stimuli + finial_right[0] + finial_left[0])
+                    stroke_strings.append(
+                        connect_strokes(
+                            [stimuli_string, finial_right[-1], finial_left[-1]]
+                        )
+                    )
+            if random.uniform(0, 1) < generation_probability:
+                if add_side_antenna:
+                    for (base_sideways, base_sideways_string) in zip(
+                        sideways_antenna_strokes, sideways_antenna_strings
+                    ):
+                        sideways_antenna = T_string(
+                            base_sideways,
+                            base_sideways_string,
+                            theta=f"(- 0 {STR_VERTICAL})",
+                        )
+                        sideways_antenna = T_string(
+                            sideways_antenna[0],
+                            sideways_antenna[-1],
+                            x=f"(+ {LARGE} (* 0.5 {base_width}))",
+                        )
+                        strokes.append(
+                            stimuli + antenna_primitive + sideways_antenna[0]
+                        )
+                        stroke_strings.append(
+                            connect_strokes(
+                                [
+                                    stimuli_string,
+                                    antenna_primitive_string,
+                                    sideways_antenna[-1],
+                                ]
+                            )
+                        )
+
+            if len(strokes) < 1:
+                return None
+            return strokes, stroke_strings
 
     def _generate_parts_strings_for_stimuli(
         self,

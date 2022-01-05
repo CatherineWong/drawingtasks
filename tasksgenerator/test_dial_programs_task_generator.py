@@ -48,6 +48,45 @@ def test_generate_bases_strings():
     )
 
 
+def test_add_antenna_to_stimuli():
+    test_strokes = []
+    test_stroke_strings = []
+    for base_columns in ["1", "2", "3"]:
+        for max_rows in ["1", "2"]:
+            for n_tiers in ["1", "2"]:
+                for base_end_filials in [False, True]:
+                    (
+                        strokes,
+                        stroke_strings,
+                        base_width,
+                        base_height,
+                    ) = generator._generate_bases_string(
+                        base_columns=base_columns,
+                        max_rows=max_rows,
+                        n_tiers=n_tiers,
+                        base_end_filials=base_end_filials,
+                    )
+
+                    antenna_stimuli = generator._add_antenna_to_stimuli(
+                        strokes,
+                        stroke_strings,
+                        base_width,
+                        base_height,
+                        generation_probability=1.0,
+                        antenna_generation_probability=1.0,
+                        add_double_antenna=True,
+                        add_side_antenna=True,
+                    )
+                    if antenna_stimuli is not None:
+                        strokes, stroke_strings = antenna_stimuli
+                    test_strokes += strokes
+                    test_stroke_strings += stroke_strings
+    _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+    # _test_parse_render_save_programs(
+    #     program_strings=test_stroke_strings, tmpdir=DESKTOP
+    # )
+
+
 def test_generate_nested_circle_dials_string():
     test_strokes, test_stroke_strings = [], []
 
