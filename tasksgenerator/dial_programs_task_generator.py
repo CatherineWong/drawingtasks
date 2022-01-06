@@ -81,6 +81,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 x_spacing=spacing,
                 dial_shape=base_dial,
                 dial_shape_string=base_dial_string,
+                centered=centered,
             )
 
             # Offset them with respect to the base.
@@ -89,7 +90,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             if centered:
                 x_offset = f"(- 0 (* 0.5 (* (- {max_dials} 1) {spacing})))"
             else:
-                x_offset = f"(* (- {max_dials} 1) {spacing})"
+                x_offset = f"(+ 0 (* 0.5 (* {max_dials} {spacing})))"
             row_of_dials, row_of_dials_string = T_string(
                 row_of_dials, row_of_dials_string, x=x_offset, y=y_offset
             )
@@ -106,10 +107,15 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         x_spacing=f"(+ {LARGE} {SCALE_UNIT})",
         dial_shape=None,
         dial_shape_string=None,
+        centered=False,
     ):
         # Generate a row of dials.
-        _, x_shift = M_string(x=x_spacing)
-        _, y_shift = M_string(y=f"(+ 0 {x_spacing})")
+        if centered:
+            _, x_shift = M_string(x=x_spacing)
+        else:
+            _, x_shift = M_string(x=f"(- 0 {x_spacing})")
+
+        _, y_shift = M_string(y=f"{x_spacing}")
         row_of_dials_string = f"(repeat {dial_shape_string} {n_dials} {x_shift})"
         row_of_rows_string = f"(repeat {row_of_dials_string} {n_dial_rows} {y_shift})"
         return peval(row_of_rows_string), row_of_rows_string
