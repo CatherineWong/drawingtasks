@@ -12,7 +12,7 @@ import tasksgenerator.dial_tasks_generator as to_test
 import primitives.object_primitives as object_primitives
 
 
-DESKTOP = "/Users/catwong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/dials"  # Internal for testing purposes.
+DESKTOP = f"/Users/catherinewong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/{to_test.DialsTasksGenerator.name}"  # Internal for testing purposes.
 
 
 def _test_render_save_programs(

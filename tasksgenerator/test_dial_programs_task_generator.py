@@ -82,9 +82,9 @@ def test_add_antenna_to_stimuli():
                     test_strokes += strokes
                     test_stroke_strings += stroke_strings
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
-    # _test_parse_render_save_programs(
-    #     program_strings=test_stroke_strings, tmpdir=DESKTOP
-    # )
+    _test_parse_render_save_programs(
+        program_strings=test_stroke_strings, tmpdir=DESKTOP
+    )
 
 
 def test_generate_nested_circle_dials_string():
@@ -168,3 +168,23 @@ def test_generate_stacked_antenna_strings():
     _test_parse_render_save_programs(
         program_strings=test_stroke_strings, tmpdir=DESKTOP
     )
+
+
+def test_generate_strokes_strings_for_stimuli():
+    generator = TasksGeneratorRegistry[to_test.DialProgramsTasksGenerator.name]
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_strokes_strings_for_stimuli(train_ratio=1.0)
+    for split, objects, test_stroke_strings in [
+        ("train", train, train_strings),
+        ("test", test, test_strings),
+    ]:
+        _test_render_save_programs(
+            stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        )
+        # _test_parse_render_save_programs(
+        #     program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        # )

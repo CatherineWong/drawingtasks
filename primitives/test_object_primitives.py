@@ -183,7 +183,9 @@ def test_connect():
     assert_equal_program_array(transformation_program, p1 + p2)
 
 
-def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
+def _test_render_save_programs(
+    stroke_arrays, export_dir, no_blanks=True, split="train"
+):
     for program_id, s in enumerate(stroke_arrays):
         # Can it render the program?
 
@@ -196,7 +198,7 @@ def _test_render_save_programs(stroke_arrays, export_dir, no_blanks=True):
         assert not no_blanks or np.sum(rendered) > 0
         # Can it save the program?
         saved_file = to_test.export_rendered_program(
-            rendered, program_id, export_dir=export_dir
+            rendered, f"{split}_{program_id}_stroke", export_dir=export_dir
         )
         print(f"Saving to id {program_id}")
         assert os.path.exists(saved_file)

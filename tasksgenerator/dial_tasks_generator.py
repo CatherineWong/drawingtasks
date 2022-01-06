@@ -587,38 +587,38 @@ class DialsTasksGenerator(SimpleDialTasksGenerator):
                                 )
 
                                 # Blank bases with antenna.
-                                if (
-                                    can_add_tiers
-                                    and rows == 1
-                                    and tiers == 1
-                                    and total_dials == 1
-                                ):
-                                    (
-                                        stimuli,
-                                        total_base_width,
-                                        total_base_height,
-                                    ) = self._generate_base_with_dials(
-                                        n_dials=0,
-                                        n_circles=1,
-                                        dial_size=DIAL_NONE,
-                                        circle_size=DIAL_NONE,
-                                        dial_angle=DIAL_NONE,
-                                        base_columns=base_columns,
-                                        base_height=base_height,
-                                        centered=centered,
-                                        n_dial_rows=rows,
-                                    )
-                                    antenna_stimuli = self._add_antenna_to_stimuli(
-                                        stimuli,
-                                        n_antenna=1,
-                                        base_width=total_base_width,
-                                        base_height=total_base_height,
-                                        spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
-                                        generation_probability=1.0,
-                                        antenna_generation_probability=0.5,
-                                    )
-                                    if antenna_stimuli is not None:
-                                        strokes += antenna_stimuli
+                                # if (
+                                #     can_add_tiers
+                                #     and rows == 1
+                                #     and tiers == 1
+                                #     and total_dials == 1
+                                # ):
+                                #     (
+                                #         stimuli,
+                                #         total_base_width,
+                                #         total_base_height,
+                                #     ) = self._generate_base_with_dials(
+                                #         n_dials=0,
+                                #         n_circles=1,
+                                #         dial_size=DIAL_NONE,
+                                #         circle_size=DIAL_NONE,
+                                #         dial_angle=DIAL_NONE,
+                                #         base_columns=base_columns,
+                                #         base_height=base_height,
+                                #         centered=centered,
+                                #         n_dial_rows=rows,
+                                #     )
+                                #     antenna_stimuli = self._add_antenna_to_stimuli(
+                                #         stimuli,
+                                #         n_antenna=1,
+                                #         base_width=total_base_width,
+                                #         base_height=total_base_height,
+                                #         spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
+                                #         generation_probability=1.0,
+                                #         antenna_generation_probability=0.5,
+                                #     )
+                                #     if antenna_stimuli is not None:
+                                #         strokes += antenna_stimuli
 
                                 # Small and large dials with the lever sticking out
                                 for dial_size in [DIAL_SMALL, DIAL_LARGE]:
@@ -665,31 +665,32 @@ class DialsTasksGenerator(SimpleDialTasksGenerator):
                                             ):
                                                 strokes.append(stimuli)
 
-                                            add_side_antenna = (
-                                                base_columns
-                                                < MAX_BASE_COLUMNS_FOR_ANTENNA
-                                            )
-                                            add_double_antenna = (
-                                                base_columns
-                                                > MAX_BASE_COLUMNS_FOR_ANTENNA
-                                            )
+                                            # add_side_antenna = (
+                                            #     base_columns
+                                            #     < MAX_BASE_COLUMNS_FOR_ANTENNA
+                                            # )
+                                            # add_double_antenna = (
+                                            #     base_columns
+                                            #     > MAX_BASE_COLUMNS_FOR_ANTENNA
+                                            # )
 
-                                            antenna_stimuli = self._add_antenna_to_stimuli(
-                                                stimuli,
-                                                n_antenna=1,
-                                                base_width=total_base_width,
-                                                base_height=total_base_height,
-                                                spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
-                                                add_double_antenna=add_double_antenna,
-                                                add_side_antenna=add_side_antenna,
-                                                generation_probability=generation_probability,
-                                            )
-                                            if antenna_stimuli is not None:
-                                                strokes += antenna_stimuli
+                                            # antenna_stimuli = self._add_antenna_to_stimuli(
+                                            #     stimuli,
+                                            #     n_antenna=1,
+                                            #     base_width=total_base_width,
+                                            #     base_height=total_base_height,
+                                            #     spacing=DIAL_LARGE + DIAL_SCALE_UNIT,
+                                            #     add_double_antenna=add_double_antenna,
+                                            #     add_side_antenna=add_side_antenna,
+                                            #     generation_probability=generation_probability,
+                                            # )
+                                            # if antenna_stimuli is not None:
+                                            #     strokes += antenna_stimuli
 
-        train_parts, test_parts = self._generate_parts_stimuli(
-            train_ratio=0.95
-        )  # Mostly in training.
+        # train_parts, test_parts = self._generate_parts_stimuli(
+        #     train_ratio=0.95
+        # )  # Mostly in training.
+        train_parts, test_parts = [], []
 
         train_main, test_main = random_sample_ratio_ordered_array(strokes, train_ratio)
 

@@ -59,7 +59,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 base_height=base_height,
                 base_columns=base_columns,
                 max_rows=n_dial_rows,
-                n_tiers=n_base_tiers,
+                n_tiers=str(n_base_tiers),
                 base_end_filials=base_end_filials,
             )
             strokes += base
@@ -84,8 +84,9 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             )
 
             # Offset them with respect to the base.
-            x_offset = f"(- 0 (* 0.5 (* {max_dials} {spacing})))"
-            y_offset = f"(- 0 (* 0.5 (* {n_dial_rows} {spacing})))"
+            y_offset = f"(- 0 (* 0.5 (* (- {n_dial_rows} 1) {spacing})))"
+
+            x_offset = f"(- 0 (* 0.5 (* (- {max_dials} 1) {spacing})))"
             row_of_dials, row_of_dials_string = T_string(
                 row_of_dials, row_of_dials_string, x=x_offset, y=y_offset
             )
@@ -105,7 +106,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
     ):
         # Generate a row of dials.
         _, x_shift = M_string(x=x_spacing)
-        _, y_shift = M_string(y=f"(- 0 {x_spacing})")
+        _, y_shift = M_string(y=f"(+ 0 {x_spacing})")
         row_of_dials_string = f"(repeat {dial_shape_string} {n_dials} {x_shift})"
         row_of_rows_string = f"(repeat {row_of_dials_string} {n_dial_rows} {y_shift})"
         return peval(row_of_rows_string), row_of_rows_string
@@ -408,9 +409,9 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                             )
                         )
 
-            if len(strokes) < 1:
-                return None
-            return strokes, stroke_strings
+        if len(strokes) < 1:
+            return None
+        return strokes, stroke_strings
 
     def _generate_parts_strings_for_stimuli(
         self,
@@ -445,6 +446,8 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         """
         strokes, stroke_strings = [], []
 
+        MAX_BASE_COLUMNS_FOR_ANTENNA = 3
+
         # Loop over the full cross product of dials / antenna / stimuli / tiers
         total_dials_range = list(range(1, max_dials + 1))
         random.shuffle(total_dials_range)
@@ -452,4 +455,120 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             total_columns_range = list(range(1, max_dials + 1, 2))
             random.shuffle(total_columns_range)
 
-            # TODO.
+            # Varying bases for the single small dials.
+            for base_columns in total_columns_range:
+                for base_heights in [1, max_dials]:
+                    for rows in [1, 2]:
+                        for tiers in [1, 2]:
+                            for base_end_filials in [True, False]:
+                                can_add_tiers = rows <= 1 and base_heights <= 1
+                                if tiers > 1 and not can_add_tiers:
+                                    continue
+
+                                if base_heights < rows:
+                                    continue
+                                base_height = base_heights * LARGE
+                                if rows > 1:  # We already take care of sizing the rows.
+                                    base_height = LARGE
+                                if base_columns < total_dials:
+                                    continue
+
+                                centered = total_dials % 2 != 0
+
+                                add_side_antenna = (
+                                    base_columns < MAX_BASE_COLUMNS_FOR_ANTENNA
+                                )
+                                add_double_antenna = (
+                                    base_columns > MAX_BASE_COLUMNS_FOR_ANTENNA
+                                )
+
+                                # Blank bases with antenna.
+                                # if (
+                                #     can_add_tiers
+                                #     and rows == 1
+                                #     and tiers == 1
+                                #     and total_dials == 1
+                                # ):
+                                #     (
+                                #         stimuli,
+                                #         stimuli_string,
+                                #         total_base_width,
+                                #         total_base_height,
+                                #     ) = self._generate_base_with_dials(
+                                #         n_dials=0,
+                                #         n_circles=1,
+                                #         dial_size=STR_ZERO,
+                                #         circle_size=STR_ZERO,
+                                #         dial_angle=STR_ZERO,
+                                #         base_columns=base_columns,
+                                #         base_height=base_height,
+                                #         centered=centered,
+                                #         n_dial_rows=rows,
+                                #     )
+                                #     antenna_stimuli = self._add_antenna_to_stimuli(
+                                #         stimuli,
+                                #         stimuli_string,
+                                #         base_width=total_base_width,
+                                #         base_height=total_base_height,
+                                #         generation_probability=1.0,
+                                #         antenna_generation_probability=0.5,
+                                #     )
+                                #     if antenna_stimuli is not None:
+                                #         stim_strokes, stim_strings = antenna_stimuli
+
+                                #         strokes += stim_strokes
+                                #         stroke_strings += stim_strings
+
+                                # Small and large dials with the lever sticking out.
+                                for dial_size in [SMALL, LARGE]:
+                                    for dial_angle in [STR_VERTICAL, STR_RIGHT]:
+                                        for shape_specification in [
+                                            None,
+                                            [c_string, r_string],
+                                            [c_string, c_string],
+                                        ]:
+                                            if (
+                                                dial_size == LARGE
+                                                and dial_angle == STR_VERTICAL
+                                            ):
+                                                continue
+
+                                            (
+                                                stimuli,
+                                                stimuli_string,
+                                                total_base_width,
+                                                total_base_height,
+                                            ) = self._generate_base_with_dials(
+                                                max_dials=total_dials,
+                                                n_dials=total_dials,
+                                                n_circles=1,
+                                                dial_size=str(dial_size),
+                                                circle_size=str(dial_size),
+                                                dial_angle=dial_angle,
+                                                base_columns=str(base_columns),
+                                                base_height=str(base_height),
+                                                centered=centered,
+                                                n_dial_rows=rows,
+                                                n_base_tiers=tiers,
+                                                spacing=spacing,
+                                                base_end_filials=base_end_filials,
+                                                shape_specification=shape_specification,
+                                            )
+                                            if (
+                                                random.uniform(0, 1)
+                                                < generation_probability
+                                            ):
+                                                strokes.append(stimuli)
+                                                stroke_strings.append(stimuli_string)
+
+        # TODO: train parts, test parts.
+        (
+            train_main,
+            test_main,
+            train_main_strings,
+            test_main_strings,
+        ) = random_sample_ratio_ordered_array(
+            strokes, train_ratio, strings_array=stroke_strings
+        )
+
+        return train_main, test_main, train_main_strings, test_main_strings
