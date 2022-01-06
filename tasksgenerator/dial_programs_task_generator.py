@@ -86,7 +86,10 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             # Offset them with respect to the base.
             y_offset = f"(- 0 (* 0.5 (* (- {n_dial_rows} 1) {spacing})))"
 
-            x_offset = f"(- 0 (* 0.5 (* (- {max_dials} 1) {spacing})))"
+            if centered:
+                x_offset = f"(- 0 (* 0.5 (* (- {max_dials} 1) {spacing})))"
+            else:
+                x_offset = f"(* (- {max_dials} 1) {spacing})"
             row_of_dials, row_of_dials_string = T_string(
                 row_of_dials, row_of_dials_string, x=x_offset, y=y_offset
             )
@@ -192,7 +195,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             )
             tier_width = f"(- {tier_width} (* {tier_idx} {margins}))"
 
-            tier_height = f"(+ (* {max_rows} (+ {base_width} {SCALE_UNIT})) {margins})"
+            tier_height = f"(+ (* {max_rows} (+ {base_height} {SCALE_UNIT})) {margins})"
             tier_height = f"(* {tier_height} (^ {tier_scaling} {tier_idx}))"
 
             # Hacky: only allows two tiers
@@ -427,10 +430,83 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         strokes, stroke_strings = [], []
 
         # Generate antenna.
+        antenna_end_shapes = [None, c_string, r_string]
+        for n_wires in ["1", "2", "3"]:
+            for scale_wires in [True, False]:
+                for end_shape in antenna_end_shapes:
+                    (
+                        antenna_stimuli,
+                        antenna_string,
+                    ) = self._generate_stacked_antenna_strings(
+                        n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape
+                    )
+                    strokes += antenna_stimuli
+                    stroke_strings.append(antenna_string)
 
         # Generate dials.
+        for total_dials in [1, max_dials + 1]:
+            # Varying bases for the single small dials.
+            for base_columns in [1, max_dials + 1]:
+                for base_heights in [1, max_dials]:
+                    for rows in [1, 2]:
+                        if base_heights < rows:
+                            continue
+                        base_height = base_heights * LARGE
+                        if rows > 1:  # We already take care of sizing the rows.
+                            base_height = LARGE
+                        if base_columns < total_dials:
+                            continue
+
+                        centered = total_dials % 2 != 0
+
+                        # Small and large dials with the lever sticking out
+                        for dial_size in [SMALL, LARGE]:
+                            for dial_angle in [STR_VERTICAL, STR_RIGHT]:
+                                for shape_specification in [
+                                    None,
+                                    [c_string, r_string],
+                                    [c_string, c_string],
+                                ]:
+                                    if (
+                                        dial_size == LARGE
+                                        and dial_angle == STR_VERTICAL
+                                    ):
+                                        continue
+
+                                    (
+                                        stimuli,
+                                        stimuli_string,
+                                        total_base_width,
+                                        total_base_height,
+                                    ) = self._generate_base_with_dials(
+                                        max_dials=total_dials,
+                                        n_dials=total_dials,
+                                        n_circles=1,
+                                        dial_size=str(dial_size),
+                                        circle_size=str(dial_size),
+                                        dial_angle=dial_angle,
+                                        base_columns=str(base_columns),
+                                        base_height=str(base_height),
+                                        centered=centered,
+                                        n_dial_rows=rows,
+                                        n_base_tiers=STR_ZERO,
+                                        spacing=spacing,
+                                        base_end_filials=False,
+                                        shape_specification=shape_specification,
+                                        no_base=True,
+                                    )
+                                    if total_dials > 1 or rows > 1:
+                                        if (
+                                            random.uniform(0, 1)
+                                            > generation_probability
+                                        ):
+                                            continue
+
+                                    strokes.append(stimuli)
+                                    stroke_strings.append(stimuli_string)
 
         # Randomly sample them.
+        return random_sample_ratio_ordered_array(strokes, train_ratio, stroke_strings)
 
     def _generate_strokes_strings_for_stimuli(
         self,
@@ -483,41 +559,41 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                 )
 
                                 # Blank bases with antenna.
-                                # if (
-                                #     can_add_tiers
-                                #     and rows == 1
-                                #     and tiers == 1
-                                #     and total_dials == 1
-                                # ):
-                                #     (
-                                #         stimuli,
-                                #         stimuli_string,
-                                #         total_base_width,
-                                #         total_base_height,
-                                #     ) = self._generate_base_with_dials(
-                                #         n_dials=0,
-                                #         n_circles=1,
-                                #         dial_size=STR_ZERO,
-                                #         circle_size=STR_ZERO,
-                                #         dial_angle=STR_ZERO,
-                                #         base_columns=base_columns,
-                                #         base_height=base_height,
-                                #         centered=centered,
-                                #         n_dial_rows=rows,
-                                #     )
-                                #     antenna_stimuli = self._add_antenna_to_stimuli(
-                                #         stimuli,
-                                #         stimuli_string,
-                                #         base_width=total_base_width,
-                                #         base_height=total_base_height,
-                                #         generation_probability=1.0,
-                                #         antenna_generation_probability=0.5,
-                                #     )
-                                #     if antenna_stimuli is not None:
-                                #         stim_strokes, stim_strings = antenna_stimuli
+                                if (
+                                    can_add_tiers
+                                    and rows == 1
+                                    and tiers == 1
+                                    and total_dials == 1
+                                ):
+                                    (
+                                        stimuli,
+                                        stimuli_string,
+                                        total_base_width,
+                                        total_base_height,
+                                    ) = self._generate_base_with_dials(
+                                        n_dials=0,
+                                        n_circles=1,
+                                        dial_size=STR_ZERO,
+                                        circle_size=STR_ZERO,
+                                        dial_angle=STR_ZERO,
+                                        base_columns=base_columns,
+                                        base_height=base_height,
+                                        centered=centered,
+                                        n_dial_rows=rows,
+                                    )
+                                    antenna_stimuli = self._add_antenna_to_stimuli(
+                                        stimuli,
+                                        stimuli_string,
+                                        base_width=total_base_width,
+                                        base_height=total_base_height,
+                                        generation_probability=1.0,
+                                        antenna_generation_probability=0.5,
+                                    )
+                                    if antenna_stimuli is not None:
+                                        stim_strokes, stim_strings = antenna_stimuli
 
-                                #         strokes += stim_strokes
-                                #         stroke_strings += stim_strings
+                                        strokes += stim_strokes
+                                        stroke_strings += stim_strings
 
                                 # Small and large dials with the lever sticking out.
                                 for dial_size in [SMALL, LARGE]:
@@ -561,7 +637,40 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                                 strokes.append(stimuli)
                                                 stroke_strings.append(stimuli_string)
 
-        # TODO: train parts, test parts.
+                                            add_side_antenna = (
+                                                base_columns
+                                                < MAX_BASE_COLUMNS_FOR_ANTENNA
+                                            )
+                                            add_double_antenna = (
+                                                base_columns
+                                                > MAX_BASE_COLUMNS_FOR_ANTENNA
+                                            )
+
+                                            antenna_stimuli = self._add_antenna_to_stimuli(
+                                                stimuli,
+                                                stimuli_string,
+                                                base_width=total_base_width,
+                                                base_height=total_base_height,
+                                                add_double_antenna=add_double_antenna,
+                                                add_side_antenna=add_side_antenna,
+                                                generation_probability=generation_probability,
+                                            )
+                                            if antenna_stimuli is not None:
+                                                (
+                                                    stim_strokes,
+                                                    stim_strings,
+                                                ) = antenna_stimuli
+
+                                                strokes += stim_strokes
+                                                stroke_strings += stim_strings
+
+        (
+            train_parts,
+            test_parts,
+            train_parts_strings,
+            test_parts_strings,
+        ) = self._generate_parts_strings_for_stimuli(train_ratio=0.95)
+
         (
             train_main,
             test_main,
@@ -571,4 +680,9 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes, train_ratio, strings_array=stroke_strings
         )
 
-        return train_main, test_main, train_main_strings, test_main_strings
+        return (
+            train_parts + train_main,
+            test_parts + test_main,
+            train_parts_strings + train_main_strings,
+            test_parts_strings + test_main_strings,
+        )
