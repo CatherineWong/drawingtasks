@@ -14,7 +14,7 @@ import tasksgenerator.bases_parts_tasks_generator as bases_parts_tasks_generator
 import tasksgenerator.dial_tasks_generator as dial_tasks_generator
 import tasksgenerator.antenna_tasks_generator as antenna_tasks_generator
 
-DESKTOP = "/Users/catwong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/wheels"  # Internal for testing purposes.
+DESKTOP = "/Users/catherinewong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/wheels"  # Internal for testing purposes.
 
 SMALL, MEDIUM, LARGE, THREE_QUARTER_SCALE = (
     bases_parts_tasks_generator.SMALL,

@@ -123,9 +123,9 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         decorator_size=str(0.25),
         decorator_displacement=str(0.75),
         decorator_start_angle="(/ pi 4)",
-        n_spokes=str(0),
+        n_spokes=STR_ZERO,
         spoke_angle="(/ pi 4)",
-        spoke_length=str(0),
+        spoke_length=STR_ZERO,
     ):
         """Generates perforated shapes and a string program that can be evaluated to generate the perforated shape. See dial_tasks_generator._generate_perforated_shapes for the original implementation.
 
@@ -176,6 +176,9 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         )
         object_strokes += decorator_strokes
         object_strings.append(decorator_string)
+
+        # Note: the original implementation provides the ability to generate spokes.
+        # However, this functionality is actually never used.
 
         height, height_string = outer_shape_size, str(outer_shape_size)
         return [object_strokes], connect_strokes(object_strings), height, height_string

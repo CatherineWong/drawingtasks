@@ -28,3 +28,13 @@ class FurnitureProgramsTasksGenerator(AbstractTasksGenerator):
 
     def __init__(self):
         super().__init__(grammar=constants + some_none + objects + transformations)
+
+    def _generate_drawer_pulls_strings_iterator(
+        self,
+        min_x,
+        max_x,
+        n_drawer_pulls,
+        float_location=FLOAT_CENTER,
+        drawer_pull_scale=str(SCALE_UNIT),
+    ):
+        pass
