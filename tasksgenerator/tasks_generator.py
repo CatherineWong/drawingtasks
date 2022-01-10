@@ -11,9 +11,11 @@ from collections import defaultdict
 from class_registry import ClassRegistry
 from dreamcoder.utilities import NEGATIVEINFINITY
 from dreamcoder.task import Task
+from dreamcoder.program import Program
 import math, random, itertools, copy
 
 DEFAULT_DRAWING_TASK_GENERATOR = "drawing"
+PROGRAMS_NAME = "programs"  # If in name, this has programs.
 
 TasksGeneratorRegistry = ClassRegistry("name", unique=True)
 
@@ -118,6 +120,8 @@ class TaskCurriculum:
         """
         Generates a flattened summary of the tasks that can be written out to a CSV. This contains information specific to the upload version on S3.
         """
+        domain = self.cleaned_name(self.name.split(f"_{PROGRAMS_NAME}")[0])
+        s3_domain = f"https://lax-drawing-{domain}-all.s3.amazonaws.com/"
         all_tasks = []
         for split in ["test", "train"]:
             for condition in self.curriculum[split]:
@@ -126,10 +130,9 @@ class TaskCurriculum:
                     task_summaries = [task.task_summary() for task in tasks]
                     all_tasks += task_summaries
         # FWIW, add back in the canonical indexing from S3.
-        canonical_name = self.cleaned_name(self.name)
         for idx, task_dict in enumerate(all_tasks):
             s3_idx = str.zfill(str(idx), 3)
-            s3_name = f"lax-drawing-{canonical_name}-{s3_idx}.png"
+            s3_name = s3_domain + f"lax-drawing-{domain}-all-{s3_idx}.png"
             task_dict["s3_stimuli"] = s3_name
         return all_tasks
 
@@ -155,7 +158,10 @@ class AbstractTasksGenerator:
         self, num_tasks_to_generate_per_condition, train_ratio
     ):
         """Helper method that returns the true number of tasks to generate and a human readable name. Generator must have defined an _generate_strokes_for_stimuli function."""
-        train, test = self._generate_strokes_for_stimuli(train_ratio)
+        if PROGRAMS_NAME in self.name:
+            train, test, _, _ = self._generate_strokes_strings_for_stimuli(train_ratio)
+        else:
+            train, test = self._generate_strokes_for_stimuli(train_ratio)
         num_total_tasks = len(train + test)
         num_to_generate = (
             num_tasks_to_generate_per_condition
@@ -170,9 +176,10 @@ class AbstractTasksGenerator:
         self,
         num_tasks_to_generate_per_condition,
         request_type,
-        render_strokes_fn,
-        task_generator_name,
+        render_strokes_fn=None,
+        task_generator_name=None,
         train_ratio=1.0,
+        render_parsed_program_fn=None,
     ):
         """Helper method to generate Drawing Tasks from strokes arrays. Deprecated: number to generate."""
         (
@@ -181,31 +188,75 @@ class AbstractTasksGenerator:
         ) = self._get_number_tasks_to_generate_per_condition(
             num_tasks_to_generate_per_condition, train_ratio
         )
-        train_tasks, test_tasks = self._generate_strokes_for_stimuli(train_ratio)
 
-        train_tasks = [
-            DrawingTask(
-                task_id=task_idx,
-                request=request_type,
-                ground_truth_strokes=task_strokes,
-                render_strokes_fn=render_strokes_fn,
-                task_generator_name=task_generator_name
-                + f"_{TaskCurriculum.SPLIT_TRAIN}",
-            )
-            for (task_idx, task_strokes) in enumerate(train_tasks)
-        ]
+        if render_parsed_program_fn is None:
+            # No program; generate from strokes.
+            train_tasks, test_tasks = self._generate_strokes_for_stimuli(train_ratio)
+            train_tasks = [
+                DrawingTask(
+                    task_id=task_idx,
+                    request=request_type,
+                    ground_truth_strokes=task_strokes,
+                    render_strokes_fn=render_strokes_fn,
+                    task_generator_name=task_generator_name
+                    + f"_{TaskCurriculum.SPLIT_TRAIN}",
+                    render_parsed_program_fn=render_parsed_program_fn,
+                )
+                for (task_idx, task_strokes) in enumerate(train_tasks)
+            ]
 
-        test_tasks = [
-            DrawingTask(
-                task_id=task_idx,
-                request=request_type,
-                ground_truth_strokes=task_strokes,
-                render_strokes_fn=render_strokes_fn,
-                task_generator_name=task_generator_name
-                + f"_{TaskCurriculum.SPLIT_TEST}",
-            )
-            for (task_idx, task_strokes) in enumerate(test_tasks)
-        ]
+            test_tasks = [
+                DrawingTask(
+                    task_id=task_idx,
+                    request=request_type,
+                    ground_truth_strokes=task_strokes,
+                    render_strokes_fn=render_strokes_fn,
+                    task_generator_name=task_generator_name
+                    + f"_{TaskCurriculum.SPLIT_TEST}",
+                    render_parsed_program_fn=render_parsed_program_fn,
+                )
+                for (task_idx, task_strokes) in enumerate(test_tasks)
+            ]
+        else:
+            (
+                train_tasks,
+                test_tasks,
+                train_strings,
+                test_strings,
+            ) = self._generate_strokes_strings_for_stimuli(train_ratio)
+
+            train_tasks = [
+                DrawingTask(
+                    task_id=task_idx,
+                    request=request_type,
+                    ground_truth_strokes=task_strokes,
+                    ground_truth_program=task_program,
+                    render_strokes_fn=render_strokes_fn,
+                    task_generator_name=task_generator_name
+                    + f"_{TaskCurriculum.SPLIT_TRAIN}",
+                    render_parsed_program_fn=render_parsed_program_fn,
+                )
+                for (task_idx, (task_strokes, task_program)) in enumerate(
+                    zip(train_tasks, train_strings)
+                )
+            ]
+
+            test_tasks = [
+                DrawingTask(
+                    task_id=task_idx,
+                    request=request_type,
+                    ground_truth_strokes=task_strokes,
+                    ground_truth_program=task_program,
+                    render_strokes_fn=render_strokes_fn,
+                    task_generator_name=task_generator_name
+                    + f"_{TaskCurriculum.SPLIT_TEST}",
+                    render_parsed_program_fn=render_parsed_program_fn,
+                )
+                for (task_idx, (task_strokes, task_program)) in enumerate(
+                    zip(test_tasks, test_strings)
+                )
+            ]
+
         return train_tasks, test_tasks
 
 
@@ -281,7 +332,12 @@ class DrawingTask(Task):
         task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR,
     ):
         padded_index = str.zfill(str(task_id), 3)
-        task_name = f"{task_generator_name}_{padded_index}"
+
+        if PROGRAMS_NAME in task_generator_name:
+            task_name = task_generator_name.split(f"_{PROGRAMS_NAME}")[0]
+            task_name = f"{task_name}_{padded_index}"
+        else:
+            task_name = f"{task_generator_name}_{padded_index}"
         super(DrawingTask, self).__init__(task_name, request, examples=[], features=[])
 
         self.task_generator_name = task_generator_name
@@ -312,13 +368,22 @@ class DrawingTask(Task):
         program = (
             self.ground_truth_program if self.ground_truth_program is not None else ""
         )
+        program_tokens = self._tokenize_program(program)
         return {
             "task_name": self.name,
             "task_generator": self.task_generator_name,
-            "dreamcoder_program": str(program),
+            "dreamcoder_program_dsl_0": str(program),
+            "dreamcoder_program_dsl_0_tokens": program_tokens,
             "ground_truth_strokes": [strokes],
             "n_strokes": len(strokes),
         }
+
+    def _tokenize_program(self, program):
+        if program == "":
+            return program
+        if type(program) == str:
+            program = Program.parse(program)
+        return program.left_order_tokens(show_vars=True)
 
     def _normalized_pixel_loss(self, img1, img2):
         return np.linalg.norm(img2 - img1)

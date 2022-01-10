@@ -28,7 +28,7 @@ from tasksgenerator.s12_s13_tasks_generator import RANDOM_SEED
 
 @TasksGeneratorRegistry.register
 class DialProgramsTasksGenerator(AbstractTasksGenerator):
-    name = "dial_programs"
+    name = "dials_programs"
 
     def __init__(self):
         super().__init__(grammar=constants + some_none + objects + transformations)
@@ -692,3 +692,58 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             train_parts_strings + train_main_strings,
             test_parts_strings + test_main_strings,
         )
+
+    def _generate_train_test_tasks(
+        self,
+        num_tasks_to_generate_per_condition=AbstractTasksGenerator.GENERATE_ALL,
+        train_ratio=0.8,
+        max_train=200,
+        max_test=50,
+    ):
+        # Currently generates all tasks as single entities. Does not generate a curriculum.
+        train_tasks, test_tasks = self._generate_drawing_tasks_from_strokes(
+            num_tasks_to_generate_per_condition,
+            request_type=object_primitives.tstroke,
+            render_parsed_program_fn=object_primitives.render_parsed_program,
+            task_generator_name=self.name,
+            train_ratio=train_ratio,
+        )
+        max_train = len(train_tasks) if max_train == None else max_train
+        max_test = len(test_tasks) if max_test == None else max_test
+        return train_tasks[:max_train], test_tasks[:max_test]
+
+    def generate_tasks_curriculum(
+        self, num_tasks_to_generate_per_condition, train_ratio=0.8
+    ):
+        """:ret: a curriculum that randomly samples among the train ratio for the simple and complex stimuli."""
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition, train_ratio
+        )
+        task_curriculum = TaskCurriculum(
+            curriculum_id=human_readable,
+            task_generator_name=self.name,
+        )
+
+        train_tasks, test_tasks = self._generate_train_test_tasks(
+            num_tasks_to_generate_per_condition, train_ratio=train_ratio
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TRAIN,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=train_tasks,
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TEST,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=test_tasks,
+        )
+        return task_curriculum

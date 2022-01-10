@@ -164,21 +164,98 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
 
         # Place decorators along evenly divided segments of a circle.
         # Note that this does not perfectly replicate the for-loop behavior in the original.
-        decorator_shape, decorator_string = T_string(
-            decorator_shape[0], decorator_shape[-1], s=decorator_size
-        )
-        decorator_strokes, decorator_string = rotation_string(
-            decorator_shape,
-            decorator_string,
-            n_decorators,
-            decorator_displacement,
-            decorator_start_angle,
-        )
-        object_strokes += decorator_strokes
-        object_strings.append(decorator_string)
+        if n_decorators != STR_ZERO:
+            decorator_shape, decorator_string = T_string(
+                decorator_shape[0], decorator_shape[-1], s=decorator_size
+            )
+            decorator_strokes, decorator_string = rotation_string(
+                decorator_shape,
+                decorator_string,
+                n_decorators,
+                decorator_displacement,
+                decorator_start_angle,
+            )
+            object_strokes += decorator_strokes
+            object_strings.append(decorator_string)
 
         # Note: the original implementation provides the ability to generate spokes.
         # However, this functionality is actually never used.
 
         height, height_string = outer_shape_size, str(outer_shape_size)
         return [object_strokes], connect_strokes(object_strings), height, height_string
+
+    def _generate_strokes_strings_for_stimuli(self, train_ratio):
+        (
+            simple_train,
+            simple_test,
+            simple_train_strings,
+            simple_test_strings,
+        ) = self._generate_simple_nuts_stimuli_strings(train_ratio)
+        (
+            perforated_train,
+            perforated_test,
+            perforated_train_strings,
+            perforated_test_strings,
+        ) = self._generate_perforated_nuts_stimuli_strings(train_ratio)
+
+        return (
+            simple_train + perforated_train,
+            simple_test + perforated_test,
+            simple_train_strings + perforated_train_strings,
+            simple_test_strings + perforated_test_strings,
+        )
+
+    def _generate_train_test_tasks(
+        self,
+        num_tasks_to_generate_per_condition=AbstractTasksGenerator.GENERATE_ALL,
+        train_ratio=0.8,
+        max_train=200,
+        max_test=50,
+    ):
+        # Currently generates all tasks as single entities. Does not generate a curriculum.
+        train_tasks, test_tasks = self._generate_drawing_tasks_from_strokes(
+            num_tasks_to_generate_per_condition,
+            request_type=object_primitives.tstroke,
+            render_parsed_program_fn=object_primitives.render_parsed_program,
+            task_generator_name=self.name,
+            train_ratio=train_ratio,
+        )
+        max_train = len(train_tasks) if max_train == None else max_train
+        max_test = len(test_tasks) if max_test == None else max_test
+        return train_tasks[:max_train], test_tasks[:max_test]
+
+    def generate_tasks_curriculum(
+        self, num_tasks_to_generate_per_condition, train_ratio=0.8
+    ):
+        """:ret: a curriculum that randomly samples among the train ratio for the simple and complex stimuli."""
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition, train_ratio
+        )
+        task_curriculum = TaskCurriculum(
+            curriculum_id=human_readable,
+            task_generator_name=self.name,
+        )
+
+        train_tasks, test_tasks = self._generate_train_test_tasks(
+            num_tasks_to_generate_per_condition, train_ratio=train_ratio
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TRAIN,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=train_tasks,
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TEST,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=test_tasks,
+        )
+        return task_curriculum
