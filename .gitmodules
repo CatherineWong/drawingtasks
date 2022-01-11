@@ -4,3 +4,6 @@
 [submodule "ec"]
 	path = ec
 	url = https://github.com/ellisk42/ec.git
+[submodule "block_utils"]
+	path = block_utils
+	url = https://github.com/cogtoolslab/block_utils.git
