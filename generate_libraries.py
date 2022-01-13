@@ -125,9 +125,15 @@ def pretty_print_program_columns(args, summaries_dict, libraries_dict, fieldname
             pretty_print_program = get_pretty_printed_program(
                 summaries_dict[task][program_column], libraries_dict[program_column]
             )
-            summaries_dict[task][f"{program_column}_pretty"] = pretty_print_program
-        if f"{program_column}_pretty" not in fieldnames:
-            fieldnames += [f"{program_column}_pretty"]
+            pretty_name = (
+                program_column.split("_")[:-1]
+                + ["pretty"]
+                + [program_column.split("_")[-1]]
+            )
+            pretty_name = "_".join(pretty_name)
+            summaries_dict[task][f"{pretty_name}"] = pretty_print_program
+        if pretty_name not in fieldnames:
+            fieldnames += [pretty_name]
 
     # Export the summary.
     task_csv = os.path.join(args.task_summaries_dir, args.task_summaries + ".csv")
