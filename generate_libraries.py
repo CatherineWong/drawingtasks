@@ -8,11 +8,12 @@ Usage:
     python data/generate_libraries.py
         --task_summaries nuts_bolts_programs_all
         --program_column dreamcoder_program_dsl_0
+        --pretty_print_program_columns
 """
 
 import random
 import itertools
-import csv, os, json, argparse
+import csv, os, json, argparse, sys
 from dreamcoder.task import Task
 from dreamcoder.frontier import Frontier
 from dreamcoder.compression import ocamlInduce
@@ -21,7 +22,7 @@ import numpy as np
 
 from primitives.gadgets_primitives import *
 from dreamcoder.grammar import Grammar
-from dreamcoder.program import Program
+from dreamcoder.program import Program, prettyProgram
 
 random.seed(0)
 np.random.seed(0)
@@ -66,10 +67,21 @@ parser.add_argument(
     help="Column in the task summaries CSV containing the program to begin compression from.",
 )
 parser.add_argument(
+    "--program_columns",
+    nargs="+",
+    default=[DEFAULT_PROGRAM_COLUMN],
+    help="Column in the task summaries CSV containing the program to begin compression from.",
+)
+parser.add_argument(
     "--max_libraries",
     type=int,
     default=DEFAULT_MAX_LIBRARIES,
     help="How many libraries to generate.",
+)
+parser.add_argument(
+    "--pretty_print_program_columns",
+    action="store_true",
+    help="If true, just writes out a summaries dict with pretty printed columns attached.",
 )
 
 
@@ -83,6 +95,49 @@ def get_summaries_dict(args):
             summaries_dict[task] = dict(row)
     print(f"...read summary rows from {len(summaries_dict)} tasks.")
     fieldnames = csv_reader.fieldnames
+    return summaries_dict, fieldnames
+
+
+def get_libraries_dict(args):
+    libraries_dict = {}
+    for program_column in args.program_columns:
+        summaries_name = args.task_summaries.replace("_libraries", "")
+        library_json = f"{summaries_name}_{program_column}.json"
+        with open(os.path.join(args.export_dir, library_json)) as f:
+            library_dict = json.load(f)
+        libraries_dict[program_column] = library_dict
+    print(f"...read libraries for {len(libraries_dict)} libraries.")
+    return libraries_dict
+
+
+def get_pretty_printed_program(program, library):
+    substitution_dict = {v: k for (k, v) in library["masked_to_original"].items()}
+
+    # Is this insane?
+    for k in sorted(substitution_dict.keys(), key=lambda k: -len(k)):
+        program = program.replace(k, substitution_dict[k])
+    return program
+
+
+def pretty_print_program_columns(args, summaries_dict, libraries_dict, fieldnames):
+    for program_column in args.program_columns:
+        for task in summaries_dict:
+            pretty_print_program = get_pretty_printed_program(
+                summaries_dict[task][program_column], libraries_dict[program_column]
+            )
+            summaries_dict[task][f"{program_column}_pretty"] = pretty_print_program
+        if f"{program_column}_pretty" not in fieldnames:
+            fieldnames += [f"{program_column}_pretty"]
+
+    # Export the summary.
+    task_csv = os.path.join(args.task_summaries_dir, args.task_summaries + ".csv")
+    with open(task_csv, "w") as csvfile:
+        csv_writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        csv_writer.writeheader()
+        for task in summaries_dict:
+            csv_writer.writerow(summaries_dict[task])
+
+    print(f"...wrote summary to {task_csv}.")
     return summaries_dict, fieldnames
 
 
@@ -249,6 +304,12 @@ def run_and_export_all_library_compression(
 
 def main(args):
     summaries_dict, fieldnames = get_summaries_dict(args)
+    libraries_dict = get_libraries_dict(args)
+
+    if args.pretty_print_program_columns:
+        pretty_print_program_columns(args, summaries_dict, libraries_dict, fieldnames)
+        sys.exit(0)
+
     frontiers_dict, library_dict = get_initial_frontiers_and_library(
         args, summaries_dict
     )
