@@ -26,7 +26,9 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
     name = "nuts_bolts_programs"
 
     def __init__(self):
-        super().__init__(grammar=constants + some_none + objects + transformations)
+        super().__init__(
+            grammar=constants + math_operations + objects + transformations
+        )
 
     def _generate_simple_nuts_stimuli_strings(self, train_ratio):
         """Generates simple nuts: up to two nested shapes on the outer edge, and no perforations. Generates train and test. Also generates strings. See: nuts_bolts_tasks_generator._generate_simple_nuts_stimuli for original implementation."""
@@ -140,7 +142,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         outer_strings = []
         for i, (shape, shape_string) in enumerate(outer_shapes):
             object_stroke, object_string = T_string(
-                shape, shape_string, s=str(outer_shape_size)
+                shape, shape_string, s=f"{outer_shape_size:g}"
             )
 
             object_strokes += object_stroke
@@ -154,7 +156,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         inner_strings = []
         for i, (shape, shape_string) in enumerate(inner_shapes):
             object_stroke, object_string = T_string(
-                shape, shape_string, s=str(inner_shape_size)
+                shape, shape_string, s=f"{inner_shape_size:g}"
             )
             object_strokes += object_stroke
             inner_shape_size -= peval(nesting_scale_unit)
@@ -181,7 +183,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         # Note: the original implementation provides the ability to generate spokes.
         # However, this functionality is actually never used.
 
-        height, height_string = outer_shape_size, str(outer_shape_size)
+        height, height_string = outer_shape_size, f"{outer_shape_size:g}"
         return [object_strokes], connect_strokes(object_strings), height, height_string
 
     def _generate_strokes_strings_for_stimuli(self, train_ratio):
@@ -237,6 +239,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         task_curriculum = TaskCurriculum(
             curriculum_id=human_readable,
             task_generator_name=self.name,
+            grammar=self.grammar,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

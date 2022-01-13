@@ -144,6 +144,7 @@ class NutsBoltsTasksGenerator(SimpleDialTasksGenerator):
         task_curriculum = TaskCurriculum(
             curriculum_id=human_readable,
             task_generator_name=self.name,
+            grammar=None,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

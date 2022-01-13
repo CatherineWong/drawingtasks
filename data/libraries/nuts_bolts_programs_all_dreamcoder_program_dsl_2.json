@@ -1,0 +1,412 @@
+{
+    "metadata": {
+        "name": "dreamcoder_program_dsl_0",
+        "timestamp": "2022-01-12T18-02-40-200561",
+        "compression_args": {
+            "topK": 1,
+            "pseudoCounts": 30,
+            "a": 1,
+            "structurePenalty": 1.5,
+            "aic": 1.0,
+            "lc_score": 0.0,
+            "max_compression": 1
+        }
+    },
+    "library": {
+        "logVariable": 0.0,
+        "productions": [
+            {
+                "expression": "#(lambda (C (C (#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0))) 2) (#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0))) 2.25)) (#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0))) $0)))",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "c",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-0.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "3.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "1.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "0.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "3.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "repeat",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "7.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-2.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "T",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "8.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "9.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "2",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "tan",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-2.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-2.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "5.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "10",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "2.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "*",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-1.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "2.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "8.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "min",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "3",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "5.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "7.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "4",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "6",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "empt",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "9.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "7.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "/",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "C",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "3.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "12",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "+",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "2.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-2",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "4.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "0.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-1.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "6.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-1",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-1.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-3",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "pi",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "0.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0)))",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "1.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "9",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "4.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "8.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "cos",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "9.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "1.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "6.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "M",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "r",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "#(M 2 0 0 0)",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "pow",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "1",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-0.5",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "max",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "11",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "4.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "5.25",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "6.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "7",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "8",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "sin",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "-0.75",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "l",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "0",
+                "logProbability": 0.0
+            },
+            {
+                "expression": "r_s",
+                "logProbability": 0.0
+            }
+        ]
+    },
+    "masked_to_original": {
+        "INV_0": "#(M 2 0 0 0)",
+        "INV_1": "#(lambda (C (C (#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0))) 2) (#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0))) 2.25)) (#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0))) $0)))",
+        "INV_2": "#(lambda (T (repeat (T l (M 1 0 -0.5 (/ 0.5 (tan (/ pi 6))))) 6 (M 1 (/ (* 2 pi) 6) 0 0)) (M $0 0 0 0)))",
+        "*": "*",
+        "+": "+",
+        "-": "-",
+        "-0.25": "-0.25",
+        "-0.5": "-0.5",
+        "-0.75": "-0.75",
+        "-1": "-1",
+        "-1.25": "-1.25",
+        "-1.5": "-1.5",
+        "-1.75": "-1.75",
+        "-2": "-2",
+        "-2.25": "-2.25",
+        "-2.5": "-2.5",
+        "-2.75": "-2.75",
+        "-3": "-3",
+        "/": "/",
+        "0": "0",
+        "0.25": "0.25",
+        "0.5": "0.5",
+        "0.75": "0.75",
+        "1": "1",
+        "1.25": "1.25",
+        "1.5": "1.5",
+        "1.75": "1.75",
+        "10": "10",
+        "11": "11",
+        "12": "12",
+        "2": "2",
+        "2.25": "2.25",
+        "2.5": "2.5",
+        "2.75": "2.75",
+        "3": "3",
+        "3.25": "3.25",
+        "3.5": "3.5",
+        "3.75": "3.75",
+        "4": "4",
+        "4.25": "4.25",
+        "4.5": "4.5",
+        "4.75": "4.75",
+        "5": "5",
+        "5.25": "5.25",
+        "5.5": "5.5",
+        "5.75": "5.75",
+        "6": "6",
+        "6.25": "6.25",
+        "6.5": "6.5",
+        "6.75": "6.75",
+        "7": "7",
+        "7.25": "7.25",
+        "7.5": "7.5",
+        "7.75": "7.75",
+        "8": "8",
+        "8.25": "8.25",
+        "8.5": "8.5",
+        "8.75": "8.75",
+        "9": "9",
+        "9.25": "9.25",
+        "9.5": "9.5",
+        "9.75": "9.75",
+        "C": "C",
+        "M": "M",
+        "T": "T",
+        "c": "c",
+        "cos": "cos",
+        "empt": "empt",
+        "l": "l",
+        "max": "max",
+        "min": "min",
+        "pi": "pi",
+        "pow": "pow",
+        "r": "r",
+        "r_s": "r_s",
+        "repeat": "repeat",
+        "sin": "sin",
+        "tan": "tan"
+    }
+}

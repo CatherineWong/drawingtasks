@@ -33,14 +33,15 @@ from primitives.object_primitives import (
 
 tfloat = baseType("tfloat")
 
-
 ## Mathematical operations.
 SCALES = np.arange(0.5, 10, 0.25)  # Scaling constants
 DISTS = np.arange(-3.0, 3.25, 0.25)  # Distances
 INTEGERS = range(0, 13)  # General scaling constants
 numeric_constants = set(list(SCALES) + list(DISTS) + list(INTEGERS))
-constants = [Primitive(f"{n:g}", tfloat, n) for n in numeric_constants]
-constants += [Primitive("pi", tfloat, math.pi)]
+constants = [
+    Primitive(f"{n:g}", tfloat, n, override_globals=True) for n in numeric_constants
+]
+constants += [Primitive("pi", tfloat, math.pi, override_globals=True)]
 
 
 def _addition(x):
@@ -72,11 +73,13 @@ def _min(x):
 
 
 math_operations = [
-    Primitive("-", arrow(tfloat, tfloat, tfloat), _subtraction),
-    Primitive("+", arrow(tfloat, tfloat, tfloat), _addition),
-    Primitive("*", arrow(tfloat, tfloat, tfloat), _multiplication),
+    Primitive("-", arrow(tfloat, tfloat, tfloat), _subtraction, override_globals=True),
+    Primitive("+", arrow(tfloat, tfloat, tfloat), _addition, override_globals=True),
+    Primitive(
+        "*", arrow(tfloat, tfloat, tfloat), _multiplication, override_globals=True
+    ),
     Primitive("/", arrow(tfloat, tfloat, tfloat), _division),
-    Primitive("^", arrow(tfloat, tfloat, tfloat), _pow),
+    Primitive("pow", arrow(tfloat, tfloat, tfloat), _pow),
     Primitive("sin", arrow(tfloat, tfloat), math.sin),
     Primitive("cos", arrow(tfloat, tfloat), math.cos),
     Primitive("tan", arrow(tfloat, tfloat), math.tan),
@@ -96,10 +99,10 @@ transformations = [
     Primitive(
         "M",  # Makes a transformation matrix
         arrow(
-            tmaybe(tfloat),  # Scale
-            tmaybe(tfloat),  # Angle
-            tmaybe(tfloat),  # Translation X
-            tmaybe(tfloat),  # Translation Y
+            tfloat,  # Scale
+            tfloat,  # Angle
+            tfloat,  # Translation X
+            tfloat,  # Translation Y
             ttransmat,
         ),
         Curried(_makeAffineSimple),
@@ -111,7 +114,10 @@ transformations = [
         "C", arrow(tstroke, tstroke, tstroke), Curried(_connect)
     ),  # Connects two strokes into a single new primitive
     Primitive(
-        "repeat", arrow(tstroke, tfloat, ttransmat, tstroke), Curried(_repeat)
+        "repeat",
+        arrow(tstroke, tfloat, ttransmat, tstroke),
+        Curried(_repeat),
+        override_globals=True,
     ),  # Repeats a transformation n times against a base primitive.
 ]
 
@@ -160,7 +166,7 @@ def _scaled_rectangle(w):
 
 _emptystroke = []
 objects = [
-    Primitive("[]", tstroke, _emptystroke),
+    Primitive("empt", tstroke, _emptystroke),
     Primitive("l", tstroke, _line),
     Primitive("c", tstroke, _circle),
     Primitive("r", tstroke, _rectangle),

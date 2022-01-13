@@ -42,6 +42,8 @@ DEFAULT_SYNTHESIS_TASKS_SUBDIR = "synthesis"
 DEFAULT_RENDERS_SUBDIR = "renders"
 GENERATING_COMMAND = "generating_command"
 COMMAND_PREFIX = "python generate_drawing_tasks.py "
+DEFAULT_LIBRARIES_DIR = f"{DEFAULT_EXPORT_DIR}/libraries"
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -58,6 +60,11 @@ parser.add_argument(
     "--summaries_export_dir",
     default=None,
     help="If provided, alternate directory to write out summaries of tasks.",
+)
+parser.add_argument(
+    "--libraries_export_dir",
+    default=DEFAULT_LIBRARIES_DIR,
+    help="If provided, alternate directory to export the library results.",
 )
 parser.add_argument(
     "--renders_export_dir",
@@ -153,6 +160,19 @@ def export_task_summary(args, tasks_curriculum):
     return curriculum_summary_file
 
 
+def export_initial_library_summary(args, tasks_curriculum):
+    libraries_export_dir = args.libraries_export_dir
+    num_tasks = args.num_tasks_per_condition
+    library_summary_file = (
+        f"{args.tasks_generator}_{num_tasks}_dreamcoder_program_dsl_0"
+    )
+    with open(
+        os.path.join(libraries_export_dir, library_summary_file + ".json"), "w"
+    ) as f:
+        library_summary = tasks_curriculum.get_initial_library_summary()
+        json.dump(library_summary, f)
+
+
 def export_tasks(args, tasks_curriculum):
     synthesis_export_dir = (
         args.synthesis_export_dir
@@ -190,6 +210,7 @@ def export_tasks_curriculum_data(args, tasks_curriculum):
 
     if args.task_summaries:
         export_task_summary(args, tasks_curriculum)
+        export_initial_library_summary(args, tasks_curriculum)
 
     if not args.no_synthesis_tasks:
         export_tasks(args, tasks_curriculum)

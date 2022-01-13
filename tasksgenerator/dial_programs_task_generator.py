@@ -31,7 +31,9 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
     name = "dials_programs"
 
     def __init__(self):
-        super().__init__(grammar=constants + some_none + objects + transformations)
+        super().__init__(
+            grammar=constants + math_operations + objects + transformations
+        )
 
     def _generate_base_with_dials(
         self,
@@ -195,14 +197,15 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
 
         # Place tiers. Note that we don't currently express the looped computation in a loop.
         first_tier_width, first_tier_height = None, None
-        for tier_idx in range(peval(n_tiers)):
+        assert int(peval(n_tiers)) == peval(n_tiers)
+        for tier_idx in range(int(peval(n_tiers))):
             tier_width = (
                 f"(+ (* {base_columns} (+ {base_width} {SCALE_UNIT})) {margins})"
             )
             tier_width = f"(- {tier_width} (* {tier_idx} {margins}))"
 
             tier_height = f"(+ (* {max_rows} (+ {base_height} {SCALE_UNIT})) {margins})"
-            tier_height = f"(* {tier_height} (^ {tier_scaling} {tier_idx}))"
+            tier_height = f"(* {tier_height} (pow {tier_scaling} {tier_idx}))"
 
             # Hacky: only allows two tiers
             if tier_idx > 0:
@@ -285,7 +288,8 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes += base_line
             stroke_strings.append(base_line_string)
 
-            for a_idx in range(peval(n_wires)):
+            assert int(peval(n_wires)) == peval(n_wires)
+            for a_idx in range(int(peval(n_wires))):
                 antenna_length = antenna_size
                 antenna_height = f"(* 0.5 {antenna_size})"
                 if scale_wires:
@@ -725,6 +729,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         task_curriculum = TaskCurriculum(
             curriculum_id=human_readable,
             task_generator_name=self.name,
+            grammar=self.grammar,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

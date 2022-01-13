@@ -11,6 +11,7 @@ from collections import defaultdict
 from class_registry import ClassRegistry
 from dreamcoder.utilities import NEGATIVEINFINITY
 from dreamcoder.task import Task
+from dreamcoder.grammar import Grammar
 from dreamcoder.program import Program
 import math, random, itertools, copy
 
@@ -63,7 +64,10 @@ class TaskCurriculum:
     METADATA = "metadata"
 
     def __init__(
-        self, curriculum_id=None, task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR
+        self,
+        curriculum_id=None,
+        task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR,
+        grammar=None,
     ):
         timestamp = datetime.datetime.now().isoformat()
         # Escape the timestamp.
@@ -73,6 +77,7 @@ class TaskCurriculum:
         self.name = f"{task_generator_name}_{curriculum_id}"
         self.timestamp = timestamp
         self.curriculum = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+        self.grammar = grammar
 
     def add_tasks(self, split, condition, curriculum_block, tasks):
         condition = f"{TaskCurriculum.CONDITION_BLOCK_PREFIX}_{condition}"
@@ -93,6 +98,28 @@ class TaskCurriculum:
                     block_tasks = self.curriculum[split][condition][curriculum_block]
                     tasks_set.update(block_tasks)
         return tasks_set
+
+    def get_initial_library_summary(self):
+        metadata = {
+            "name": "dreamcoder_program_dsl_0",
+            "timestamp": self.timestamp,
+            "compression_args": {
+                "topK": 1,
+                "pseudoCounts": 30,
+                "a": 1,
+                "structurePenalty": 1.5,
+                "aic": 1.0,
+                "lc_score": 0.0,
+                "max_compression": 1,
+            },
+        }
+
+        if self.grammar is not None:
+            library = self.grammar.json()
+        else:
+            library = {}
+        summary = {TaskCurriculum.METADATA: metadata, "library": library}
+        return summary
 
     def get_curriculum_summary(self):
         metadata = {"name": self.name, "timestamp": self.timestamp}
@@ -129,6 +156,7 @@ class TaskCurriculum:
                     tasks = self.curriculum[split][condition][curriculum_block]
                     task_summaries = [task.task_summary() for task in tasks]
                     all_tasks += task_summaries
+
         # FWIW, add back in the canonical indexing from S3.
         for idx, task_dict in enumerate(all_tasks):
             s3_idx = str.zfill(str(idx), 3)
@@ -145,6 +173,8 @@ class AbstractTasksGenerator:
 
     def __init__(self, grammar):
         self.grammar = grammar
+        if type(self.grammar) == list:
+            self.grammar = Grammar.uniform(grammar)
 
     def generate_tasks_curriculum(self, num_tasks_to_generate_per_condition):
         """:ret: TaskCurriculum"""
