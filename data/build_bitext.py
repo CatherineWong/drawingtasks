@@ -56,8 +56,9 @@ parser.add_argument(
 )
 parser.add_argument(
     "--program_column",
-    default=DEFAULT_PROGRAM_COLUMN,
-    help="Column in the task summaries CSV containing the program.",
+    nargs="+",
+    default=[DEFAULT_PROGRAM_COLUMN],
+    help="Columns in the task summaries CSV containing the program.",
 )
 parser.add_argument(
     "--language_dir",
@@ -140,7 +141,7 @@ def get_task_to_language_dict(args, task_to_program_tokens_dict):
     return task_to_program_tokens_dict
 
 
-def get_task_to_program_tokens_dict(args):
+def get_task_to_program_tokens_dict(args, program_column_idx):
     task_csv = os.path.join(args.task_summaries_dir, args.task_summaries + ".csv")
     task_to_program_tokens = defaultdict(
         lambda: {PROGRAM_TOKENS: [], LANGUAGE_TOKENS: []}
@@ -150,26 +151,31 @@ def get_task_to_program_tokens_dict(args):
         for row in csv_reader:
             task, program = (
                 row[args.task_summaries_task_column],
-                ast.literal_eval(row[args.program_column]),
+                ast.literal_eval(row[args.program_column[program_column_idx]]),
             )
             task_to_program_tokens[task][PROGRAM_TOKENS] += program
     print(f"...read program tokens from {len(task_to_program_tokens)} tasks.")
     return task_to_program_tokens
 
 
-def output_task_language_bitext(args, task_to_program_tokens_dict):
-    output_file = f"{args.task_summaries}_{args.program_column}_{args.language_column}"
+def output_task_language_bitext(args, task_to_program_tokens_dict, program_column_idx):
+    output_file = f"{args.task_summaries}_{args.program_column[program_column_idx]}_{args.language_column}"
     output_file = os.path.join(args.export_dir, output_file)
     with open(output_file, "w") as f:
         json.dump(task_to_program_tokens_dict, f)
 
 
 def main(args):
-    task_to_program_tokens_dict = get_task_to_program_tokens_dict(args)
-    task_to_program_tokens_dict = get_task_to_language_dict(
-        args, task_to_program_tokens_dict
-    )
-    output_task_language_bitext(args, task_to_program_tokens_dict)
+    for program_column_idx in range(len(args.program_column)):
+        task_to_program_tokens_dict = get_task_to_program_tokens_dict(
+            args, program_column_idx
+        )
+        task_to_program_tokens_dict = get_task_to_language_dict(
+            args, task_to_program_tokens_dict
+        )
+        output_task_language_bitext(
+            args, task_to_program_tokens_dict, program_column_idx
+        )
 
 
 if __name__ == "__main__":

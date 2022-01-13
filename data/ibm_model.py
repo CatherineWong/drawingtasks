@@ -7,7 +7,7 @@ Usage:
     python data/ibm_model.py
         --task_summaries dials_programs_all # TODO: make this an N+ later.
         --language_column lemmatized_whats
-        --program_column dreamcoder_program_dsl_0
+        --program_column dreamcoder_program_dsl_0_tokens
         --leave_out_n 1 # How many tasks to train/test on
         --random_likelihood_baseline # If provided, runs a sanity check fitting likelihoods.
 """
@@ -47,7 +47,8 @@ parser.add_argument(
 )
 parser.add_argument(
     "--program_column",
-    default=DEFAULT_PROGRAM_COLUMN,
+    nargs="+",
+    default=[DEFAULT_PROGRAM_COLUMN],
     help="Column in the task summaries CSV containing the program.",
 )
 parser.add_argument(
@@ -74,10 +75,8 @@ parser.add_argument(
 parser.add_argument("--random_likelihood_baseline", action="store_true")
 
 
-def get_task_to_tokens_dict(args):
-    task_tokens_file = (
-        f"{args.task_summaries}_{args.program_column}_{args.language_column}"
-    )
+def get_task_to_tokens_dict(args, program_column_idx):
+    task_tokens_file = f"{args.task_summaries}_{args.program_column[program_column_idx]}_{args.language_column}"
     task_tokens_file = os.path.join(args.language_dir, task_tokens_file)
     with open(task_tokens_file) as f:
         task_to_tokens_dict = json.load(f)
@@ -198,11 +197,11 @@ def build_summary_json(task_to_likelihoods_dict, ibm_model):
     return task_to_likelihoods_dict
 
 
-def export_task_to_likelihoods_summary(args, task_to_likelihoods_dict, ibm_model):
+def export_task_to_likelihoods_summary(
+    args, task_to_likelihoods_dict, ibm_model, program_column_idx
+):
     # Export the likelihoods dict.
-    task_translations_file_base = (
-        f"ibm_1_{args.task_summaries}_{args.program_column}_{args.language_column}"
-    )
+    task_translations_file_base = f"ibm_1_{args.task_summaries}_{args.program_column[program_column_idx]}_{args.language_column}"
     task_translations_file = os.path.join(
         args.export_dir, task_translations_file_base + ".json"
     )
@@ -221,9 +220,14 @@ def export_task_to_likelihoods_summary(args, task_to_likelihoods_dict, ibm_model
 
 
 def main(args):
-    task_to_tokens_dict = get_task_to_tokens_dict(args)
-    task_to_likelihoods_dict, ibm_model = run_all_leave_n_out(args, task_to_tokens_dict)
-    export_task_to_likelihoods_summary(args, task_to_likelihoods_dict, ibm_model)
+    for program_column_idx in range(len(args.program_column)):
+        task_to_tokens_dict = get_task_to_tokens_dict(args, program_column_idx)
+        task_to_likelihoods_dict, ibm_model = run_all_leave_n_out(
+            args, task_to_tokens_dict
+        )
+        export_task_to_likelihoods_summary(
+            args, task_to_likelihoods_dict, ibm_model, program_column_idx
+        )
 
 
 if __name__ == "__main__":
