@@ -10,6 +10,12 @@ Usage:
         --program_column dreamcoder_program_dsl_0_tokens dreamcoder_program_dsl_1_tokens dreamcoder_program_dsl_2_tokens dreamcoder_program_dsl_3_tokens dreamcoder_program_dsl_4_tokens dreamcoder_program_dsl_5_tokens
 """
 import csv, os, json, argparse
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+LIBRARY = "library"
 
 DEFAULT_DATA_DIR = "data"
 DEFAULT_ANALYSES_DIR = f"{DEFAULT_DATA_DIR}/analyses"
@@ -36,6 +42,11 @@ parser.add_argument(
     "--export_dir",
     default=DEFAULT_ANALYSES_DIR,
     help="If provided, alternate directory to export the translation results.",
+)
+parser.add_argument(
+    "--translations_dir",
+    default=DEFAULT_TRANSLATIONS_DIR,
+    help="If provided, alternate directory to export the library results.",
 )
 parser.add_argument(
     "--libraries_dir",
@@ -108,17 +119,90 @@ def get_translations(args):
             f"ibm_1_{args.task_summaries}_{program_column}_{args.language_column}"
         )
         task_translations_file = os.path.join(
-            args.export_dir, task_translations_file_base + ".json"
+            args.translations_dir, task_translations_file_base + ".json"
         )
-        with open(task_translations_file, "w") as f:
-            translation_dict = json.load(f)
+        try:
+            with open(task_translations_file) as f:
+                translation_dict = json.load(f)
+        except:
+            print("Error reading: " + task_translations_file)
         translations_dict[program_column] = translation_dict
     print(f"...read translations info for {len(translations_dict)} libraries.")
     return translations_dict
 
 
-def generate_program_length_plots(args):
-    pass
+def generate_program_length_plots(args, summaries_dict, libraries_dict):
+    # X is: size of program library.
+    # Y is: length of program.
+    library_sizes, program_sizes = [], []
+    for program_column in args.program_column:
+        # Get the library size.
+        library_size = len(libraries_dict[program_column][LIBRARY]["productions"])
+        for task_name in summaries_dict:
+            library_sizes.append(library_size)
+            program_sizes.append(len(eval(summaries_dict[task_name][program_column])))
+    ax = sns.regplot(
+        x=library_sizes,
+        y=program_sizes,
+        x_estimator=np.mean,
+        scatter_kws={"color": "black"},
+    )
+    fig = ax.get_figure()
+
+    output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_lengths.png"
+    output = os.path.join(args.export_dir, output_plot)
+
+    plt.title(f"{args.task_summaries}")
+    plt.xlabel("|DSL|")
+    plt.ylabel("|Program|")
+
+    fig.savefig(output)
+    print(f"...saved lengths plot to {output}.")
+
+
+def generate_program_likelihood_plots(
+    args, summaries_dict, libraries_dict, translations_dict
+):
+    library_sizes, translation_probabilities, random_probabilities = [], [], []
+    for program_column in args.program_column:
+        # Get the library size.
+        library_size = len(libraries_dict[program_column][LIBRARY]["productions"])
+        for task_name in translations_dict[program_column]:
+            for likelihood in translations_dict[program_column][task_name][
+                TRANSLATION_MARGINAL_LOG_LIKELIHOODS
+            ]:
+                library_sizes.append(library_size)
+                translation_probabilities.append(likelihood)
+            for likelihood in translations_dict[program_column][task_name][
+                RANDOM_TRANSLATION_MARGINAL_LOG_LIKELIHOODS
+            ]:
+                random_probabilities.append(likelihood)
+    plt.clf()
+    ax = sns.regplot(
+        x=library_sizes,
+        y=translation_probabilities,
+        x_estimator=np.mean,
+        scatter_kws={"color": "black"},
+        label="Translation",
+    )
+    ax = sns.regplot(
+        x=library_sizes,
+        y=random_probabilities,
+        x_estimator=np.mean,
+        scatter_kws={"color": "black"},
+        label="Random",
+    )
+    fig = ax.get_figure()
+
+    output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_ibm.png"
+    output = os.path.join(args.export_dir, output_plot)
+
+    plt.title(f"{args.task_summaries}")
+    plt.xlabel("P(language | program)")
+    plt.ylabel("|Program|")
+
+    fig.savefig(output)
+    print(f"...saved lengths plot to {output}.")
 
 
 def main(args):
@@ -126,7 +210,10 @@ def main(args):
     libraries_dict = get_libraries_dict(args)
     translations_dict = get_translations(args)
 
-    generate_program_length_plots(args)
+    generate_program_length_plots(args, summaries_dict, libraries_dict)
+    generate_program_likelihood_plots(
+        args, summaries_dict, libraries_dict, translations_dict
+    )
 
 
 if __name__ == "__main__":

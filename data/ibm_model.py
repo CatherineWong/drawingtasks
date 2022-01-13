@@ -30,8 +30,11 @@ DEFAULT_LANGUAGE_COLUMN = LEMMATIZED_WHATS
 
 PROGRAM_TOKENS, LANGUAGE_TOKENS = "program_tokens", "language_tokens"
 TRANSLATION_MARGINAL_LOG_LIKELIHOODS = "translation_log_likelihoods"
+TRANSLATION_BEST_LOG_LIKELIHOODS = "translation_best_log_likelihoods"
 RANDOM_TRANSLATION_MARGINAL_LOG_LIKELIHOODS = "random_translation_log_likelihoods"
-DEFAULT_LEAVE_OUT_N = 2
+RANDOM_TRANSLATION_BEST_LOG_LIKELIHOODS = "random_translation_best_log_likelihoods"
+
+DEFAULT_LEAVE_OUT_N = 5
 DEFAULT_IBM_ITERATIONS = 5
 
 parser = argparse.ArgumentParser()
@@ -92,7 +95,8 @@ def build_train_heldout_bitexts(args, heldout_tasks, task_to_tokens_dict):
     for task in task_to_tokens_dict:
         program_tokens = task_to_tokens_dict[task][PROGRAM_TOKENS]
         for language_tokens in task_to_tokens_dict[task][LANGUAGE_TOKENS]:
-            aligned_sent = AlignedSent(program_tokens, language_tokens)
+            # AlignedSent(Target, Source); words=target; mots=source. Translation is MOTS->WORDS
+            aligned_sent = AlignedSent(language_tokens, program_tokens)
             if task in heldout_tasks:
                 heldout_bitext[task].append(aligned_sent)
             else:
@@ -100,21 +104,48 @@ def build_train_heldout_bitexts(args, heldout_tasks, task_to_tokens_dict):
     return train_bitext, heldout_bitext
 
 
+def prob_best_alignment(ibm_model, source, target):
+    best_alignment = []
+    best_probs = []
+    for j, trg_word in enumerate(target):
+        # Initialize trg_word to align with the NULL token
+        best_prob = max(ibm_model.translation_table[trg_word][None], IBMModel.MIN_PROB)
+        best_alignment_point = None
+        for i, src_word in enumerate(source):
+            align_prob = ibm_model.translation_table[trg_word][src_word]
+            if align_prob >= best_prob:  # prefer newer word in case of tie
+                best_prob = align_prob
+                best_alignment_point = i
+        best_probs.append(best_prob)
+        best_alignment.append((j, best_alignment_point))
+    length_normalized_marginal = np.mean([np.log(l) for l in best_probs])
+    return length_normalized_marginal
+
+
 def get_heldout_task_likelihoods(task_to_tokens_dict, ibm_model, heldout_bitexts):
     for task in heldout_bitexts:
         task_to_tokens_dict[task][TRANSLATION_MARGINAL_LOG_LIKELIHOODS] = []
+        task_to_tokens_dict[task][TRANSLATION_BEST_LOG_LIKELIHOODS] = []
         for sentence_pair in heldout_bitexts[task]:
-            translation_marginal_likelihood = sum(
-                [
-                    v
-                    for v in ibm_model.prob_all_alignments(
-                        sentence_pair.words, sentence_pair.mots
-                    ).values()
-                ]
+            # Length normalized. - take log and mean log.
+            marginal_alignments = [
+                v
+                for v in ibm_model.prob_all_alignments(
+                    sentence_pair.mots, sentence_pair.words
+                ).values()
+            ]
+            length_normalized_marginal = np.mean(
+                [np.log(l) for l in marginal_alignments]
             )
-            log_likelihood = np.log(translation_marginal_likelihood)
             task_to_tokens_dict[task][TRANSLATION_MARGINAL_LOG_LIKELIHOODS].append(
-                log_likelihood
+                length_normalized_marginal
+            )
+
+            translation_best_likelihood = prob_best_alignment(
+                ibm_model, source=sentence_pair.mots, target=sentence_pair.words
+            )
+            task_to_tokens_dict[task][TRANSLATION_BEST_LOG_LIKELIHOODS].append(
+                translation_best_likelihood
             )
     return task_to_tokens_dict
 
@@ -122,22 +153,30 @@ def get_heldout_task_likelihoods(task_to_tokens_dict, ibm_model, heldout_bitexts
 def run_random_bitext_baseline(task_to_tokens_dict, ibm_model, heldout_bitexts):
     for task in heldout_bitexts:
         task_to_tokens_dict[task][RANDOM_TRANSLATION_MARGINAL_LOG_LIKELIHOODS] = []
+        task_to_tokens_dict[task][RANDOM_TRANSLATION_BEST_LOG_LIKELIHOODS] = []
         for sentence_pair in heldout_bitexts[task]:
             # Pick another one to be the heldout.
             random_task = random.choice([t for t in heldout_bitexts if t != task])
             random_target = random.choice(heldout_bitexts[random_task])
-            translation_marginal_likelihood = sum(
-                [
-                    v
-                    for v in ibm_model.prob_all_alignments(
-                        sentence_pair.words, random_target.mots
-                    ).values()
-                ]
+            marginal_alignments = [
+                v
+                for v in ibm_model.prob_all_alignments(
+                    sentence_pair.mots, random_target.words
+                ).values()
+            ]
+            length_normalized_marginal = np.mean(
+                [np.log(l) for l in marginal_alignments]
             )
-            log_likelihood = np.log(translation_marginal_likelihood)
             task_to_tokens_dict[task][
                 RANDOM_TRANSLATION_MARGINAL_LOG_LIKELIHOODS
-            ].append(log_likelihood)
+            ].append(length_normalized_marginal)
+
+            translation_best_likelihood = prob_best_alignment(
+                ibm_model, source=sentence_pair.mots, target=random_target.words
+            )
+            task_to_tokens_dict[task][RANDOM_TRANSLATION_BEST_LOG_LIKELIHOODS].append(
+                translation_best_likelihood
+            )
     return task_to_tokens_dict
 
 
@@ -187,11 +226,31 @@ def build_summary_json(task_to_likelihoods_dict, ibm_model):
             ]
         )
     )
+    translation_best_likelihoods = list(
+        itertools.chain.from_iterable(
+            [
+                task_entry.get(TRANSLATION_BEST_LOG_LIKELIHOODS, [])
+                for task_entry in task_to_likelihoods_dict.values()
+            ]
+        )
+    )
+    random_best_likelihoods = list(
+        itertools.chain.from_iterable(
+            [
+                task_entry.get(RANDOM_TRANSLATION_BEST_LOG_LIKELIHOODS, [])
+                for task_entry in task_to_likelihoods_dict.values()
+            ]
+        )
+    )
     task_to_likelihoods_dict = {
         "translation_log_likelihoods_mean": np.mean(translation_log_likelihoods),
         "translation_log_likelihoods_std": np.std(translation_log_likelihoods),
         "random_log_likelihoods_mean": np.mean(random_log_likelihoods),
         "random_log_likelihoods_std": np.std(random_log_likelihoods),
+        "translation_best_likelihoods_mean": np.mean(translation_best_likelihoods),
+        "translation_best_likelihoods_std": np.std(translation_best_likelihoods),
+        "random_best_likelihoods_mean": np.mean(random_best_likelihoods),
+        "random_best_likelihoods_std": np.std(random_best_likelihoods),
         "sample_ibm_model": ibm_model.translation_table,
     }
     return task_to_likelihoods_dict
