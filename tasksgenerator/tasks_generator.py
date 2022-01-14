@@ -448,9 +448,26 @@ class DrawingTask(Task):
             "ground_truth_strokes": [strokes],
             "n_strokes": len(strokes),
         }
-        # Add any synthetic abstractions we have
-        summary.update(self.synthetic_abstractions)
+        # Add any synthetic abstractions we have. Take the cross product of params.
+        summary.update(self._get_crossed_abstractions(self.synthetic_abstractions))
         return summary
+
+    def _get_crossed_abstractions(self, synthetic_abstractions):
+        for parts in [
+            LOW_LEVEL,
+            MID_LEVEL,
+            HIGH_LEVEL,
+            LOW_LEVEL_PARTS,
+            MID_LEVEL_PARTS,
+            HIGH_LEVEL_PARTS,
+        ]:
+            for params in [LOW_LEVEL_PARAMS, MID_LEVEL_PARAMS, HIGH_LEVEL_PARAMS]:
+                if parts.split("_")[:2] == params.split("_")[:2]:
+                    self.synthetic_abstractions[parts + "_with_params"] = (
+                        self.synthetic_abstractions[parts]
+                        + self.synthetic_abstractions[params]
+                    )
+        return self.synthetic_abstractions
 
     def _tokenize_program(self, program):
         if program == "":

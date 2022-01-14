@@ -81,6 +81,10 @@ def split_tokenize(sentences):
     return [s.split() for s in sentences]
 
 
+def lowercase(sentences):
+    return [[t.lower() for t in tokens] for tokens in sentences]
+
+
 def get_cleaned_language_dataframe(language_csv):
     """
     Reference: https://github.com/cogtoolslab/lax/blob/master/analysis/corpus/lax-corpus-analysis.ipynb
@@ -117,15 +121,23 @@ def get_task_to_language_dict(args, task_to_program_tokens_dict):
         if row["stimURL"] in task_to_program_tokens_dict:
             task = row["stimURL"]
             if args.language_column == LEMMATIZED_WHATS:
-                language = list(itertools.chain.from_iterable(row["lemmatized_whats"]))
+                language = list(
+                    itertools.chain.from_iterable(lowercase(row["lemmatized_whats"]))
+                )
             elif args.language_column == LEMMATIZED_WHATS_WHERES:
                 zipped = [
                     x + y
-                    for x, y in zip(row["lemmatized_whats"], row["lemmatized_wheres"])
+                    for x, y in zip(
+                        lowercase(row["lemmatized_whats"]),
+                        lowercase(row["lemmatized_wheres"]),
+                    )
                 ]
                 language = list(itertools.chain.from_iterable(zipped))
             elif args.language_column == RAW_WHATS_WHERES:
-                zipped = [x + y for x, y in zip(row["whats"], row["wheres"])]
+                zipped = [
+                    x + y
+                    for x, y in zip(lowercase(row["whats"]), lowercase(row["wheres"]))
+                ]
                 language = list(itertools.chain.from_iterable(zipped))
             else:
                 print("Error: unrecognized language column.")

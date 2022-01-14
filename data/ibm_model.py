@@ -119,6 +119,7 @@ def prob_best_alignment(ibm_model, source, target):
                 best_alignment_point = i
         best_probs.append(best_prob)
         best_alignment.append((j, best_alignment_point))
+    # Should this be length normalized??
     length_normalized_marginal = np.mean([np.log(l) for l in best_probs])
     return length_normalized_marginal
 
@@ -148,6 +149,13 @@ def get_heldout_task_likelihoods(task_to_tokens_dict, ibm_model, heldout_bitexts
             task_to_tokens_dict[task][TRANSLATION_BEST_LOG_LIKELIHOODS].append(
                 translation_best_likelihood
             )
+        # if (
+        #     task
+        #     == "https://lax-drawing-nuts-bolts-all.s3.amazonaws.com/lax-drawing-nuts-bolts-all-009.png"
+        # ):
+        #     import pdb
+
+        #     pdb.set_trace()
     return task_to_tokens_dict
 
 
@@ -181,6 +189,15 @@ def run_random_bitext_baseline(task_to_tokens_dict, ibm_model, heldout_bitexts):
     return task_to_tokens_dict
 
 
+def normalize_ibm(ibm_model):
+    for target_word in ibm_model.translation_table:
+        normalization_constant = sum(ibm_model.translation_table[target_word].values())
+        for source_word in ibm_model.translation_table[target_word]:
+            ibm_model.translation_table[target_word][
+                source_word
+            ] /= normalization_constant
+
+
 def run_all_leave_n_out(args, task_to_tokens_dict, print_every=10, max_cutoff=250):
     # Sort task keys.
     task_keys = sorted(list(task_to_tokens_dict.keys()))[:max_cutoff]
@@ -196,6 +213,9 @@ def run_all_leave_n_out(args, task_to_tokens_dict, print_every=10, max_cutoff=25
 
         # Fit the IBM model.
         ibm_model = IBMModel1(train_bitext, args.num_ibm_iterations)
+        # From what I can tell, the IBM model is not properly normalized. Normalize it.
+        normalize_ibm(ibm_model)
+
         task_to_tokens_dict = get_heldout_task_likelihoods(
             task_to_tokens_dict, ibm_model, heldout_bitext
         )
