@@ -5,7 +5,7 @@ Utility script to generate libraries over program domains.
 Augments the summary file with additional library columns and writes out libraries (and metadata) to data/libraries.
 
 Usage:
-    python data/generate_libraries.py
+    python generate_libraries.py
         --task_summaries nuts_bolts_programs_all
         --program_column dreamcoder_program_dsl_0
         --pretty_print_program_columns
@@ -36,6 +36,7 @@ FIELDNAMES = "fieldnames"
 DEFAULT_PROGRAM_COLUMN = "dreamcoder_program_dsl_0"
 LIBRARY = "library"
 DEFAULT_MAX_LIBRARIES = 5
+DEFAULT_BATCH_SIZE = 2
 METADATA = "metadata"
 COMPRESSION_ARGS = "compression_args"
 MASKED_TO_ORIGINAL = "masked_to_original"
@@ -76,6 +77,12 @@ parser.add_argument(
     "--max_libraries",
     type=int,
     default=DEFAULT_MAX_LIBRARIES,
+    help="How many libraries to generate.",
+)
+parser.add_argument(
+    "--batch_size",
+    type=int,
+    default=DEFAULT_BATCH_SIZE,
     help="How many libraries to generate.",
 )
 parser.add_argument(
@@ -198,10 +205,10 @@ def run_iteration_library_compression(
     args,
     tasks_dict,
     library_dict,
-    parallel_bucket_size=5,
     max_cutoff=250,
     timeout_mins=10,
 ):
+    parallel_bucket_size = args.batch_size
     shuffled_tasks = sorted(list(tasks_dict.keys()))[:max_cutoff]
     # random.shuffle(shuffled_tasks)
     sorted_frontiers = [tasks_dict[t] for t in shuffled_tasks][:max_cutoff]

@@ -113,6 +113,7 @@ def prob_best_alignment(ibm_model, source, target):
         best_alignment_point = None
         for i, src_word in enumerate(source):
             align_prob = ibm_model.translation_table[trg_word][src_word]
+
             if align_prob >= best_prob:  # prefer newer word in case of tie
                 best_prob = align_prob
                 best_alignment_point = i
@@ -180,9 +181,9 @@ def run_random_bitext_baseline(task_to_tokens_dict, ibm_model, heldout_bitexts):
     return task_to_tokens_dict
 
 
-def run_all_leave_n_out(args, task_to_tokens_dict, print_every=10):
+def run_all_leave_n_out(args, task_to_tokens_dict, print_every=10, max_cutoff=250):
     # Sort task keys.
-    task_keys = sorted(list(task_to_tokens_dict.keys()))
+    task_keys = sorted(list(task_to_tokens_dict.keys()))[:max_cutoff]
     num_splits = int(len(task_keys) / args.leave_out_n)
     heldout_splits = np.array_split(task_keys, num_splits)
     for idx, heldout_tasks in enumerate(heldout_splits):
