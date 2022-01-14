@@ -4,17 +4,11 @@ Defines TasksGenerators that produce gadget tasks that look like nuts and bolts.
 
 Threads program string generating logic through the generation.
 """
+from curses.ascii import SYN
 import math, random, itertools, copy
 from primitives.gadgets_primitives import *
 from dreamcoder.grammar import Grammar
-from tasksgenerator.tasks_generator import (
-    AbstractTasksGenerator,
-    ManualCurriculumTasksGenerator,
-    TasksGeneratorRegistry,
-    TaskCurriculum,
-    DrawingTask,
-    random_sample_ratio_ordered_array,
-)
+from tasksgenerator.tasks_generator import *
 from tasksgenerator.bases_parts_tasks_generator import *
 from tasksgenerator.s12_s13_tasks_generator import RANDOM_SEED
 
@@ -34,6 +28,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         """Generates simple nuts: up to two nested shapes on the outer edge, and no perforations. Generates train and test. Also generates strings. See: nuts_bolts_tasks_generator._generate_simple_nuts_stimuli for original implementation."""
         all_strokes = []
         all_strokes_strings = []
+        all_synthetic = []
         base_size = LARGE
         for outer_shapes in [
             [cc_string],
@@ -52,6 +47,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
                         (
                             object_strokes,
                             stroke_strings,
+                            synthetic_dict,
                             height,
                             height_strings,
                         ) = self._generate_perforated_shapes_string(
@@ -63,15 +59,19 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
                         )
                         all_strokes += object_strokes
                         all_strokes_strings.append(stroke_strings)
+                        all_synthetic.append(synthetic_dict)
 
         return random_sample_ratio_ordered_array(
-            all_strokes, train_ratio, strings_array=all_strokes_strings
+            all_strokes,
+            train_ratio,
+            strings_array=list(zip(all_strokes_strings, all_synthetic)),
         )
 
     def _generate_perforated_nuts_stimuli_strings(self, train_ratio):
         """Generates nuts with perforated 'decorators' around the center. Also generates strings. See: nuts_bolts_tasks_generator._generate_perforated_nuts_stimuli for original implementation."""
         all_strokes = []
         all_strokes_strings = []
+        all_synthetic = []
         base_size = LARGE
         for outer_shapes in [
             [cc_string],
@@ -94,6 +94,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
                                     (
                                         object_strokes,
                                         stroke_strings,
+                                        synthetic_dict,
                                         height,
                                         height_strings,
                                     ) = self._generate_perforated_shapes_string(
@@ -108,9 +109,12 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
                                     )
                                     all_strokes += object_strokes
                                     all_strokes_strings.append(stroke_strings)
+                                    all_synthetic.append(synthetic_dict)
 
         return random_sample_ratio_ordered_array(
-            all_strokes, train_ratio, strings_array=all_strokes_strings
+            all_strokes,
+            train_ratio,
+            strings_array=list(zip(all_strokes_strings, all_synthetic)),
         )
 
     def _generate_perforated_shapes_string(
@@ -134,9 +138,11 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         :ret: object_strokes, stroke_string, height, height_string.
 
         """
-        object_strokes, object_strings = [], []
+        object_strokes, object_strings, object_synthetic = [], [], []
 
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
         # Place outer shapes.
+
         # # Note: catwong: we don't currently express the looped computation in loop.
         outer_shape_size = peval(outer_shapes_min_size)
         outer_strings = []
@@ -148,6 +154,19 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
             object_strokes += object_stroke
             outer_strings.append(object_string)
             outer_shape_size += peval(nesting_scale_unit)
+
+            # Add a low-level abstraction corresponding to the shape.
+            shape_abstraction = "base_shape"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
+            synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(nesting_scale_unit)))
+
+        # Mid-level abstraction corresponding to the outer shape.
+        outer_shape_abstraction = "outer_strokes"
+        synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+        synthetic_dict[MID_LEVEL_PARTS].append(shape_string)
+        synthetic_dict[MID_LEVEL_PARAMS].append(str(outer_shape_size))
+
         outer_shape_string = connect_strokes(outer_strings)
         object_strings.append(outer_shape_string)
 
@@ -161,8 +180,21 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
             object_strokes += object_stroke
             inner_shape_size -= peval(nesting_scale_unit)
             inner_strings.append(object_string)
+
+            # Add a low-level abstraction corresponding to the shape.
+            shape_abstraction = "base_shape"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
+            synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(nesting_scale_unit)))
+
         inner_shape_string = connect_strokes(inner_strings)
         object_strings.append(inner_shape_string)
+
+        # Mid-level abstraction corresponding to the outer shape.
+        shape_abstraction = "inner_strokes"
+        synthetic_dict[MID_LEVEL].append(shape_abstraction)
+        synthetic_dict[MID_LEVEL_PARTS].append(shape_string)
+        synthetic_dict[MID_LEVEL_PARAMS].append(str(inner_shape_size))
 
         # Place decorators along evenly divided segments of a circle.
         # Note that this does not perfectly replicate the for-loop behavior in the original.
@@ -170,6 +202,13 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
             decorator_shape, decorator_string = T_string(
                 decorator_shape[0], decorator_shape[-1], s=decorator_size
             )
+            # Add the individual decorators.
+            shape_abstraction = "decorator_strokes"
+            synthetic_dict[LOW_LEVEL] += [shape_abstraction] * int(peval(n_decorators))
+            synthetic_dict[LOW_LEVEL_PARTS] += [decorator_string] * int(
+                peval(n_decorators)
+            )
+
             decorator_strokes, decorator_string = rotation_string(
                 decorator_shape,
                 decorator_string,
@@ -180,11 +219,30 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
             object_strokes += decorator_strokes
             object_strings.append(decorator_string)
 
+            # Add the whole decorating string as a mid-level abstraction.
+            shape_abstraction = "decorator_strokes"
+            synthetic_dict[MID_LEVEL].append(shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(decorator_string)
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(peval(n_decorators)))
+
         # Note: the original implementation provides the ability to generate spokes.
         # However, this functionality is actually never used.
 
         height, height_string = outer_shape_size, f"{outer_shape_size:g}"
-        return [object_strokes], connect_strokes(object_strings), height, height_string
+        object_string = connect_strokes(object_strings)
+
+        # Finally, add the whole thing as a high level abstraction.
+        shape_abstraction = "nuts_bolts_strokes"
+        synthetic_dict[HIGH_LEVEL].append(shape_abstraction)
+        synthetic_dict[HIGH_LEVEL_PARTS].append(object_string)
+
+        return (
+            [object_strokes],
+            object_string,
+            synthetic_dict,
+            height,
+            height_string,
+        )
 
     def _generate_strokes_strings_for_stimuli(self, train_ratio):
         (

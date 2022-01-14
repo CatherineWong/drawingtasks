@@ -16,7 +16,7 @@ from tasksgenerator.bases_parts_tasks_generator import *
 
 import tasksgenerator.nuts_bolts_programs_tasks_generator as to_test
 
-DESKTOP = f"/Users/catherinewongwong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/{to_test.NutsBoltsProgramsTasksGenerator.name}"  # Internal for testing purposes.
+DESKTOP = f"/Users/catherinewong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/{to_test.NutsBoltsProgramsTasksGenerator.name}"  # Internal for testing purposes.
 
 generator = TasksGeneratorRegistry[to_test.NutsBoltsProgramsTasksGenerator.name]
 
@@ -29,10 +29,15 @@ def test_generate_simple_nuts_stimuli_strings(tmpdir):
         train_strings,
         test_strings,
     ) = generator._generate_simple_nuts_stimuli_strings(train_ratio=0.8)
-    for split, objects in [("train", train_strings), ("test", test_strings)]:
+    for (split, strings) in [
+        ("train", train_strings),
+        ("test", test_strings),
+    ]:
+        objects, synthetic = zip(*strings)
         _test_parse_render_save_programs(
             program_strings=objects, tmpdir=DESKTOP, split=split
         )
+        print(f"Total string length: {np.sum([len(o) for o in objects])}")
 
 
 def test_generate_perforated_nuts_stimuli_strings(tmpdir):
@@ -43,7 +48,9 @@ def test_generate_perforated_nuts_stimuli_strings(tmpdir):
         train_strings,
         test_strings,
     ) = generator._generate_perforated_nuts_stimuli_strings(train_ratio=0.8)
-    for split, objects in [("train", train_strings), ("test", test_strings)]:
+    for split, strings in [("train", train_strings), ("test", test_strings)]:
+        objects, synthetic = zip(*strings)
         _test_parse_render_save_programs(
             program_strings=objects, tmpdir=DESKTOP, split=split
         )
+        print(f"Total string length: {np.sum([len(o) for o in objects])}")

@@ -182,31 +182,45 @@ def peval(program_string):
     return output
 
 
-def M_string(s="1", theta="0", x="0", y="0"):
+def get_simplified(program_string):
+    p = Program.parse(program_string)
+    output = p.evaluate([])
+    output = f"{output:g}"
+    try:
+        p = Program.parse(output)
+        _ = p.evaluate([])
+        return str(output)
+    except:
+        return program_string
+
+
+def M_string(s="1", theta="0", x="0", y="0", simplify=True):
     affine_matrix = _makeAffineSimple(peval(s), peval(theta), peval(x), peval(y))
-    m_string = f"(M {s} {theta} {x} {y})"
+    if simplify:
+        m_string = f"(M {get_simplified(s)} {get_simplified(theta)} {get_simplified(x)} {get_simplified(y)})"
+    else:
+        m_string = f"(M {s} {theta} {x} {y})"
     return affine_matrix, m_string
 
 
-def T_string(p, p_string, s="1", theta="0", x="0", y="0"):
+def T_string(p, p_string, s="1", theta="0", x="0", y="0", simplify=True):
     """Transform Python utility wrapper that applies an affine transformation matrix directly to a primitive, while also generating a string that can be applied to a downstream stroke. Python-usable API that mirrors the functional semantics"""
-    tmat, m_string = M_string(
-        s,
-        theta,
-        x,
-        y,
-    )  # get affine matrix.
+    tmat, m_string = M_string(s, theta, x, y, simplify=simplify)  # get affine matrix.
     p = _tform_once(p, tmat)
     t_string = f"(T {p_string} {m_string})"
     return p, t_string
 
 
-def scaled_rectangle_string(w, h):
+def scaled_rectangle_string(w, h, simplify=True):
+    if simplify:
+        w, h = get_simplified(w), get_simplified(h)
     scaled_rectangle_string = f"(r_s {w} {h})"
     return peval(scaled_rectangle_string), scaled_rectangle_string
 
 
-def polygon_string(n):
+def polygon_string(n, simplify=True):
+    if simplify:
+        n = get_simplified(str(n))
     y = f"(/ 0.5 (tan (/ pi {n})))"
     theta = f"(/ (* 2 pi) {n})"
 
@@ -229,8 +243,11 @@ def nested_scaling_string(shape_string, n, scale_factor):
 
 
 def rotation_string(
-    p, p_string, n, displacement="0.5", decorator_start_angle="(/ pi 4)"
+    p, p_string, n, displacement="0.5", decorator_start_angle="(/ pi 4)", simplify=True
 ):
+    if simplify:
+        n = get_simplified(n)
+        displacement = get_simplified(displacement)
     y = f"(* {displacement} (sin {decorator_start_angle}))"
     x = f"(* {displacement} (cos {decorator_start_angle}))"
     theta = f"(/ (* 2 pi) {n})"

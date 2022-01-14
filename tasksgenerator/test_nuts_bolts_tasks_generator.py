@@ -10,7 +10,7 @@ from tasksgenerator.tasks_generator import (
 import primitives.object_primitives as object_primitives
 import tasksgenerator.nuts_bolts_tasks_generator as to_test
 
-DESKTOP = "/Users/catwong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/nuts_bolts"  # Internal for testing purposes.
+DESKTOP = f"/Users/catherinewong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/nuts_bolts_programs"  # Internal for testing purposes.
 
 
 def _test_render_save_programs(
@@ -49,6 +49,7 @@ def test_nutsbolts_tasks_generator_generate_simple_nuts_stimuli(tmpdir):
         _test_render_save_programs(
             stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
         )
+        print(f"Total program length: {np.sum(len([o for o in objects]))}")
 
 
 def test_nutsbolts_tasks_generator_generate_perforated_nuts_stimuli(tmpdir):

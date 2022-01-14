@@ -23,6 +23,37 @@ TasksGeneratorRegistry = ClassRegistry("name", unique=True)
 RANDOM_SEED = 0
 random.seed(RANDOM_SEED)
 
+LOW_LEVEL, MID_LEVEL, HIGH_LEVEL = (
+    "low_level_parts",  # ONe element per part abstraction.
+    "mid_level_parts",  # Repeated units and stacks.
+    "high_level_parts",  #
+)
+LOW_LEVEL_PARTS, MID_LEVEL_PARTS, HIGH_LEVEL_PARTS = (
+    "low_level_part_types",  # Types has an ID
+    "mid_level_part_types",
+    "high_level_part_types",
+)
+LOW_LEVEL_PARAMS, MID_LEVEL_PARAMS, HIGH_LEVEL_PARAMS = (
+    "low_level_part_params",  # Add numbers.
+    "mid_level_part_params",
+    "high_level_part_params",
+)
+
+SYNTHETIC_DICT = {
+    k: []
+    for k in [
+        LOW_LEVEL,
+        MID_LEVEL,
+        HIGH_LEVEL,
+        LOW_LEVEL_PARTS,
+        MID_LEVEL_PARTS,
+        HIGH_LEVEL_PARTS,
+        LOW_LEVEL_PARAMS,
+        MID_LEVEL_PARAMS,
+        HIGH_LEVEL_PARAMS,
+    ]
+}
+
 
 def random_sample_ratio_ordered_array(array, train_ratio, strings_array=None):
     """Utility function to randomly sample a ratio from an ordered array, preserving order.
@@ -255,6 +286,9 @@ class AbstractTasksGenerator:
                 test_strings,
             ) = self._generate_strokes_strings_for_stimuli(train_ratio)
 
+            train_strings, train_synthetic = zip(*train_strings)
+            test_strings, test_synthetic = zip(*test_strings)
+
             train_tasks = [
                 DrawingTask(
                     task_id=task_idx,
@@ -265,10 +299,12 @@ class AbstractTasksGenerator:
                     task_generator_name=task_generator_name
                     + f"_{TaskCurriculum.SPLIT_TRAIN}",
                     render_parsed_program_fn=render_parsed_program_fn,
+                    synthetic_abstractions=task_synthetic,
                 )
-                for (task_idx, (task_strokes, task_program)) in enumerate(
-                    zip(train_tasks, train_strings)
-                )
+                for (
+                    task_idx,
+                    (task_strokes, task_program, task_synthetic),
+                ) in enumerate(zip(train_tasks, train_strings, train_synthetic))
             ]
 
             test_tasks = [
@@ -281,10 +317,12 @@ class AbstractTasksGenerator:
                     task_generator_name=task_generator_name
                     + f"_{TaskCurriculum.SPLIT_TEST}",
                     render_parsed_program_fn=render_parsed_program_fn,
+                    synthetic_abstractions=task_synthetic,
                 )
-                for (task_idx, (task_strokes, task_program)) in enumerate(
-                    zip(test_tasks, test_strings)
-                )
+                for (
+                    task_idx,
+                    (task_strokes, task_program, task_synthetic),
+                ) in enumerate(zip(test_tasks, test_strings, test_synthetic))
             ]
 
         return train_tasks, test_tasks
@@ -360,6 +398,7 @@ class DrawingTask(Task):
         render_strokes_fn=None,
         rendering=None,
         task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR,
+        synthetic_abstractions={},
     ):
         padded_index = str.zfill(str(task_id), 3)
 
@@ -391,6 +430,8 @@ class DrawingTask(Task):
                 self.rendering = render_strokes_fn(ground_truth_strokes)
         assert self.rendering is not None
 
+        self.synthetic_abstractions = synthetic_abstractions
+
     def task_summary(self):
         strokes = (
             self.ground_truth_strokes if self.ground_truth_strokes is not None else []
@@ -399,7 +440,7 @@ class DrawingTask(Task):
             self.ground_truth_program if self.ground_truth_program is not None else ""
         )
         program_tokens = self._tokenize_program(program)
-        return {
+        summary = {
             "task_name": self.name,
             "task_generator": self.task_generator_name,
             "dreamcoder_program_dsl_0": str(program),
@@ -407,6 +448,9 @@ class DrawingTask(Task):
             "ground_truth_strokes": [strokes],
             "n_strokes": len(strokes),
         }
+        # Add any synthetic abstractions we have
+        summary.update(self.synthetic_abstractions)
+        return summary
 
     def _tokenize_program(self, program):
         if program == "":
