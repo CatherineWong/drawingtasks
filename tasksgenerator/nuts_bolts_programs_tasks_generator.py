@@ -209,6 +209,12 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
                 peval(n_decorators)
             )
 
+            # Add the whole decorator once as a mid-level abstraction.
+            shape_abstraction = "decorator_strokes"
+            synthetic_dict[MID_LEVEL].append(shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(decorator_string)
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(peval(n_decorators)))
+
             decorator_strokes, decorator_string = rotation_string(
                 decorator_shape,
                 decorator_string,
@@ -218,12 +224,6 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
             )
             object_strokes += decorator_strokes
             object_strings.append(decorator_string)
-
-            # Add the whole decorating string as a mid-level abstraction.
-            shape_abstraction = "decorator_strokes"
-            synthetic_dict[MID_LEVEL].append(shape_abstraction)
-            synthetic_dict[MID_LEVEL_PARTS].append(decorator_string)
-            synthetic_dict[MID_LEVEL_PARAMS].append(str(peval(n_decorators)))
 
         # Note: the original implementation provides the ability to generate spokes.
         # However, this functionality is actually never used.
