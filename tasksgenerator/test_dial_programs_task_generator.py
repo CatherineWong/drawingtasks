@@ -34,7 +34,13 @@ def test_generate_bases_strings():
         for max_rows in ["1", "2"]:
             for n_tiers in ["1", "2"]:
                 for base_end_filials in [False, True]:
-                    strokes, stroke_strings, _, _ = generator._generate_bases_string(
+                    (
+                        strokes,
+                        stroke_strings,
+                        _,
+                        _,
+                        synthetic_dict,
+                    ) = generator._generate_bases_string(
                         base_columns=base_columns,
                         max_rows=max_rows,
                         n_tiers=n_tiers,
@@ -42,6 +48,7 @@ def test_generate_bases_strings():
                     )
                     test_strokes += [strokes]
                     test_stroke_strings.append(stroke_strings)
+
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
     _test_parse_render_save_programs(
         program_strings=test_stroke_strings, tmpdir=DESKTOP
@@ -51,6 +58,7 @@ def test_generate_bases_strings():
 def test_add_antenna_to_stimuli():
     test_strokes = []
     test_stroke_strings = []
+    test_stroke_dicts = []
     for base_columns in ["1", "2", "3"]:
         for max_rows in ["1", "2"]:
             for n_tiers in ["1", "2"]:
@@ -60,6 +68,7 @@ def test_add_antenna_to_stimuli():
                         stroke_strings,
                         base_width,
                         base_height,
+                        base_dict,
                     ) = generator._generate_bases_string(
                         base_columns=base_columns,
                         max_rows=max_rows,
@@ -76,11 +85,14 @@ def test_add_antenna_to_stimuli():
                         antenna_generation_probability=1.0,
                         add_double_antenna=True,
                         add_side_antenna=True,
+                        stimuli_synthetic_dict=base_dict,
                     )
                     if antenna_stimuli is not None:
-                        strokes, stroke_strings = antenna_stimuli
+                        strokes, stroke_strings, stroke_dicts = antenna_stimuli
                     test_strokes += strokes
                     test_stroke_strings += stroke_strings
+                    test_stroke_dicts += stroke_dicts
+
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
     _test_parse_render_save_programs(
         program_strings=test_stroke_strings, tmpdir=DESKTOP
@@ -103,6 +115,7 @@ def test_generate_nested_circle_dials_string():
                 (
                     strokes,
                     stroke_strings,
+                    synthetic_dict,
                 ) = generator._generate_nested_circle_dials_string(
                     dial_size=dial_size,
                     dial_angle=dial_angle,
@@ -110,6 +123,7 @@ def test_generate_nested_circle_dials_string():
                 )
                 test_strokes += strokes
                 test_stroke_strings.append(stroke_strings)
+
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
     _test_parse_render_save_programs(
         program_strings=test_stroke_strings, tmpdir=DESKTOP
@@ -132,6 +146,7 @@ def test_generate_row_of_dials():
                 (
                     strokes,
                     stroke_strings,
+                    dial_synthetic_dict,
                 ) = generator._generate_nested_circle_dials_string(
                     dial_size=dial_size,
                     dial_angle=dial_angle,
@@ -140,14 +155,22 @@ def test_generate_row_of_dials():
 
                 for n_dial_rows in ["1", "2"]:
                     for n_dials in ["1", "3"]:
-                        strokes, stroke_strings = generator._generate_rows_of_dials(
+                        (
+                            strokes,
+                            stroke_strings,
+                            synthetic_dict,
+                        ) = generator._generate_rows_of_dials(
                             n_dial_rows,
                             n_dials,
                             dial_shape=strokes,
                             dial_shape_string=stroke_strings,
+                            dial_synthetic_dict=dial_synthetic_dict,
                         )
                         test_strokes += [strokes]
                         test_stroke_strings.append(stroke_strings)
+                        import pdb
+
+                        pdb.set_trace()
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
     _test_parse_render_save_programs(
         program_strings=test_stroke_strings, tmpdir=DESKTOP
@@ -159,7 +182,11 @@ def test_generate_stacked_antenna_strings():
     for n_wires in ["1", "2", "3"]:
         for scale_wires in [True, False]:
             for end_shape in [None, c_string, r_string]:
-                (strokes, stroke_strings) = generator._generate_stacked_antenna_strings(
+                (
+                    strokes,
+                    stroke_strings,
+                    _,
+                ) = generator._generate_stacked_antenna_strings(
                     n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape
                 )
                 test_strokes += strokes

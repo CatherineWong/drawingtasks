@@ -48,8 +48,15 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         no_base=False,
     ):
         strokes, stroke_strings = [], []
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
         if not no_base:
-            base, base_string, base_width, base_height = self._generate_bases_string(
+            (
+                base,
+                base_string,
+                base_width,
+                base_height,
+                base_synthetic_dict,
+            ) = self._generate_bases_string(
                 base_width=base_width,
                 base_height=base_height,
                 base_columns=base_columns,
@@ -60,9 +67,17 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes += base
             stroke_strings.append(base_string)
 
+            # Add the base to the synthetic dict.
+            for k in base_synthetic_dict:
+                synthetic_dict[k] += base_synthetic_dict[k]
+
         if n_dials > 0:
             # Generate the base dial.
-            base_dial, base_dial_string = self._generate_nested_circle_dials_string(
+            (
+                base_dial,
+                base_dial_string,
+                base_dial_dict,
+            ) = self._generate_nested_circle_dials_string(
                 n_circles=str(n_circles),
                 circle_size=circle_size,
                 dial_size=dial_size,
@@ -70,14 +85,23 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 shape_specification=shape_specification,
             )
             # Generate the row of dials.
-            row_of_dials, row_of_dials_string = self._generate_rows_of_dials(
+            (
+                row_of_dials,
+                row_of_dials_string,
+                row_dials_dict,
+            ) = self._generate_rows_of_dials(
                 n_dial_rows=str(n_dial_rows),
                 n_dials=str(n_dials),
                 x_spacing=spacing,
                 dial_shape=base_dial,
                 dial_shape_string=base_dial_string,
                 centered=centered,
+                dial_synthetic_dict=base_dial_dict,
             )
+
+            # Add the row of dials to the synthetic dict
+            for k in row_dials_dict:
+                synthetic_dict[k] += row_dials_dict[k]
 
             # Offset them with respect to the base.
             y_offset = f"(- 0 (* 0.5 (* (- {n_dial_rows} 1) {spacing})))"
@@ -93,7 +117,13 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes += row_of_dials
             stroke_strings.append(row_of_dials_string)
 
-        return strokes, connect_strokes(stroke_strings), base_width, base_height
+        return (
+            strokes,
+            connect_strokes(stroke_strings),
+            base_width,
+            base_height,
+            synthetic_dict,
+        )
 
     def _generate_rows_of_dials(
         self,
@@ -102,9 +132,10 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         x_spacing=f"(+ {LARGE} {SCALE_UNIT})",
         dial_shape=None,
         dial_shape_string=None,
+        dial_synthetic_dict=None,
         centered=False,
     ):
-        # Generate a row of dials.
+
         if centered:
             _, x_shift = M_string(x=x_spacing)
         else:
@@ -113,7 +144,32 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         _, y_shift = M_string(y=f"{x_spacing}")
         row_of_dials_string = f"(repeat {dial_shape_string} {n_dials} {x_shift})"
         row_of_rows_string = f"(repeat {row_of_dials_string} {n_dial_rows} {y_shift})"
-        return peval(row_of_rows_string), row_of_rows_string
+
+        # Add a low-level abstraction for each dial.
+        dial_synthetic_dict[LOW_LEVEL] = dial_synthetic_dict[LOW_LEVEL] * int(
+            peval(f"(* {n_dials} {n_dial_rows})")
+        )
+        dial_synthetic_dict[LOW_LEVEL_PARTS] = dial_synthetic_dict[
+            LOW_LEVEL_PARTS
+        ] * int(peval(f"(* {n_dials} {n_dial_rows})"))
+
+        # Add a mid-level abstraction for the repetition and a parameter.
+        dial_synthetic_dict[MID_LEVEL] = ["repeat_x", "repeat_y"] + dial_synthetic_dict[
+            MID_LEVEL
+        ]
+        dial_synthetic_dict[MID_LEVEL_PARTS] = [
+            "repeat_x",
+            "repeat_y",
+        ] + dial_synthetic_dict[MID_LEVEL_PARTS]
+        dial_synthetic_dict[MID_LEVEL_PARAMS] = [
+            str(peval(n_dials)),
+            str(peval(n_dial_rows)),
+        ] + dial_synthetic_dict[MID_LEVEL_PARAMS]
+
+        dial_synthetic_dict[HIGH_LEVEL] = ["row_of_dials"]
+        dial_synthetic_dict[HIGH_LEVEL_PARTS] = [row_of_rows_string]
+
+        return peval(row_of_rows_string), row_of_rows_string, dial_synthetic_dict
 
     def _generate_nested_circle_dials_string(
         self,
@@ -149,12 +205,9 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
 
             # Add a low-level circle for each next.
             shape_abstraction = "base_dial_shape"
-            synthetic_dict[LOW_LEVEL].append(
-                [shape_abstraction] * int(peval(n_circles))
-            )
-            synthetic_dict[LOW_LEVEL_PARTS].append(
-                [c_string[-1]] * int(peval(n_circles))
-            )
+            synthetic_dict[LOW_LEVEL] += [shape_abstraction] * int(peval(n_circles))
+            synthetic_dict[LOW_LEVEL_PARTS] += [c_string[-1]] * int(peval(n_circles))
+
             synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(scale_factor)))
 
             # Add a mid-level abstraction for just the nested dial.
@@ -336,7 +389,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         # Add the whole base type as a high-level abstraction.
         # Add a high-level abstraction corresponding to the dial type.
         object_string = connect_strokes(stroke_strings)
-        shape_abstraction = "dbase_strokes"
+        shape_abstraction = "all_base_strokes"
         synthetic_dict[HIGH_LEVEL].append(shape_abstraction)
         synthetic_dict[HIGH_LEVEL_PARTS].append(object_string)
 
@@ -345,6 +398,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             object_string,
             total_base_width,
             total_base_height,
+            synthetic_dict,
         )
 
     def _generate_stacked_antenna_strings(
@@ -354,6 +408,8 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         Generates stacked antenna. See SimpleAntennaTasksGenerator for original implementation.
         """
         strokes, stroke_strings = [], []
+
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
 
         antenna_base_height = "3"
         long_vl_string = T_string(
@@ -372,10 +428,15 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 base_line, base_line_string, x=STR_ZERO
             )
 
+            shape_abstraction = "antenna_vertical_line"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(long_vl_string[-1])
+
             strokes += base_line
             stroke_strings.append(base_line_string)
 
             assert int(peval(n_wires)) == peval(n_wires)
+            largest_antenna_string = ""
             for a_idx in range(int(peval(n_wires))):
                 antenna_length = antenna_size
                 antenna_height = f"(* 0.5 {antenna_size})"
@@ -383,9 +444,16 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                     s = f"(- (* {antenna_length} 2) {a_idx})"
                 else:
                     s = f"(* {antenna_length} 2)"
+
                 antenna_wire, antenna_wire_string = T_string(
                     short_l_string[0], short_l_string[-1], s=s
                 )
+
+                shape_abstraction = "antenna_horizontal_line"
+                synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+                synthetic_dict[LOW_LEVEL_PARTS].append(antenna_wire_string)
+                largest_antenna_string = antenna_wire_string
+
                 antenna_wire, antenna_wire_string = T_string(
                     antenna_wire,
                     antenna_wire_string,
@@ -394,12 +462,22 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 strokes += antenna_wire
                 stroke_strings.append(antenna_wire_string)
 
+            # Add one for the mid-level abstractions.
+            shape_abstraction = "antenna_lines"
+            synthetic_dict[MID_LEVEL].append(shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(largest_antenna_string)
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(peval(n_wires)))
+
         if end_shape:
             # Add end finials
             x_shift = f"(+ {SCALE_UNIT} {antenna_length})"
             finial, finial_string = T_string(
                 end_shape[0], end_shape[1], x=f"(- 0 {x_shift})", y=antenna_height
             )
+            shape_abstraction = "antenna_finial"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(finial_string)
+
             finial, finial_string = T_string(finial, finial_string, y=antenna_height)
             strokes += finial
             stroke_strings.append(finial_string)
@@ -407,10 +485,23 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             finial, finial_string = T_string(
                 end_shape[0], end_shape[1], x=x_shift, y=antenna_height
             )
+            shape_abstraction = "antenna_finial"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(finial_string)
+
+            shape_abstraction = "antenna_finial"
+            synthetic_dict[MID_LEVEL].append(shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(finial_string)
+
             finial, finial_string = T_string(finial, finial_string, y=antenna_height)
             strokes += finial
             stroke_strings.append(finial_string)
-        return [strokes], connect_strokes(stroke_strings)
+
+        strokes_string = connect_strokes(stroke_strings)
+        synthetic_dict[HIGH_LEVEL].append("whole_antenna")
+        synthetic_dict[HIGH_LEVEL_PARTS].append(strokes_string)
+
+        return [strokes], strokes_string, synthetic_dict
 
     def _add_antenna_to_stimuli(
         self,
@@ -423,32 +514,43 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         add_side_antenna=False,
         generation_probability=1.0,
         antenna_generation_probability=0.25,
+        stimuli_synthetic_dict=None,
     ):
         if random.uniform(0, 1) > generation_probability:
             return None
         generation_probability *= antenna_generation_probability
 
-        strokes, stroke_strings = [], []
-        antenna_strokes, antenna_strings = [], []
+        strokes, stroke_strings, synthetic_dicts = [], [], []
+        antenna_strokes, antenna_strings, antenna_synthetic_dicts = [], [], []
         for n_wires in ["1", "2", "3"]:
             for scale_wires in [True, False]:
                 for end_shape in antenna_end_shapes:
-                    stroke, stroke_string = self._generate_stacked_antenna_strings(
+                    (
+                        stroke,
+                        stroke_string,
+                        stroke_dict,
+                    ) = self._generate_stacked_antenna_strings(
                         n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape
                     )
                     antenna_strokes += stroke
                     antenna_strings.append(stroke_string)
+                    antenna_synthetic_dicts.append(stroke_dict)
 
-        sideways_antenna_strokes, sideways_antenna_strings = [], []
+        sideways_antenna_strokes, sideways_antenna_strings, sideways_antenna_dicts = (
+            [],
+            [],
+            [],
+        )
         for n_wires in ["2", "3"]:
-            stroke, stroke_string = self._generate_stacked_antenna_strings(
+            stroke, stroke_string, stroke_dict = self._generate_stacked_antenna_strings(
                 n_wires=n_wires, scale_wires=False, end_shape=None
             )
             sideways_antenna_strokes += stroke
             sideways_antenna_strings.append(stroke_string)
+            sideways_antenna_dicts.append(stroke_dict)
 
-        for base_antenna_primitive, base_antenna_string in zip(
-            antenna_strokes, antenna_strings
+        for base_antenna_primitive, base_antenna_string, base_antenna_dict in zip(
+            antenna_strokes, antenna_strings, antenna_synthetic_dicts
         ):
             y_shift = f"(+ {LARGE} {base_height})"
             antenna_primitive, antenna_primitive_string = T_string(
@@ -459,6 +561,10 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 stroke_strings.append(
                     connect_strokes([stimuli_string, antenna_primitive_string])
                 )
+                new_base_dict = copy.deepcopy(stimuli_synthetic_dict)
+                for k in new_base_dict:
+                    new_base_dict[k] += base_antenna_dict[k]
+                synthetic_dicts.append(new_base_dict)
 
             if random.uniform(0, 1) < generation_probability:
                 if peval(base_width) > peval(base_height) and add_double_antenna:
@@ -481,10 +587,22 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                             [stimuli_string, finial_right[-1], finial_left[-1]]
                         )
                     )
+                    new_base_dict = copy.deepcopy(stimuli_synthetic_dict)
+                    for k in new_base_dict:
+                        new_base_dict[k] += base_antenna_dict[k]
+                        new_base_dict[k] += base_antenna_dict[k]
+                    synthetic_dicts.append(new_base_dict)
+
             if random.uniform(0, 1) < generation_probability:
                 if add_side_antenna:
-                    for (base_sideways, base_sideways_string) in zip(
-                        sideways_antenna_strokes, sideways_antenna_strings
+                    for (
+                        base_sideways,
+                        base_sideways_string,
+                        base_sideways_dict,
+                    ) in zip(
+                        sideways_antenna_strokes,
+                        sideways_antenna_strings,
+                        sideways_antenna_dicts,
                     ):
                         sideways_antenna = T_string(
                             base_sideways,
@@ -508,10 +626,15 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                 ]
                             )
                         )
+                        new_base_dict = copy.deepcopy(stimuli_synthetic_dict)
+                        for k in new_base_dict:
+                            if "params" not in k:
+                                new_base_dict[k] += base_antenna_dict[k] + ["rotate"]
+                        synthetic_dicts.append(new_base_dict)
 
         if len(strokes) < 1:
             return None
-        return strokes, stroke_strings
+        return strokes, stroke_strings, synthetic_dicts
 
     def _generate_parts_strings_for_stimuli(
         self,
@@ -524,7 +647,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         Generator function for drawing the individual parts in the domain.
         See dials_task_generator.generate_parts_stimuli for original implementation.
         """
-        strokes, stroke_strings = [], []
+        strokes, stroke_strings, stroke_dicts = [], [], []
 
         # Generate antenna.
         antenna_end_shapes = [None, c_string, r_string]
@@ -534,11 +657,13 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                     (
                         antenna_stimuli,
                         antenna_string,
+                        antenna_dict,
                     ) = self._generate_stacked_antenna_strings(
                         n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape
                     )
                     strokes += antenna_stimuli
                     stroke_strings.append(antenna_string)
+                    stroke_dicts.append(antenna_dict)
 
         # Generate dials.
         for total_dials in [1, max_dials + 1]:
@@ -575,6 +700,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                         stimuli_string,
                                         total_base_width,
                                         total_base_height,
+                                        stimuli_dict,
                                     ) = self._generate_base_with_dials(
                                         max_dials=total_dials,
                                         n_dials=total_dials,
@@ -601,9 +727,12 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
 
                                     strokes.append(stimuli)
                                     stroke_strings.append(stimuli_string)
+                                    stroke_dicts.append(stimuli_dict)
 
         # Randomly sample them.
-        return random_sample_ratio_ordered_array(strokes, train_ratio, stroke_strings)
+        return random_sample_ratio_ordered_array(
+            strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
+        )
 
     def _generate_strokes_strings_for_stimuli(
         self,
@@ -617,7 +746,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
 
         See dials_task_generator.generate_strokes_for_stimuli for original implementation.
         """
-        strokes, stroke_strings = [], []
+        strokes, stroke_strings, stroke_dicts = [], [], []
 
         MAX_BASE_COLUMNS_FOR_ANTENNA = 3
 
@@ -667,6 +796,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                         stimuli_string,
                                         total_base_width,
                                         total_base_height,
+                                        stimuli_dict,
                                     ) = self._generate_base_with_dials(
                                         n_dials=0,
                                         n_circles=1,
@@ -685,12 +815,18 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                         base_height=total_base_height,
                                         generation_probability=1.0,
                                         antenna_generation_probability=0.5,
+                                        stimuli_synthetic_dict=stimuli_dict,
                                     )
                                     if antenna_stimuli is not None:
-                                        stim_strokes, stim_strings = antenna_stimuli
+                                        (
+                                            stim_strokes,
+                                            stim_strings,
+                                            stim_dicts,
+                                        ) = antenna_stimuli
 
                                         strokes += stim_strokes
                                         stroke_strings += stim_strings
+                                        stroke_dicts += stim_dicts
 
                                 # Small and large dials with the lever sticking out.
                                 for dial_size in [SMALL, LARGE]:
@@ -711,6 +847,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                                 stimuli_string,
                                                 total_base_width,
                                                 total_base_height,
+                                                stimuli_dict,
                                             ) = self._generate_base_with_dials(
                                                 max_dials=total_dials,
                                                 n_dials=total_dials,
@@ -733,6 +870,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                             ):
                                                 strokes.append(stimuli)
                                                 stroke_strings.append(stimuli_string)
+                                                stroke_dicts.append(stimuli_dict)
 
                                             add_side_antenna = (
                                                 base_columns
@@ -751,15 +889,18 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                                 add_double_antenna=add_double_antenna,
                                                 add_side_antenna=add_side_antenna,
                                                 generation_probability=generation_probability,
+                                                stimuli_synthetic_dict=stimuli_dict,
                                             )
                                             if antenna_stimuli is not None:
                                                 (
                                                     stim_strokes,
                                                     stim_strings,
+                                                    stim_dicts,
                                                 ) = antenna_stimuli
 
                                                 strokes += stim_strokes
                                                 stroke_strings += stim_strings
+                                                stroke_dicts += stim_dicts
 
         (
             train_parts,
@@ -774,7 +915,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             train_main_strings,
             test_main_strings,
         ) = random_sample_ratio_ordered_array(
-            strokes, train_ratio, strings_array=stroke_strings
+            strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
         )
 
         return (
