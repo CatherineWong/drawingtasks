@@ -27,6 +27,7 @@ DEFAULT_TRANSLATIONS_DIR = f"{DEFAULT_DATA_DIR}/translations"
 DEFAULT_LANGUAGE_DIR = f"{DEFAULT_DATA_DIR}/language"
 DEFAULT_SUMMARIES_DIR = f"{DEFAULT_DATA_DIR}/summaries"
 DEFAULT_PROGRAM_COLUMN = "dreamcoder_program_dsl_0_tokens"
+
 LEMMATIZED_WHATS = "lemmatized_whats"
 LEMMATIZED_WHATS_WHERES = "lemmatized_whats_wheres"
 RAW_WHATS_WHERES = "raw_whats_wheres"
@@ -89,6 +90,11 @@ parser.add_argument(
     default=DEFAULT_LANGUAGE_COLUMN,
     help="Column in the language CSV containing which language to use.",
 )
+parser.add_argument(
+    "--use_base_dsl_bitext",
+    action="store_true",
+    help="If included, uses a bitext for the base DSL.",
+)
 
 
 def get_summaries_dict(args):
@@ -127,7 +133,7 @@ def get_bitexts_dict(args):
     return bitexts_dict
 
 
-def get_libraries_dict(args):
+def get_libraries_dict(args, bitexts_dict):
     libraries_dict = {}
     for program_column in args.program_column:
         summaries_name = args.task_summaries.replace("_libraries", "")
@@ -140,6 +146,13 @@ def get_libraries_dict(args):
         except:
             print(f"Not found: library for: {col_name}")
     print(f"...read libraries for {len(libraries_dict)} libraries.")
+
+    # If this is structures, use the base DSL as as as library.
+    if args.use_base_dsl_bitext:
+        libraries_dict[DEFAULT_PROGRAM_COLUMN] = {
+            "library": {"productions": bitexts_dict[DEFAULT_PROGRAM_COLUMN]}
+        }
+
     return libraries_dict
 
 
@@ -252,7 +265,7 @@ def generate_program_likelihood_plots(
 def main(args):
     summaries_dict, fieldnames = get_summaries_dict(args)
     bitexts_dict = get_bitexts_dict(args)
-    libraries_dict = get_libraries_dict(args)
+    libraries_dict = get_libraries_dict(args, bitexts_dict)
     translations_dict = get_translations(args)
 
     generate_program_length_plots(args, summaries_dict, libraries_dict, bitexts_dict)

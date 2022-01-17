@@ -149,13 +149,6 @@ def get_heldout_task_likelihoods(task_to_tokens_dict, ibm_model, heldout_bitexts
             task_to_tokens_dict[task][TRANSLATION_BEST_LOG_LIKELIHOODS].append(
                 translation_best_likelihood
             )
-        # if (
-        #     task
-        #     == "https://lax-drawing-nuts-bolts-all.s3.amazonaws.com/lax-drawing-nuts-bolts-all-009.png"
-        # ):
-        #     import pdb
-
-        #     pdb.set_trace()
     return task_to_tokens_dict
 
 

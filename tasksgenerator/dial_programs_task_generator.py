@@ -13,14 +13,7 @@ from tasksgenerator.dial_tasks_generator import (
     DIAL_SCALE_UNIT,
     MAX_ANTENNA_WIRES,
 )
-from tasksgenerator.tasks_generator import (
-    AbstractTasksGenerator,
-    ManualCurriculumTasksGenerator,
-    TasksGeneratorRegistry,
-    TaskCurriculum,
-    DrawingTask,
-    random_sample_ratio_ordered_array,
-)
+from tasksgenerator.tasks_generator import *
 from tasksgenerator.bases_parts_tasks_generator import *
 
 from tasksgenerator.s12_s13_tasks_generator import RANDOM_SEED
@@ -138,7 +131,13 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
 
         :ret: dial_strokes, dial_strokes_string
         """
-        strokes, stroke_strings = [], []
+        strokes, stroke_strings = (
+            [],
+            [],
+        )
+
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+
         if circle_size != STR_ZERO and not shape_specification:
             # Draw nested circles.
             scale_factor = f"(+ {circle_size} {SCALE_UNIT})"
@@ -147,6 +146,25 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             )
             strokes += circle_strokes
             stroke_strings.append(circle_strings)
+
+            # Add a low-level circle for each next.
+            shape_abstraction = "base_dial_shape"
+            synthetic_dict[LOW_LEVEL].append(
+                [shape_abstraction] * int(peval(n_circles))
+            )
+            synthetic_dict[LOW_LEVEL_PARTS].append(
+                [c_string[-1]] * int(peval(n_circles))
+            )
+            synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(scale_factor)))
+
+            # Add a mid-level abstraction for just the nested dial.
+            # Mid-level abstraction corresponding to the outer shape.
+            outer_shape_abstraction = "outer_strokes"
+            synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(c_string[-1])
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(peval(scale_factor)))
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(peval(n_circles)))
+
         # Shape specification - we don't really do this one correctly.
         if shape_specification:
             for shape_idx, (shape, shape_string) in enumerate(shape_specification):
@@ -156,6 +174,19 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 )
                 strokes += object_stroke
                 stroke_strings.append(object_string)
+
+                # Low-level: one for each type.
+                shape_abstraction = "base_dial_shape"
+                synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+                synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
+                synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(scale_factor)))
+            # Mid-level: just choose the outer one.
+            outer_shape_abstraction = "outer_strokes"
+            synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(shape_string)
+            synthetic_dict[MID_LEVEL_PARAMS].append(
+                str(peval(scale_factor))
+            )  # Use the last scale factor.
 
         # Dials.
         if dial_size != STR_ZERO:
@@ -170,7 +201,24 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes += dial_hand
             stroke_strings.append(dial_hand_string)
 
-        return [strokes], connect_strokes(stroke_strings)
+            # Add a low abstraction corresponding to a dial direction
+            shape_abstraction = "base_dial_hand"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(dial_hand_string)
+            # Mid-level: just choose the outer one.
+
+            outer_shape_abstraction = "base_dial_hand"
+            synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(short_l_string[-1])
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(dial_angle))
+
+        # Add a high-level abstraction corresponding to the dial type.
+        object_string = connect_strokes(stroke_strings)
+        shape_abstraction = "dial_strokes"
+        synthetic_dict[HIGH_LEVEL].append(shape_abstraction)
+        synthetic_dict[HIGH_LEVEL_PARTS].append(object_string)
+
+        return [strokes], object_string, synthetic_dict
 
     def _generate_bases_string(
         self,
@@ -190,6 +238,9 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         :ret: base, base_string, base_width, base_width_string, base_height, base_height_string.
         """
         strokes, stroke_strings = [], []
+
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+
         margins = f"(* 4 {tier_scaling})"
         total_base_height = "0"
         total_base_width = "0"
@@ -198,6 +249,8 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
         # Place tiers. Note that we don't currently express the looped computation in a loop.
         first_tier_width, first_tier_height = None, None
         assert int(peval(n_tiers)) == peval(n_tiers)
+
+        untransformed_rect_string = None
         for tier_idx in range(int(peval(n_tiers))):
             tier_width = (
                 f"(+ (* {base_columns} (+ {base_width} {SCALE_UNIT})) {margins})"
@@ -215,6 +268,14 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             tier_rect, tier_rect_string = scaled_rectangle_string(
                 tier_width, tier_height
             )
+
+            # Place a tier for each low-level abstraction.
+            untransformed_rect_string = tier_rect_string
+            shape_abstraction = "base_tier_shape"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(tier_rect_string)
+            synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(tier_y)))
+
             tier_rect, tier_rect_string = T_string(
                 tier_rect, tier_rect_string, y=tier_y
             )
@@ -228,6 +289,12 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 total_base_height = f"(+ (* 0.5 {tier_height}) {total_base_height})"
             else:
                 total_base_height = f"(+ {tier_height} {total_base_height})"
+        # Place tiers as a mid-level abstraction
+        # Mid-level abstraction corresponding to the outer shape.
+        outer_shape_abstraction = "base_tiers"
+        synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+        synthetic_dict[MID_LEVEL_PARTS].append(untransformed_rect_string)
+        synthetic_dict[MID_LEVEL_PARAMS].append(str(int(peval(n_tiers))))
 
         # Add decorative finials.
         if base_end_filials:
@@ -236,6 +303,15 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             filial_rect, filial_rect_string = scaled_rectangle_string(
                 w=filial_width, h=filial_height
             )
+
+            shape_abstraction = "base_filial_shape"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(filial_rect_string)
+
+            outer_shape_abstraction = "base_filials"
+            synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(filial_rect_string)
+
             x_shift = f"(* 0.5 (+ {first_tier_width} {filial_width}))"
             first_filial, first_filial_string = T_string(
                 filial_rect, filial_rect_string, x=x_shift
@@ -251,11 +327,22 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             strokes += scd_filial
             stroke_strings.append(scd_filial_string)
 
+            shape_abstraction = "base_filial_shape"
+            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+            synthetic_dict[LOW_LEVEL_PARTS].append(filial_rect_string)
+
             total_base_width = f"(+ {total_base_width} (* 2 {filial_width}))"
+
+        # Add the whole base type as a high-level abstraction.
+        # Add a high-level abstraction corresponding to the dial type.
+        object_string = connect_strokes(stroke_strings)
+        shape_abstraction = "dbase_strokes"
+        synthetic_dict[HIGH_LEVEL].append(shape_abstraction)
+        synthetic_dict[HIGH_LEVEL_PARTS].append(object_string)
 
         return (
             strokes,
-            connect_strokes(stroke_strings),
+            object_string,
             total_base_width,
             total_base_height,
         )

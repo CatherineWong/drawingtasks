@@ -4,7 +4,6 @@ Defines TasksGenerators that produce gadget tasks that look like nuts and bolts.
 
 Threads program string generating logic through the generation.
 """
-from curses.ascii import SYN
 import math, random, itertools, copy
 from primitives.gadgets_primitives import *
 from dreamcoder.grammar import Grammar
