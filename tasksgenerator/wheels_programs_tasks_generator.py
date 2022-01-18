@@ -313,11 +313,17 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             # Double the wheel.
             _, x_shift = M_string(x=wheel_height_string)
             base_wheel_string = f"(repeat {base_wheel_string} 2 {x_shift})"
-            base_wheel = peval(base_wheel_string)
+            base_wheel, base_wheel_string = T_string(
+                peval(base_wheel_string),
+                base_wheel_string,
+                x=f"(* -0.5 {wheel_height})",
+            )
 
-        # TODO: implement paired wheels.
-        min_x = f"(+ {min_x} (* 0.5 {wheel_height}))"
-        max_x = f"(- {max_x} (* 0.5 {wheel_height}))"
+            min_x = f"(+ {min_x} (* 1 {wheel_height}))"
+            max_x = f"(- {max_x} (* 1 {wheel_height}))"
+        else:
+            min_x = f"(+ {min_x} (* 0.5 {wheel_height}))"
+            max_x = f"(- {max_x} (* 0.5 {wheel_height}))"
         return self._generate_n_objects_on_grid_x_y_limits_string(
             object=base_wheel[0],
             object_string=base_wheel_string,
@@ -329,7 +335,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             min_y=STR_ZERO,
             max_y=STR_ZERO,
             n_rows=1,
-            n_columns=n_wheels,
+            n_columns=n_wheels if not paired_wheels else n_wheels / 2,
             float_location=float_location,
         )
 
@@ -399,6 +405,60 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             strokes += antenna_object
             stroke_strings.append(antenna_string)
 
+        return random_sample_ratio_ordered_array(
+            strokes, train_ratio, strings_array=stroke_strings
+        )
+
+    def _generate_truck_stimuli_strings(self, train_ratio=1.0):
+        big_width = f"(* {LARGE} 8)"
+        strokes, stroke_strings = [], []
+        for head_width in [LARGE]:
+            for head_height in [LARGE * 2]:
+                for body_width, body_height in [
+                    (LARGE * 8, LARGE * 4),
+                    (LARGE * 10, LARGE * 3),
+                ]:
+                    reverse = False
+                    nose_scale = THREE_QUARTER_SCALE
+                    (
+                        base_strokes,
+                        base_stroke_strings,
+                        base_min_x,
+                        base_max_x,
+                        base_min_y,
+                        base_max_y,
+                    ) = self._generate_truck_bases_strings(
+                        head_width=head_width,
+                        head_height=body_height * THREE_QUARTER_SCALE,
+                        body_width=body_width,
+                        body_height=body_height,
+                        nose_scale=nose_scale,
+                        reverse=reverse,
+                    )
+                    n_wheels_types = [2, 4]
+                    for n_wheels in n_wheels_types:
+                        paired_wheels = True if n_wheels > 2 else False
+                        wheels_iterator = self._generate_wheels_strings_iterator(
+                            base_min_x,
+                            base_max_x,
+                            n_wheels=n_wheels,
+                            float_location=FLOAT_CENTER,
+                            paired_wheels=paired_wheels,
+                        )
+                        for (
+                            wheels_strokes,
+                            wheels_strokes_strings,
+                            wheels_min_x,
+                            wheels_max_x,
+                            wheels_min_y,
+                            wheels_max_y,
+                        ) in wheels_iterator:
+                            truck_strokes = [base_strokes[0] + wheels_strokes[0]]
+                            truck_stroke_strings = connect_strokes(
+                                [base_stroke_strings, wheels_strokes_strings]
+                            )
+                            strokes += truck_strokes
+                            stroke_strings.append(truck_stroke_strings)
         return random_sample_ratio_ordered_array(
             strokes, train_ratio, strings_array=stroke_strings
         )

@@ -160,3 +160,23 @@ def test_wheels_tasks_generator_generate_parts_for_stimuli(tmpdir):
         _test_parse_render_save_programs(
             program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
         )
+
+
+def test_wheels_tasks_generator_generate_truck_stimuli(tmpdir):
+    generator = TasksGeneratorRegistry[to_test.WheelsProgramsTasksGenerator.name]
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_truck_stimuli_strings(train_ratio=1.0)
+    for split, objects, test_stroke_strings in [
+        ("train", train, train_strings),
+        ("test", test, test_strings),
+    ]:
+        # _test_render_save_programs(
+        #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
+        # )
+        _test_parse_render_save_programs(
+            program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        )

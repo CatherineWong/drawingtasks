@@ -214,17 +214,23 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
             object_center, object_height, object_width, float_location
         )
 
-        x_spacing = f"(/ (- {max_x} {min_x}) {n_columns})"
+        x_spacing = f"(/ (- {max_x} {min_x}) {n_columns - 1})"
         y_spacing = f"(+ (/ (- {max_y} {min_y}) {n_rows}) {y_float_offset})"
         _, x_shift = M_string(x=x_spacing)
         _, y_shift = M_string(y=y_spacing)
         row_of_objects_string = f"(repeat {object_string} {n_columns} {x_shift})"
         row_of_rows_string = f"(repeat {row_of_objects_string} {n_rows} {y_shift})"
 
+        x_shift = f"(/ (- {max_x} {min_x}) -2)"
+        y_shift = y_spacing = f"(+ (/ (- {max_y} {min_y}) -2) {y_float_offset})"
+        row_of_rows, row_of_rows_string = T_string(
+            peval(row_of_rows_string), row_of_rows_string, x=x_shift, y=y_shift
+        )
+
         # Shift the whole thing into the right location.
         # TBD.
         return (
-            [peval(row_of_rows_string)],
+            [row_of_rows],
             row_of_rows_string,
             min_x,
             max_x,

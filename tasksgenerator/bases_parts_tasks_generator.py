@@ -37,7 +37,7 @@ from tasksgenerator.s12_s13_tasks_generator import (
 
 CIRCLE, RECTANGLE, LINE = ("CIRCLE", "RECTANGLE", "LINE")
 FLOAT_TOP, FLOAT_CENTER, FLOAT_BOTTOM = "FLOAT_TOP", "FLOAT_CENTER", "FLOAT_BOTTOM"
-BASE_CENTER=0
+BASE_CENTER = 0
 
 NONE, SMALL, MEDIUM, LARGE = 0, 1, 1.5, 2
 SCALE_UNIT = 0.5
@@ -50,9 +50,7 @@ VERTICAL, RIGHT, LEFT = (
 )
 short_hline = T(object_primitives._line, x=-0.5)
 STR_ZERO = "0"
-STR_VERTICAL, STR_RIGHT, STR_LEFT = (
-    "(/ pi 2)", "(/ pi 4)", "(- pi (/ pi 4))"
-)
+STR_VERTICAL, STR_RIGHT, STR_LEFT = ("(/ pi 2)", "(/ pi 4)", "(- pi (/ pi 4))")
 
 
 @TasksGeneratorRegistry.register
