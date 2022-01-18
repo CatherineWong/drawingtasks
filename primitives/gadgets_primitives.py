@@ -177,6 +177,10 @@ objects = [
 
 
 def peval(program_string):
+    if type(program_string) == int:
+        return program_string
+    elif type(program_string) == float:
+        return program_string
     p = Program.parse(program_string)
     output = p.evaluate([])
     return output
