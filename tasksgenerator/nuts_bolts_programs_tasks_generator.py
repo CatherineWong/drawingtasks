@@ -116,6 +116,54 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
             strings_array=list(zip(all_strokes_strings, all_synthetic)),
         )
 
+    def _generate_dsl_primitives(self, train_ratio):
+        """Generates nuts with perforated 'decorators' around the center. Also generates strings. See: nuts_bolts_tasks_generator._generate_perforated_nuts_stimuli for original implementation."""
+        all_strokes = []
+        all_strokes_strings = []
+        all_synthetic = []
+        base_size = LARGE
+        for outer_shapes in [[hexagon_string, hexagon_string], []]:
+            for outer_shapes_min_size in [base_size * n for n in [2]]:
+                for inner_shapes in [[]]:
+                    for inner_shapes_max_size in [
+                        outer_shapes_min_size * scale
+                        for scale in [SCALE_UNIT, QUARTER_SCALE]
+                    ]:
+                        for decorator_shape in [c_string, r_string]:
+                            for decorator_size in [SCALE_UNIT]:
+                                for n_decorators in [0, 2, 4, 6, 8]:
+                                    decorator_displacement = (
+                                        f"(* {inner_shapes_max_size:g} {MEDIUM})"
+                                    )
+                                    try:
+                                        (
+                                            object_strokes,
+                                            stroke_strings,
+                                            synthetic_dict,
+                                            height,
+                                            height_strings,
+                                        ) = self._generate_perforated_shapes_string(
+                                            outer_shapes=outer_shapes,
+                                            outer_shapes_min_size=f"{outer_shapes_min_size:g}",
+                                            inner_shapes=inner_shapes,
+                                            inner_shapes_max_size=f"{inner_shapes_max_size:g}",
+                                            nesting_scale_unit=str(0.5),
+                                            n_decorators=str(n_decorators),
+                                            decorator_shape=decorator_shape,
+                                            decorator_size=f"{decorator_size:g}",
+                                            decorator_displacement=decorator_displacement,
+                                        )
+                                        all_strokes += object_strokes
+                                        all_strokes_strings.append(stroke_strings)
+                                        all_synthetic.append(synthetic_dict)
+                                    except:
+                                        continue
+        return random_sample_ratio_ordered_array(
+            all_strokes,
+            train_ratio,
+            strings_array=list(zip(all_strokes_strings, all_synthetic)),
+        )
+
     def _generate_perforated_shapes_string(
         self,
         outer_shapes=[c_string],
@@ -143,57 +191,59 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
         # Place outer shapes.
 
         # # Note: catwong: we don't currently express the looped computation in loop.
-        outer_shape_size = peval(outer_shapes_min_size)
-        outer_strings = []
-        for i, (shape, shape_string) in enumerate(outer_shapes):
-            object_stroke, object_string = T_string(
-                shape, shape_string, s=f"{outer_shape_size:g}"
-            )
+        if len(outer_shapes) > 0:
+            outer_shape_size = peval(outer_shapes_min_size)
+            outer_strings = []
+            for i, (shape, shape_string) in enumerate(outer_shapes):
+                object_stroke, object_string = T_string(
+                    shape, shape_string, s=f"{outer_shape_size:g}"
+                )
 
-            object_strokes += object_stroke
-            outer_strings.append(object_string)
-            outer_shape_size += peval(nesting_scale_unit)
+                object_strokes += object_stroke
+                outer_strings.append(object_string)
+                outer_shape_size += peval(nesting_scale_unit)
 
-            # Add a low-level abstraction corresponding to the shape.
-            shape_abstraction = "base_shape"
-            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
-            synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
-            synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(nesting_scale_unit)))
+                # Add a low-level abstraction corresponding to the shape.
+                shape_abstraction = "base_shape"
+                synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+                synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
+                synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(nesting_scale_unit)))
 
-        # Mid-level abstraction corresponding to the outer shape.
-        outer_shape_abstraction = "outer_strokes"
-        synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
-        synthetic_dict[MID_LEVEL_PARTS].append(shape_string)
-        synthetic_dict[MID_LEVEL_PARAMS].append(str(outer_shape_size))
+            # Mid-level abstraction corresponding to the outer shape.
+            outer_shape_abstraction = "outer_strokes"
+            synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(shape_string)
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(outer_shape_size))
 
-        outer_shape_string = connect_strokes(outer_strings)
-        object_strings.append(outer_shape_string)
+            outer_shape_string = connect_strokes(outer_strings)
+            object_strings.append(outer_shape_string)
 
         # Place inner shapes
-        inner_shape_size = peval(inner_shapes_max_size)
-        inner_strings = []
-        for i, (shape, shape_string) in enumerate(inner_shapes):
-            object_stroke, object_string = T_string(
-                shape, shape_string, s=f"{inner_shape_size:g}"
-            )
-            object_strokes += object_stroke
-            inner_shape_size -= peval(nesting_scale_unit)
-            inner_strings.append(object_string)
+        if len(inner_shapes) > 0:
+            inner_shape_size = peval(inner_shapes_max_size)
+            inner_strings = []
+            for i, (shape, shape_string) in enumerate(inner_shapes):
+                object_stroke, object_string = T_string(
+                    shape, shape_string, s=f"{inner_shape_size:g}"
+                )
+                object_strokes += object_stroke
+                inner_shape_size -= peval(nesting_scale_unit)
+                inner_strings.append(object_string)
 
-            # Add a low-level abstraction corresponding to the shape.
-            shape_abstraction = "base_shape"
-            synthetic_dict[LOW_LEVEL].append(shape_abstraction)
-            synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
-            synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(nesting_scale_unit)))
+                # Add a low-level abstraction corresponding to the shape.
+                shape_abstraction = "base_shape"
+                synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+                synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
+                synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(nesting_scale_unit)))
 
-        inner_shape_string = connect_strokes(inner_strings)
-        object_strings.append(inner_shape_string)
+            inner_shape_string = connect_strokes(inner_strings)
+            object_strings.append(inner_shape_string)
 
-        # Mid-level abstraction corresponding to the outer shape.
-        shape_abstraction = "inner_strokes"
-        synthetic_dict[MID_LEVEL].append(shape_abstraction)
-        synthetic_dict[MID_LEVEL_PARTS].append(shape_string)
-        synthetic_dict[MID_LEVEL_PARAMS].append(str(inner_shape_size))
+            # Mid-level abstraction corresponding to the outer shape.
+            shape_abstraction = "inner_strokes"
+            synthetic_dict[MID_LEVEL].append(shape_abstraction)
+            synthetic_dict[MID_LEVEL_PARTS].append(shape_string)
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(inner_shape_size))
 
         # Place decorators along evenly divided segments of a circle.
         # Note that this does not perfectly replicate the for-loop behavior in the original.

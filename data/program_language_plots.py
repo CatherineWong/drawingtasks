@@ -233,7 +233,7 @@ def generate_program_likelihood_plots(
             ]:
                 random_probabilities.append(likelihood)
     plt.clf()
-    plt.figure(figsize=(9, 5))
+    plt.figure(figsize=(3, 4.5))
     ax = sns.regplot(
         x=library_sizes,
         y=translation_probabilities,
@@ -241,25 +241,31 @@ def generate_program_likelihood_plots(
         label="Translation",
         order=2,
     )
-    ax = sns.regplot(
-        x=library_sizes,
-        y=random_probabilities,
-        x_estimator=np.mean,
-        label="Random",
-        order=2,
-    )
-    ax.legend()
+    # ax = sns.regplot(
+    #     x=library_sizes,
+    #     y=random_probabilities,
+    #     x_estimator=np.mean,
+    #     label="Random",
+    #     order=2,
+    # )
+    # ax.legend()
     fig = ax.get_figure()
 
     output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_ibm.png"
     output = os.path.join(args.export_dir, output_plot)
 
-    plt.title(f"{args.task_summaries}")
-    plt.ylabel("P(language | program)")
-    plt.xlabel("log(|DSL|)")
+    plt.title(f"{get_subdomain_name(args.task_summaries)}")
+    # plt.ylabel("P(language | program, T, DSL)")
+    # plt.xlabel("log(|DSL|)")
 
     fig.savefig(output)
     print(f"...saved lengths plot to {output}.")
+
+
+def get_subdomain_name(task_summaries_name):
+    subdomain_name = task_summaries_name.split("_")[:-2]
+    subdomain_name = "&".join([t.capitalize() for t in subdomain_name])
+    return subdomain_name
 
 
 def main(args):

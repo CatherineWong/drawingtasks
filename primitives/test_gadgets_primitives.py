@@ -61,6 +61,14 @@ def test_T_string_to_polygon():
     _test_render_save_programs(stroke_arrays=[strokes], export_dir=DESKTOP)
 
 
+def test_generate_dsl_primitives():
+    test_strings = [
+        p_string
+        for (p, p_string) in [to_test.c_string, to_test.l_string, to_test.r_string]
+    ]
+    _test_parse_render_save_programs(program_strings=test_strings, tmpdir=DESKTOP)
+
+
 def test_polygon():
     test_programs = []
 
@@ -68,11 +76,13 @@ def test_polygon():
         test_programs.append(to_test.polygon_string(n_sides)[-1])
     _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
 
+
 def test_scaled_rectangle_strings():
     test_programs = []
     for (w, h) in [(1, 1), (1, 2), (2, 1), (2, 3)]:
         test_programs.append(to_test.scaled_rectangle_string(w, h)[-1])
     _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
+
 
 def test_scaled_rectangle_strokes():
     test_strokes = []
@@ -80,13 +90,19 @@ def test_scaled_rectangle_strokes():
         test_strokes.append(to_test.scaled_rectangle_string(w, h)[0])
     _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
 
+
 def test_nested_scaling_string():
     test_programs = []
-    for n in range(1,3):
+    for n in range(1, 3):
         _, shape_string = to_test.c_string
         scale_factor = f"(+ {SMALL} {SCALE_UNIT})"
-        test_programs.append(to_test.nested_scaling_string(shape_string, n, scale_factor=scale_factor)[-1])
+        test_programs.append(
+            to_test.nested_scaling_string(shape_string, n, scale_factor=scale_factor)[
+                -1
+            ]
+        )
     _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
+
 
 def test_object_constants():
     test_programs = []
