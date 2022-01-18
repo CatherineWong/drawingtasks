@@ -138,7 +138,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 min_x=-body_widths[0] * body_repetitions * 0.5 + MEDIUM,
                 max_x=body_widths[0] * body_repetitions * 0.5 - MEDIUM,
                 min_y=body_heights[0] * 0.5,
-                max_y=body_heights[0] * 0.5,
+                max_y=body_heights[0] * -0.5,
                 n_rows=1,
                 n_columns=n_windows,
                 float_location=FLOAT_CENTER,
@@ -462,3 +462,257 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         return random_sample_ratio_ordered_array(
             strokes, train_ratio, strings_array=stroke_strings
         )
+
+    def _generate_train_stimuli_strings(self, train_ratio=1.0):
+        strokes, stroke_strings = [], []
+
+        body_height = SMALL * 5
+        caboose_width = MEDIUM
+        caboose_height = body_height * THREE_QUARTER_SCALE
+        caboose_primitives, caboose_heights, caboose_widths, caboose_floats = (
+            [
+                RECTANGLE,
+            ],
+            [caboose_height],
+            [caboose_width],
+            [
+                FLOAT_TOP,
+            ],
+        )
+
+        small_width, large_width = SMALL * 7, SMALL * 9
+        for body_heights in [body_height]:
+            for body_widths in [small_width, large_width]:
+                body_repetitions = [2] if body_widths > small_width else [2, 3]
+                for body_repetitions in body_repetitions:
+                    for car_margins in [QUARTER_SCALE]:
+                        for show_doors in [True, False]:
+                            (
+                                base_strokes,
+                                base_stroke_strings,
+                                base_min_x,
+                                base_max_x,
+                                base_min_y,
+                                base_max_y,
+                            ) = self._generate_train_bases_strings(
+                                caboose_primitives=caboose_primitives,
+                                caboose_heights=caboose_heights,
+                                caboose_widths=caboose_widths,
+                                caboose_floats=caboose_floats,
+                                reflect_caboose_for_head=True,
+                                body_primitives=[RECTANGLE],
+                                body_heights=[body_heights],
+                                body_widths=[body_widths],
+                                body_floats=[FLOAT_TOP],
+                                body_repetitions=body_repetitions,
+                                car_margins=car_margins,
+                                show_doors=show_doors,
+                            )
+                            n_wheels_types = [
+                                body_repetitions * 2,
+                                body_repetitions * 3,
+                            ]
+                            for n_wheels in n_wheels_types:
+                                wheels_iterator = (
+                                    self._generate_wheels_strings_iterator(
+                                        base_min_x,
+                                        base_max_x,
+                                        n_wheels=n_wheels,
+                                        float_location=FLOAT_CENTER,
+                                        wheel_scale=THREE_QUARTER_SCALE,
+                                    )
+                                )
+                                for (
+                                    wheels_strokes,
+                                    wheels_strokes_strings,
+                                    wheels_min_x,
+                                    wheels_max_x,
+                                    wheels_min_y,
+                                    wheels_max_y,
+                                ) in wheels_iterator:
+
+                                    train_strokes = [
+                                        base_strokes[0] + wheels_strokes[0]
+                                    ]
+                                    train_stroke_strings = connect_strokes(
+                                        [base_stroke_strings, wheels_strokes_strings]
+                                    )
+                                    strokes += train_strokes
+                                    stroke_strings.append(train_stroke_strings)
+        return random_sample_ratio_ordered_array(
+            strokes, train_ratio, strings_array=stroke_strings
+        )
+
+    def _generate_buggy_stimuli_strings(
+        self, train_ratio=1.0, generation_probability=0.80
+    ):
+        strokes, stroke_strings = [], []
+        for scale_wires in [True, False]:
+            antenna_generator = DialProgramsTasksGenerator()
+            n_wires = 3
+            (
+                antenna_object,
+                antenna_string,
+                antenna_dict,
+            ) = antenna_generator._generate_stacked_antenna_strings(
+                n_wires=n_wires,
+                scale_wires=scale_wires,
+                end_shape=None,
+            )
+            antenna_object = antenna_object[0]
+
+            antenna_base_height = 3
+            antenna_height = antenna_base_height + (SMALL * (n_wires - 1))
+
+            for first_tier_height, second_tier_height in [
+                (MEDIUM * 3, SMALL),
+            ]:
+                small_width = LARGE * 7
+                for first_tier_width in [LARGE * n for n in [5, 8]]:
+                    for nose_tail_heights, nose_tail_widths in [
+                        (0, 0),
+                        (
+                            first_tier_height * THREE_QUARTER_SCALE,
+                            LARGE,
+                        ),
+                    ]:
+                        for antenna in [(antenna_object, antenna_string), None]:
+                            n_wheel_sets = (
+                                [2] if first_tier_width <= small_width else [2, 6]
+                            )
+                            for n_wheels in n_wheel_sets:
+                                (
+                                    base_strokes,
+                                    base_stroke_strings,
+                                    base_min_x,
+                                    base_max_x,
+                                    base_min_y,
+                                    base_max_y,
+                                ) = self._generate_buggy_bases_strings(
+                                    tier_heights=[
+                                        first_tier_height,
+                                        second_tier_height,
+                                    ],
+                                    tier_widths=[
+                                        first_tier_width,
+                                        first_tier_width * THREE_QUARTER_SCALE,
+                                    ],
+                                    nose_tail_heights=[nose_tail_heights],
+                                    nose_tail_widths=[nose_tail_widths],
+                                    antenna=antenna,
+                                    antenna_height=antenna_height,
+                                    n_windows=0,
+                                )
+                                wheels_iterator = (
+                                    self._generate_wheels_strings_iterator(
+                                        base_min_x + nose_tail_widths,
+                                        base_max_x - nose_tail_widths,
+                                        n_wheels=n_wheels,
+                                        float_location=FLOAT_CENTER,
+                                    )
+                                )
+                                for (
+                                    wheels_strokes,
+                                    wheels_strokes_strings,
+                                    wheels_min_x,
+                                    wheels_max_x,
+                                    wheels_min_y,
+                                    wheels_max_y,
+                                ) in wheels_iterator:
+                                    buggy_strokes = [
+                                        base_strokes[0] + wheels_strokes[0]
+                                    ]
+                                    buggy_stroke_strings = connect_strokes(
+                                        [base_stroke_strings, wheels_strokes_strings]
+                                    )
+                                    if random.uniform(0, 1) > generation_probability:
+                                        continue
+                                    strokes += buggy_strokes
+                                    stroke_strings.append(buggy_stroke_strings)
+
+        return random_sample_ratio_ordered_array(
+            strokes, train_ratio, strings_array=stroke_strings
+        )
+
+    def _generate_strokes_for_stimuli(
+        self,
+        train_ratio=0.8,
+        generation_probability=1.0,  # Probabilistically generate from space
+    ):
+        """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
+        train, test = [], []
+        train_strings, test_strings = [], []
+        for generator_fn in [
+            self._generate_parts_stimuli,
+            self._generate_truck_stimuli,
+            self._generate_train_stimuli,
+            self._generate_buggy_stimuli,
+        ]:
+            (
+                generator_train,
+                generator_test,
+                generator_train_strings,
+                generator_test_strings,
+            ) = generator_fn(train_ratio)
+            train += generator_train
+            test += generator_test
+            train_strings += generator_train_strings
+            test_strings += generator_test_strings
+
+        return train, test
+
+    def _generate_train_test_tasks(
+        self,
+        num_tasks_to_generate_per_condition=AbstractTasksGenerator.GENERATE_ALL,
+        train_ratio=0.8,
+        max_train=200,
+        max_test=50,
+    ):
+        # Currently generates all tasks as single entities. Does not generate a curriculum.
+        train_tasks, test_tasks = self._generate_drawing_tasks_from_strokes(
+            num_tasks_to_generate_per_condition,
+            request_type=object_primitives.tstroke,
+            render_parsed_program_fn=object_primitives.render_parsed_program,
+            task_generator_name=self.name,
+            train_ratio=train_ratio,
+        )
+        max_train = len(train_tasks) if max_train == None else max_train
+        max_test = len(test_tasks) if max_test == None else max_test
+        return train_tasks[:max_train], test_tasks[:max_test]
+
+    def generate_tasks_curriculum(
+        self, num_tasks_to_generate_per_condition, train_ratio=0.8
+    ):
+        """:ret: a curriculum that randomly samples among the train ratio for the simple and complex stimuli."""
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition, train_ratio
+        )
+        task_curriculum = TaskCurriculum(
+            curriculum_id=human_readable,
+            task_generator_name=self.name,
+            grammar=self.grammar,
+        )
+
+        train_tasks, test_tasks = self._generate_train_test_tasks(
+            num_tasks_to_generate_per_condition, train_ratio=train_ratio
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TRAIN,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=train_tasks,
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TEST,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=test_tasks,
+        )
+        return task_curriculum
