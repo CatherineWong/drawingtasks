@@ -187,6 +187,11 @@ def peval(program_string):
 
 
 def get_simplified(program_string):
+    if type(program_string) == int:
+        return f"{program_string:g}"
+    elif type(program_string) == float:
+        return f"{program_string:g}"
+
     p = Program.parse(program_string)
     output = p.evaluate([])
     output = f"{output:g}"

@@ -56,7 +56,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             right_margins=[STR_ZERO] * n_segments,
         )
 
-    def _generate_train_bases(
+    def _generate_train_bases_strings(
         self,
         caboose_primitives,
         caboose_heights,
@@ -151,6 +151,125 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         else:
             object_string = stroke_strings
         return strokes, object_string, min_x, max_x, min_y, max_y
+
+    def _generate_buggy_bases_strings(
+        self,
+        tier_heights,
+        tier_widths,
+        nose_tail_heights=[STR_ZERO],
+        nose_tail_widths=[STR_ZERO],
+        antenna=None,
+        antenna_height=None,
+        n_windows=0,
+    ):
+        """Generates 'buggies' consisting of one or more tiers of cars and an optional antenna and windows."""
+        nose_tail_primitives = [RECTANGLE]
+        if nose_tail_heights[0] == STR_ZERO:
+            nose_tail_primitives, nose_tail_heights, nose_tail_widths = [], [], []
+        # First tier is a base.
+        base_primitives = nose_tail_primitives + [RECTANGLE] + nose_tail_primitives
+        base_heights = nose_tail_heights + [tier_heights[0]] + nose_tail_heights
+        base_widths = nose_tail_widths + [tier_widths[0]] + nose_tail_widths
+        base_float_locations = [FLOAT_TOP] * len(base_primitives)
+        base_right_margins = [0] * len(base_primitives)
+        (
+            strokes,
+            stroke_strings,
+            min_x,
+            max_x,
+            min_y,
+            max_y,
+        ) = self._generate_basic_n_segment_bases_string(
+            primitives=base_primitives,
+            heights=base_heights,
+            widths=base_widths,
+            float_locations=base_float_locations,
+            right_margins=base_right_margins,
+        )
+        # Add additional tiers.
+        if len(tier_heights) > 1:
+            for tier_height, tier_width in zip(tier_heights[1:], tier_widths[1:]):
+                tier_rect = scaled_rectangle_string(w=tier_width, h=tier_height)
+                (
+                    new_strokes,
+                    new_stroke_strings,
+                    new_min_x,
+                    new_max_x,
+                    new_min_y,
+                    new_max_y,
+                ) = self._generate_object_on_location_string(
+                    object=tier_rect[0],
+                    object_string=tier_rect[1],
+                    object_center=(0, 0),
+                    object_height=tier_height,
+                    object_width=tier_width,
+                    location=(0, max_y),
+                    float_location=FLOAT_TOP,
+                    x_margin=0,
+                    y_margin=0,
+                )
+                max_y += peval(tier_height)
+                strokes = [strokes[0] + new_strokes[0]]
+                stroke_strings = connect_strokes([stroke_strings, new_stroke_strings])
+                min_x, max_x = min(peval(min_x), peval(new_min_x)), max(
+                    peval(new_max_x), peval(max_x)
+                )
+        # Add optional windows.
+        if n_windows > 0:
+            window = T_string(r_string[0], r_string[1], s=str(MEDIUM))
+            (
+                new_strokes,
+                new_stroke_strings,
+                _,
+                _,
+                _,
+                _,
+            ) = self._generate_n_objects_on_grid_x_y_limits_string(
+                object=window[0],
+                object_string=window[1],
+                object_center=(0, 0),
+                object_height=1,
+                object_width=1,
+                min_x=-tier_widths[0] * 0.5 * THREE_QUARTER_SCALE,
+                max_x=tier_widths[0] * 0.5 * THREE_QUARTER_SCALE,
+                min_y=tier_heights[0] * 0.5,
+                max_y=tier_heights[0] * 0.5,
+                n_rows=1,
+                n_columns=n_windows,
+                float_location=FLOAT_CENTER,
+                grid_indices=range(n_windows),
+            )
+            strokes = [strokes[0] + new_strokes[0]]
+            stroke_strings = connect_strokes([stroke_strings, new_stroke_strings])
+
+        # Add optional antenna.
+        if antenna is not None:
+            (
+                new_strokes,
+                new_stroke_strings,
+                new_min_x,
+                new_max_x,
+                new_min_y,
+                new_max_y,
+            ) = self._generate_object_on_location_string(
+                object=antenna[0],
+                object_string=antenna[1],
+                object_center=(0, 0),
+                object_height=antenna_height,
+                object_width=1,
+                location=(0, max_y),
+                float_location=FLOAT_TOP,
+                x_margin=0,
+                y_margin=0,
+            )
+            max_y += antenna_height
+            strokes = [strokes[0] + new_strokes[0]]
+            stroke_strings = connect_strokes([stroke_strings, new_stroke_strings])
+            min_x, max_x = min(peval(min_x), peval(new_min_x)), max(
+                peval(new_max_x), peval(max_x)
+            )
+
+        return strokes, stroke_strings, min_x, max_x, min_y, max_y
 
     def _generate_row_of_wheels_strings(
         self,

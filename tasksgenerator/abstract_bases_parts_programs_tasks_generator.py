@@ -109,6 +109,55 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         base_string = connect_strokes(stroke_strings)
         return [strokes], base_string, min_x, max_x, min_y, max_y
 
+    def _generate_object_on_location_string(
+        self,
+        object,
+        object_string,
+        object_center,
+        object_height,
+        object_width,
+        location,
+        float_location,
+        x_margin,
+        y_margin,
+    ):
+        """
+        Utility function for transforming an object to place it at a location. Currently supports y_floating and places objects so that they are x_centered.
+        This is specified via:
+            object: the strokes to be placed.
+            object_center, object_height, object_width: (x,y tuple); float, float.
+            location: (x, y) tuple for placing the object.
+            float_location [TOP, CENTER, BOTTOM]: where to float the object wrt the location.
+            x_margin, y_margin: float, float for adding an additional margin wrt the location.
+        Returns:
+            strokes, min_x, max_x, min_y, max_y of the strokes. If a margin is specified this will return the coordinates of the object, not including the margin.
+        """
+        strokes = []
+
+        location_x, location_y = location
+        # Calculate the float offset.
+        (
+            y_float_offset,
+            object_max_y,
+            object_min_y,
+        ) = self._calculate_float_offset_string(
+            object_center, object_height, object_width, float_location
+        )
+
+        x_value = f"(+ {location_x} {x_margin})"
+        y_value = f"(+ (+ {location_y} {y_float_offset}) {y_margin})"
+        placed_primitive = T_string(object, object_string, x=x_value, y=y_value)
+
+        strokes += placed_primitive[0]
+        stroke_string = placed_primitive[-1]
+
+        min_y = peval(object_min_y) + peval(location_y) + peval(y_margin)
+        max_y = peval(object_max_y) + peval(location_y) + peval(y_margin)
+
+        min_x = f"(- {x_value} (* {object_width} 0.5))"
+        max_x = f"(+ {x_value} (* {object_width} 0.5))"
+        return [strokes], stroke_string, min_x, max_x, min_y, max_y
+
     def _calculate_float_offset_string(
         self, object_center, object_height, object_width, float_location
     ):
