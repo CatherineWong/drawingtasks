@@ -8,6 +8,7 @@ import math, random, itertools, copy
 from sqlite3 import connect
 from primitives.gadgets_primitives import *
 from dreamcoder.grammar import Grammar
+from tasksgenerator.dial_programs_task_generator import DialProgramsTasksGenerator
 
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
@@ -290,6 +291,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         (
             base_wheel,
             base_wheel_string,
+            synthetic_dict,
             wheel_height,
             wheel_height_string,
         ) = nuts_bolts_generator._generate_perforated_shapes_string(
@@ -307,9 +309,15 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             * wheel_scale,  # This is never used.
         )
 
+        if paired_wheels:
+            # Double the wheel.
+            _, x_shift = M_string(x=wheel_height_string)
+            base_wheel_string = f"(repeat {base_wheel_string} 2 {x_shift})"
+            base_wheel = peval(base_wheel_string)
+
         # TODO: implement paired wheels.
-        min_x = f"(+ {min_x} (* 0.5 {wheel_height})"
-        max_x = f"(- {max_x} (* 0.5 {wheel_height})"
+        min_x = f"(+ {min_x} (* 0.5 {wheel_height}))"
+        max_x = f"(- {max_x} (* 0.5 {wheel_height}))"
         return self._generate_n_objects_on_grid_x_y_limits_string(
             object=base_wheel[0],
             object_string=base_wheel_string,
@@ -321,6 +329,76 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             min_y=STR_ZERO,
             max_y=STR_ZERO,
             n_rows=1,
-            n_columns=n_wheels if not paired_wheels else n_wheels * 2,
+            n_columns=n_wheels,
             float_location=float_location,
+        )
+
+    def _generate_wheels_strings_iterator(
+        self,
+        min_x,
+        max_x,
+        n_wheels,
+        paired_wheels=False,
+        float_location=FLOAT_BOTTOM,
+        wheel_scale=1.0,
+    ):
+        for outer_shapes in [[c_string], [c_string, c_string]]:
+            for outer_shapes_min_size in [MEDIUM * MEDIUM]:
+                for inner_shapes in [[c_string], [r_string]]:
+                    for inner_shapes_max_size in [f"(* {SMALL} {SCALE_UNIT})"]:
+                        for n_decorators in [4, 8]:
+                            yield self._generate_row_of_wheels_strings(
+                                outer_shapes=outer_shapes,
+                                outer_shapes_min_size=outer_shapes_min_size,
+                                inner_shapes=inner_shapes,
+                                inner_shapes_max_size=inner_shapes_max_size,
+                                n_decorators=n_decorators,
+                                n_spokes=0,
+                                min_x=min_x,
+                                max_x=max_x,
+                                paired_wheels=paired_wheels,
+                                n_wheels=n_wheels,
+                                float_location=float_location,
+                                wheel_scale=wheel_scale,
+                            )
+
+    def _generate_parts_stimuli_strings(self, train_ratio=1.0):
+        strokes, stroke_strings = [], []
+        # Generate wheels.
+        n_wheels_types = [1, 4]
+        for n_wheels in n_wheels_types:
+            wheels_iterator = self._generate_wheels_strings_iterator(
+                f"(* {LARGE} -4)",
+                f"(* {LARGE} 4)",
+                n_wheels=n_wheels,
+                float_location=FLOAT_CENTER,
+                paired_wheels=False,
+            )
+            for (
+                wheels_strokes,
+                wheels_stroke_strings,
+                wheels_min_x,
+                wheels_max_x,
+                wheels_min_y,
+                wheels_max_y,
+            ) in wheels_iterator:
+                strokes += wheels_strokes
+                stroke_strings.append(wheels_stroke_strings)
+        for scale_wires in [True, False]:
+            antenna_generator = DialProgramsTasksGenerator()
+            n_wires = 3
+            (
+                antenna_object,
+                antenna_string,
+                antenna_dict,
+            ) = antenna_generator._generate_stacked_antenna_strings(
+                n_wires=n_wires,
+                scale_wires=scale_wires,
+                end_shape=None,
+            )
+            strokes += antenna_object
+            stroke_strings.append(antenna_string)
+
+        return random_sample_ratio_ordered_array(
+            strokes, train_ratio, strings_array=stroke_strings
         )

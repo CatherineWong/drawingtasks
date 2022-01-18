@@ -206,7 +206,11 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         strokes, stroke_strings = [], []
 
         # Calculate the float offset.
-        y_float_offset, object_max_y, object_min_y = self._calculate_float_offset(
+        (
+            y_float_offset,
+            object_max_y,
+            object_min_y,
+        ) = self._calculate_float_offset_string(
             object_center, object_height, object_width, float_location
         )
 
@@ -219,4 +223,11 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
 
         # Shift the whole thing into the right location.
         # TBD.
-        return peval(row_of_rows_string), row_of_rows_string
+        return (
+            [peval(row_of_rows_string)],
+            row_of_rows_string,
+            min_x,
+            max_x,
+            min_y,
+            max_y,
+        )
