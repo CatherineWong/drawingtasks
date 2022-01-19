@@ -138,7 +138,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 min_x=-body_widths[0] * body_repetitions * 0.5 + MEDIUM,
                 max_x=body_widths[0] * body_repetitions * 0.5 - MEDIUM,
                 min_y=body_heights[0] * 0.5,
-                max_y=body_heights[0] * -0.5,
+                max_y=body_heights[0] * 0.5,
                 n_rows=1,
                 n_columns=n_windows,
                 float_location=FLOAT_CENTER,
@@ -634,7 +634,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             strokes, train_ratio, strings_array=stroke_strings
         )
 
-    def _generate_strokes_for_stimuli(
+    def _generate_strokes_strings_for_stimuli(
         self,
         train_ratio=0.8,
         generation_probability=1.0,  # Probabilistically generate from space
@@ -643,10 +643,10 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         train, test = [], []
         train_strings, test_strings = [], []
         for generator_fn in [
-            self._generate_parts_stimuli,
-            self._generate_truck_stimuli,
-            self._generate_train_stimuli,
-            self._generate_buggy_stimuli,
+            self._generate_parts_stimuli_strings,
+            self._generate_truck_stimuli_strings,
+            self._generate_train_stimuli_strings,
+            self._generate_buggy_stimuli_strings,
         ]:
             (
                 generator_train,
@@ -659,7 +659,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             train_strings += generator_train_strings
             test_strings += generator_test_strings
 
-        return train, test
+        return train, test, train_strings, test_strings
 
     def _generate_train_test_tasks(
         self,

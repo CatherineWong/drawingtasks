@@ -189,7 +189,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
 
         synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
         # Place outer shapes.
-
+        outer_shape_size = peval(outer_shapes_min_size)
         # # Note: catwong: we don't currently express the looped computation in loop.
         if len(outer_shapes) > 0:
             outer_shape_size = peval(outer_shapes_min_size)
@@ -276,7 +276,6 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
 
         # Note: the original implementation provides the ability to generate spokes.
         # However, this functionality is actually never used.
-
         height, height_string = outer_shape_size, f"{outer_shape_size:g}"
         object_string = connect_strokes(object_strings)
 

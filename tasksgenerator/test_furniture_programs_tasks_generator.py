@@ -25,3 +25,25 @@ DESKTOP = f"/Users/catherinewong/Desktop/zyzzyva/research/language-abstractions/
 
 
 generator = TasksGeneratorRegistry[to_test.FurnitureProgramsTasksGenerator.name]
+
+
+def test_furniture_tasks_generator_generate_drawers_iterator():
+    test_strokes, test_stroke_strings = [], []
+    for n_drawers in [2, 4]:
+        for float_location in [FLOAT_CENTER, FLOAT_TOP, FLOAT_BOTTOM]:
+            for (
+                drawer_strokes,
+                drawer_stroke_strings,
+                enclosure_min_x,
+                enclosure_max_x,
+                enclosure_min_y,
+                enclosure_max_y,
+            ) in generator._generate_drawers_strings_iterator(
+                n_drawers=n_drawers, stack_float_locations=float_location
+            ):
+                test_strokes += drawer_strokes
+                test_stroke_strings.append(drawer_stroke_strings)
+    # _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+    _test_parse_render_save_programs(
+        program_strings=test_stroke_strings, tmpdir=DESKTOP
+    )

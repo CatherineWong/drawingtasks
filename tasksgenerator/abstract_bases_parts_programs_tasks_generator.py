@@ -206,6 +206,16 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         strokes, stroke_strings = [], []
 
         # Calculate the float offset.
+        if peval(n_rows) * peval(n_columns) == 0:
+            return (
+                [[]],
+                "empt",
+                min_x,
+                max_x,
+                min_y,
+                max_y,
+            )
+
         (
             y_float_offset,
             object_max_y,
@@ -213,8 +223,10 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         ) = self._calculate_float_offset_string(
             object_center, object_height, object_width, float_location
         )
-
-        x_spacing = f"(/ (- {max_x} {min_x}) {n_columns - 1})"
+        if peval(n_columns) == 1:
+            x_spacing = 0
+        else:
+            x_spacing = f"(/ (- {max_x} {min_x}) {n_columns - 1})"
         y_spacing = f"(+ (/ (- {max_y} {min_y}) {n_rows}) {y_float_offset})"
         _, x_shift = M_string(x=x_spacing)
         _, y_shift = M_string(y=y_spacing)
@@ -222,7 +234,8 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         row_of_rows_string = f"(repeat {row_of_objects_string} {n_rows} {y_shift})"
 
         x_shift = f"(/ (- {max_x} {min_x}) -2)"
-        y_shift = y_spacing = f"(+ (/ (- {max_y} {min_y}) -2) {y_float_offset})"
+        y_shift = f"(+ (+ (/ (- {max_y} {min_y}) -2) {y_float_offset}) {min_y})"
+
         row_of_rows, row_of_rows_string = T_string(
             peval(row_of_rows_string), row_of_rows_string, x=x_shift, y=y_shift
         )
