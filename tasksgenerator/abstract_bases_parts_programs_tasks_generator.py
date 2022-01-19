@@ -14,6 +14,8 @@ from tasksgenerator.tasks_generator import (
     DrawingTask,
     random_sample_ratio_ordered_array,
 )
+from tasksgenerator.tasks_generator import *
+
 from tasksgenerator.bases_parts_tasks_generator import *
 
 
@@ -35,7 +37,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
     ):
         """See bases_parts_tasks_generator for initial implementation."""
         strokes, stroke_strings = [], []
-
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
         # For now, we do this in the most naive way possible. The looping structure is external to the
         # DreamCoder string program.
 
@@ -49,6 +51,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
 
         curr_end_x = min_x
 
+        base_shapes_to_counts = defaultdict(int)
         for idx, shape_primitive in enumerate(primitives):
             height, width, float_location, right_margin = (
                 heights[idx],
@@ -74,6 +77,21 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
                     )
                 else:
                     scaled_primitive = shape_primitive
+
+            # Add a low-level circle for each item
+            initial_shape = (
+                initial_shape if type(initial_shape) == str else initial_shape[-1]
+            )
+            shape_abstraction = "base_shape"
+            synthetic_dict[LOW_LEVEL] += [shape_abstraction]
+            synthetic_dict[LOW_LEVEL_PARTS] += [initial_shape]
+
+            synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(width)))
+
+            base_shapes_to_counts[(scaled_primitive[-1], initial_shape)] += 1
+
+            # Add unique shapes for each mid-level item with a different scale.
+            synthetic_dict[MID_LEVEL_PARAMS].append(str(peval(width)))
 
             # Float it to the right location.
             if float_location == FLOAT_CENTER:
@@ -106,8 +124,23 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
 
             strokes += scaled_primitive[0]
             stroke_strings.append(scaled_primitive[1])
+
+        # Add unique shapes for each of the base shapes.
+        for base_shape, count in base_shapes_to_counts.items():
+            shape_abstraction = "base_shape"
+            synthetic_dict[MID_LEVEL] += [shape_abstraction]
+            synthetic_dict[MID_LEVEL_PARTS] += [base_shape[-1]]
+
+            synthetic_dict[LOW_LEVEL_PARAMS].append(str(count))
+
         base_string = connect_strokes(stroke_strings)
-        return [strokes], base_string, min_x, max_x, min_y, max_y
+
+        # Add the whole base as a high-level abstraction.
+        shape_abstraction = "whole_base"
+        synthetic_dict[HIGH_LEVEL].append(shape_abstraction)
+        synthetic_dict[HIGH_LEVEL_PARTS].append(base_string)
+
+        return [strokes], base_string, synthetic_dict, min_x, max_x, min_y, max_y
 
     def _generate_object_on_location_string(
         self,
@@ -120,6 +153,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         float_location,
         x_margin,
         y_margin,
+        object_synthetic_dict=None,
     ):
         """
         Utility function for transforming an object to place it at a location. Currently supports y_floating and places objects so that they are x_centered.
@@ -156,6 +190,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
 
         min_x = f"(- {x_value} (* {object_width} 0.5))"
         max_x = f"(+ {x_value} (* {object_width} 0.5))"
+
         return [strokes], stroke_string, min_x, max_x, min_y, max_y
 
     def _calculate_float_offset_string(
@@ -196,6 +231,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         n_columns,
         float_location,
         grid_indices=None,  # Note: we cannot replicate this logic cleanly.
+        object_synthetic_dict=None,
     ):
         """
         See original implementation in: bases_parts_tasks_generator.
@@ -240,11 +276,37 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
             peval(row_of_rows_string), row_of_rows_string, x=x_shift, y=y_shift
         )
 
-        # Shift the whole thing into the right location.
-        # TBD.
+        # Add a low-level abstraction for each object.
+        object_synthetic_dict[LOW_LEVEL] = object_synthetic_dict[LOW_LEVEL] * int(
+            peval(f"(* {n_rows} {n_columns})")
+        )
+        object_synthetic_dict[LOW_LEVEL_PARTS] = object_synthetic_dict[
+            LOW_LEVEL_PARTS
+        ] * int(peval(f"(* {n_rows} {n_columns})"))
+
+        # Add a mid-level abstraction for the repetition and a parameter.
+        object_synthetic_dict[MID_LEVEL] = [
+            "repeat_x",
+            "repeat_y",
+        ] + object_synthetic_dict[MID_LEVEL]
+        object_synthetic_dict[MID_LEVEL_PARTS] = [
+            "repeat_x",
+            "repeat_y",
+        ] + object_synthetic_dict[MID_LEVEL_PARTS]
+        object_synthetic_dict[MID_LEVEL_PARAMS] = [
+            str(peval(n_rows)),
+            str(peval(n_columns)),
+        ] + object_synthetic_dict[MID_LEVEL_PARAMS]
+
+        object_synthetic_dict[HIGH_LEVEL] = ["repeated_grid"]
+        object_synthetic_dict[HIGH_LEVEL_PARTS] = [row_of_rows_string]
+
+        max_y = max(peval(max_y), peval(object_max_y))
+        max_y = f"{max_y:g}"
         return (
             [row_of_rows],
             row_of_rows_string,
+            object_synthetic_dict,
             min_x,
             max_x,
             min_y,

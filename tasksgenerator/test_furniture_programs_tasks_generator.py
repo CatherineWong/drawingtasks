@@ -30,7 +30,9 @@ generator = TasksGeneratorRegistry[to_test.FurnitureProgramsTasksGenerator.name]
 def test_furniture_tasks_generator_generate_drawers_iterator():
     test_strokes, test_stroke_strings = [], []
     for n_drawers in [2, 4]:
-        for float_location in [FLOAT_CENTER, FLOAT_TOP, FLOAT_BOTTOM]:
+        for float_location in [
+            FLOAT_TOP
+        ]:  # Add other floats - FLOAT_CENTER is working, float_top is confusing
             for (
                 drawer_strokes,
                 drawer_stroke_strings,

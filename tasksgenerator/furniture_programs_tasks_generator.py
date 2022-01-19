@@ -112,13 +112,12 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     drawer_pull_scale=SCALE_UNIT,
                 ):
                     drawer_spacing = base_height * QUARTER_SCALE
-
-                    # TBD: this is not filtering out what it should.
                     if peval(drawer_pull_strokes_max_y) >= (
                         base_max_y - (drawer_spacing)
                     ) or peval(drawer_pull_strokes_max_x) >= (
                         base_max_x - (drawer_spacing)
                     ):
+
                         continue
 
                     if n_drawer_pulls < 1 and drawn_blank:
@@ -135,13 +134,19 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     # Draw the grid of drawers.
                     total_height = (n_drawers) * (base_height + drawer_spacing)
                     if stack_float_locations == FLOAT_CENTER:
-                        # min_y, max_y = (
-                        #     -total_height * 0.5,
-                        #     total_height * 0.5,
-                        # )
-                        min_y, max_y = total_height * 0.5, total_height * 1.5
+                        # Janky. What's going on here with the scaling?
+                        min_y, max_y = total_height * (
+                            1 / (n_drawers * 2)
+                        ), total_height * (1 + ((1 / (n_drawers * 2))))
+
                     elif stack_float_locations == FLOAT_TOP:
-                        min_y, max_y = drawer_spacing, total_height + drawer_spacing
+                        total_height = (n_drawers) * (base_height)
+                        # min_y, max_y = total_height * (
+                        #     1 / (n_drawers * 4)
+                        # ), total_height * (1 - ((1 / (n_drawers * 4))))
+                        min_y, max_y = total_height * (
+                            2 / (n_drawers * 2)
+                        ), total_height * (1 - ((2 / (n_drawers * 2))))
                     else:
                         min_y, max_y = -total_height - drawer_spacing, -drawer_spacing
 

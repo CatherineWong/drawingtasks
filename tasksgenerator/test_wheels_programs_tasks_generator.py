@@ -31,6 +31,7 @@ def test_wheeled_vehicles_tasks_generator_generate_truck_bases():
                             (
                                 strokes,
                                 stroke_strings,
+                                synthetic_dict,
                                 min_x,
                                 max_x,
                                 min_y,
@@ -45,6 +46,9 @@ def test_wheeled_vehicles_tasks_generator_generate_truck_bases():
                             )
                             test_strokes += strokes
                             test_stroke_strings.append(stroke_strings)
+                            import pdb
+
+                            pdb.set_trace()
 
         # _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
         _test_parse_render_save_programs(
@@ -65,11 +69,12 @@ def test_wheeled_vehicles_tasks_generator_generate_train_bases():
 
     for body_heights in [str(MEDIUM), str(LARGE)]:
         for body_widths in [str(LARGE * 2), str(LARGE * 3)]:
-            for body_repetitions in [1, 2, 3]:
+            for body_repetitions in [2, 3]:
                 for car_margins in [str(0.25), str(0.5)]:
                     (
                         strokes,
                         stroke_strings,
+                        synthetic_dict,
                         min_x,
                         max_x,
                         min_y,
@@ -119,10 +124,14 @@ def test_wheeled_vehicles_tasks_generator_generate_buggy_bases():
         for first_tier_width in [LARGE * n for n in range(5, 8)]:
             for second_tier_height in [SMALL, MEDIUM, LARGE]:
                 for second_tier_width in [LARGE * n for n in range(1, 4)]:
-                    for antenna in [(antenna_object, antenna_string), None]:
+                    for antenna in [
+                        (antenna_object, antenna_string, antenna_dict),
+                        None,
+                    ]:
                         (
                             strokes,
                             stroke_strings,
+                            synthetic_dict,
                             min_x,
                             max_x,
                             min_y,
@@ -154,9 +163,14 @@ def test_wheels_tasks_generator_generate_parts_for_stimuli(tmpdir):
         ("train", train, train_strings),
         ("test", test, test_strings),
     ]:
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
         # )
+        import pdb
+
+        pdb.set_trace()
         _test_parse_render_save_programs(
             program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
         )
@@ -177,6 +191,7 @@ def test_wheels_tasks_generator_generate_truck_stimuli(tmpdir):
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
         # )
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
         _test_parse_render_save_programs(
             program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
         )
@@ -197,6 +212,10 @@ def test_wheels_tasks_generator_generate_train_stimuli(tmpdir):
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
         # )
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        import pdb
+
+        pdb.set_trace()
         _test_parse_render_save_programs(
             program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
         )
@@ -217,6 +236,10 @@ def test_wheels_tasks_generator_generate_buggy_stimuli(tmpdir):
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
         # )
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        import pdb
+
+        pdb.set_trace()
         _test_parse_render_save_programs(
             program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
         )
@@ -237,6 +260,8 @@ def test_wheels_tasks_generator_generate_strokes_for_stimuli(tmpdir):
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
         # )
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+
         _test_parse_render_save_programs(
             program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
         )

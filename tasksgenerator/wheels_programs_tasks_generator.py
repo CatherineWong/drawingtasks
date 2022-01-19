@@ -76,6 +76,8 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         reflect_caboose_for_head: we reverse the order of the head.
         car_margins: scalar value for spacing.
         """
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+
         head_primitives, head_heights, head_widths, head_floats = (
             copy.deepcopy(caboose_primitives),
             copy.deepcopy(caboose_heights),
@@ -103,6 +105,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         (
             strokes,
             stroke_strings,
+            base_synthetic_dict,
             min_x,
             max_x,
             min_y,
@@ -118,13 +121,24 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             + head_floats,
             right_margins=caboose_margin + body_margin + head_margin,
         )
+        # Add the base to the synthetic dict.
+        for k in base_synthetic_dict:
+            synthetic_dict[k] += base_synthetic_dict[k]
 
         if show_doors:
+            window_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
             window = T_string(r_string[0], r_string[1], s=str(MEDIUM))
+            window_synthetic_dict[LOW_LEVEL] += ["window_rectangle"]
+            window_synthetic_dict[LOW_LEVEL_PARTS] += [r_string[1]]
+
+            window_synthetic_dict[MID_LEVEL] += ["window_rectangle"]
+            window_synthetic_dict[MID_LEVEL_PARTS] += [window[1]]
+
             n_windows = 2 * body_repetitions
             (
                 new_strokes,
                 new_stroke_strings,
+                new_synthetic_dict,
                 _,
                 _,
                 _,
@@ -143,15 +157,19 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 n_columns=n_windows,
                 float_location=FLOAT_CENTER,
                 grid_indices=range(n_windows),
+                object_synthetic_dict=window_synthetic_dict,
             )
             strokes = [strokes[0] + new_strokes[0]]
             stroke_strings = [stroke_strings, new_stroke_strings]
+            # Add the base to the synthetic dict.
+            for k in new_synthetic_dict:
+                synthetic_dict[k] += new_synthetic_dict[k]
 
         if type(stroke_strings) == list:
             object_string = connect_strokes(stroke_strings)
         else:
             object_string = stroke_strings
-        return strokes, object_string, min_x, max_x, min_y, max_y
+        return strokes, object_string, synthetic_dict, min_x, max_x, min_y, max_y
 
     def _generate_buggy_bases_strings(
         self,
@@ -164,6 +182,8 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         n_windows=0,
     ):
         """Generates 'buggies' consisting of one or more tiers of cars and an optional antenna and windows."""
+        synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+
         nose_tail_primitives = [RECTANGLE]
         if nose_tail_heights[0] == STR_ZERO:
             nose_tail_primitives, nose_tail_heights, nose_tail_widths = [], [], []
@@ -176,6 +196,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         (
             strokes,
             stroke_strings,
+            base_synthetic_dict,
             min_x,
             max_x,
             min_y,
@@ -187,6 +208,10 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             float_locations=base_float_locations,
             right_margins=base_right_margins,
         )
+        # Add the base to the synthetic dict.
+        for k in base_synthetic_dict:
+            synthetic_dict[k] += base_synthetic_dict[k]
+
         # Add additional tiers.
         if len(tier_heights) > 1:
             for tier_height, tier_width in zip(tier_heights[1:], tier_widths[1:]):
@@ -215,12 +240,36 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 min_x, max_x = min(peval(min_x), peval(new_min_x)), max(
                     peval(new_max_x), peval(max_x)
                 )
+
+                # Replace the high-level with the whole base.
+
+                shape_abstraction = "base_shape"
+                synthetic_dict[LOW_LEVEL].append(shape_abstraction)
+                synthetic_dict[LOW_LEVEL_PARTS].append("r_s")
+                synthetic_dict[LOW_LEVEL_PARAMS].append(str(tier_width))
+                # Mid-level: just choose the outer one.
+
+                outer_shape_abstraction = "base_dial_hand"
+                synthetic_dict[MID_LEVEL].append(outer_shape_abstraction)
+                synthetic_dict[MID_LEVEL_PARTS].append("r_s")
+                synthetic_dict[MID_LEVEL_PARAMS].append(str(tier_width))
+
+                synthetic_dict[HIGH_LEVEL_PARTS] = [stroke_strings]
+
         # Add optional windows.
         if n_windows > 0:
             window = T_string(r_string[0], r_string[1], s=str(MEDIUM))
+            window_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+            window = T_string(r_string[0], r_string[1], s=str(MEDIUM))
+            window_synthetic_dict[LOW_LEVEL] += ["window_rectangle"]
+            window_synthetic_dict[LOW_LEVEL_PARTS] += [r_string[1]]
+
+            window_synthetic_dict[MID_LEVEL] += ["window_rectangle"]
+            window_synthetic_dict[MID_LEVEL_PARTS] += [window[1]]
             (
                 new_strokes,
                 new_stroke_strings,
+                new_synthetic_dict,
                 _,
                 _,
                 _,
@@ -242,6 +291,8 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             )
             strokes = [strokes[0] + new_strokes[0]]
             stroke_strings = connect_strokes([stroke_strings, new_stroke_strings])
+            for k in new_synthetic_dict:
+                synthetic_dict[k] += new_synthetic_dict[k]
 
         # Add optional antenna.
         if antenna is not None:
@@ -269,8 +320,10 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             min_x, max_x = min(peval(min_x), peval(new_min_x)), max(
                 peval(new_max_x), peval(max_x)
             )
-
-        return strokes, stroke_strings, min_x, max_x, min_y, max_y
+            antenna_synthetic_dict = copy.deepcopy(antenna[-1])
+            for k in antenna_synthetic_dict:
+                synthetic_dict[k] += antenna_synthetic_dict[k]
+        return strokes, stroke_strings, synthetic_dict, min_x, max_x, min_y, max_y
 
     def _generate_row_of_wheels_strings(
         self,
@@ -291,7 +344,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         (
             base_wheel,
             base_wheel_string,
-            synthetic_dict,
+            wheel_synthetic_dict,
             wheel_height,
             wheel_height_string,
         ) = nuts_bolts_generator._generate_perforated_shapes_string(
@@ -318,12 +371,29 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 base_wheel_string,
                 x=f"(* -0.5 {wheel_height})",
             )
+            wheel_synthetic_dict[LOW_LEVEL] = wheel_synthetic_dict[LOW_LEVEL] * 2
+            wheel_synthetic_dict[LOW_LEVEL_PARTS] = (
+                wheel_synthetic_dict[LOW_LEVEL_PARTS] * 2
+            )
+            wheel_synthetic_dict[MID_LEVEL] = ["repeat_x"] + wheel_synthetic_dict[
+                MID_LEVEL
+            ]
+            wheel_synthetic_dict[MID_LEVEL_PARTS] = ["repeat_x"] + wheel_synthetic_dict[
+                MID_LEVEL_PARTS
+            ]
+            wheel_synthetic_dict[MID_LEVEL_PARAMS] = ["2"] + wheel_synthetic_dict[
+                MID_LEVEL_PARAMS
+            ]
+            wheel_synthetic_dict[HIGH_LEVEL] = ["double_wheel"]
+            wheel_synthetic_dict[HIGH_LEVEL_PARTS] = [base_wheel_string]
 
             min_x = f"(+ {min_x} (* 1 {wheel_height}))"
             max_x = f"(- {max_x} (* 1 {wheel_height}))"
         else:
             min_x = f"(+ {min_x} (* 0.5 {wheel_height}))"
             max_x = f"(- {max_x} (* 0.5 {wheel_height}))"
+
+        wheel_synthetic_dict = copy.deepcopy(wheel_synthetic_dict)
         return self._generate_n_objects_on_grid_x_y_limits_string(
             object=base_wheel[0],
             object_string=base_wheel_string,
@@ -337,6 +407,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             n_rows=1,
             n_columns=n_wheels if not paired_wheels else n_wheels / 2,
             float_location=float_location,
+            object_synthetic_dict=wheel_synthetic_dict,
         )
 
     def _generate_wheels_strings_iterator(
@@ -369,7 +440,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                             )
 
     def _generate_parts_stimuli_strings(self, train_ratio=1.0):
-        strokes, stroke_strings = [], []
+        strokes, stroke_strings, stroke_dicts = [], [], []
         # Generate wheels.
         n_wheels_types = [1, 4]
         for n_wheels in n_wheels_types:
@@ -383,6 +454,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             for (
                 wheels_strokes,
                 wheels_stroke_strings,
+                wheels_stroke_dicts,
                 wheels_min_x,
                 wheels_max_x,
                 wheels_min_y,
@@ -390,6 +462,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             ) in wheels_iterator:
                 strokes += wheels_strokes
                 stroke_strings.append(wheels_stroke_strings)
+                stroke_dicts.append(wheels_stroke_dicts)
         for scale_wires in [True, False]:
             antenna_generator = DialProgramsTasksGenerator()
             n_wires = 3
@@ -404,14 +477,15 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             )
             strokes += antenna_object
             stroke_strings.append(antenna_string)
+            stroke_dicts.append(antenna_dict)
 
         return random_sample_ratio_ordered_array(
-            strokes, train_ratio, strings_array=stroke_strings
+            strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
         )
 
     def _generate_truck_stimuli_strings(self, train_ratio=1.0):
         big_width = f"(* {LARGE} 8)"
-        strokes, stroke_strings = [], []
+        strokes, stroke_strings, stroke_dicts = [], [], []
         for head_width in [LARGE]:
             for head_height in [LARGE * 2]:
                 for body_width, body_height in [
@@ -420,9 +494,11 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 ]:
                     reverse = False
                     nose_scale = THREE_QUARTER_SCALE
+
                     (
                         base_strokes,
                         base_stroke_strings,
+                        base_synthetic_dict,
                         base_min_x,
                         base_max_x,
                         base_min_y,
@@ -448,23 +524,30 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                         for (
                             wheels_strokes,
                             wheels_strokes_strings,
+                            wheels_synthetic_dict,
                             wheels_min_x,
                             wheels_max_x,
                             wheels_min_y,
                             wheels_max_y,
                         ) in wheels_iterator:
+
+                            synthetic_dict = copy.deepcopy(base_synthetic_dict)
                             truck_strokes = [base_strokes[0] + wheels_strokes[0]]
                             truck_stroke_strings = connect_strokes(
                                 [base_stroke_strings, wheels_strokes_strings]
                             )
+                            for k in wheels_synthetic_dict:
+                                synthetic_dict[k] += wheels_synthetic_dict[k]
                             strokes += truck_strokes
                             stroke_strings.append(truck_stroke_strings)
+                            stroke_dicts.append(synthetic_dict)
+
         return random_sample_ratio_ordered_array(
-            strokes, train_ratio, strings_array=stroke_strings
+            strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
         )
 
     def _generate_train_stimuli_strings(self, train_ratio=1.0):
-        strokes, stroke_strings = [], []
+        strokes, stroke_strings, stroke_dicts = [], [], []
 
         body_height = SMALL * 5
         caboose_width = MEDIUM
@@ -487,9 +570,11 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 for body_repetitions in body_repetitions:
                     for car_margins in [QUARTER_SCALE]:
                         for show_doors in [True, False]:
+
                             (
                                 base_strokes,
                                 base_stroke_strings,
+                                base_synthetic_dict,
                                 base_min_x,
                                 base_max_x,
                                 base_min_y,
@@ -508,6 +593,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                 car_margins=car_margins,
                                 show_doors=show_doors,
                             )
+
                             n_wheels_types = [
                                 body_repetitions * 2,
                                 body_repetitions * 3,
@@ -525,28 +611,32 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                 for (
                                     wheels_strokes,
                                     wheels_strokes_strings,
+                                    wheels_synthetic_dict,
                                     wheels_min_x,
                                     wheels_max_x,
                                     wheels_min_y,
                                     wheels_max_y,
                                 ) in wheels_iterator:
-
+                                    synthetic_dict = copy.deepcopy(base_synthetic_dict)
                                     train_strokes = [
                                         base_strokes[0] + wheels_strokes[0]
                                     ]
                                     train_stroke_strings = connect_strokes(
                                         [base_stroke_strings, wheels_strokes_strings]
                                     )
+                                    for k in wheels_synthetic_dict:
+                                        synthetic_dict[k] += wheels_synthetic_dict[k]
                                     strokes += train_strokes
                                     stroke_strings.append(train_stroke_strings)
+                                    stroke_dicts.append(synthetic_dict)
         return random_sample_ratio_ordered_array(
-            strokes, train_ratio, strings_array=stroke_strings
+            strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
         )
 
     def _generate_buggy_stimuli_strings(
         self, train_ratio=1.0, generation_probability=0.80
     ):
-        strokes, stroke_strings = [], []
+        strokes, stroke_strings, stroke_dicts = [], [], []
         for scale_wires in [True, False]:
             antenna_generator = DialProgramsTasksGenerator()
             n_wires = 3
@@ -576,7 +666,10 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                             LARGE,
                         ),
                     ]:
-                        for antenna in [(antenna_object, antenna_string), None]:
+                        for antenna in [
+                            (antenna_object, antenna_string, antenna_dict),
+                            None,
+                        ]:
                             n_wheel_sets = (
                                 [2] if first_tier_width <= small_width else [2, 6]
                             )
@@ -584,6 +677,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                 (
                                     base_strokes,
                                     base_stroke_strings,
+                                    base_synthetic_dict,
                                     base_min_x,
                                     base_max_x,
                                     base_min_y,
@@ -603,6 +697,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                     antenna_height=antenna_height,
                                     n_windows=0,
                                 )
+
                                 wheels_iterator = (
                                     self._generate_wheels_strings_iterator(
                                         base_min_x + nose_tail_widths,
@@ -614,6 +709,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                 for (
                                     wheels_strokes,
                                     wheels_strokes_strings,
+                                    wheels_synthetic_dict,
                                     wheels_min_x,
                                     wheels_max_x,
                                     wheels_min_y,
@@ -625,13 +721,22 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                     buggy_stroke_strings = connect_strokes(
                                         [base_stroke_strings, wheels_strokes_strings]
                                     )
+                                    synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+
+                                    # Add the base.
+                                    for k in base_synthetic_dict:
+                                        synthetic_dict[k] += base_synthetic_dict[k]
+
+                                    # Add the wheels.
+                                    for k in wheels_synthetic_dict:
+                                        synthetic_dict[k] += wheels_synthetic_dict[k]
                                     if random.uniform(0, 1) > generation_probability:
                                         continue
                                     strokes += buggy_strokes
                                     stroke_strings.append(buggy_stroke_strings)
-
+                                    stroke_dicts.append(synthetic_dict)
         return random_sample_ratio_ordered_array(
-            strokes, train_ratio, strings_array=stroke_strings
+            strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
         )
 
     def _generate_strokes_strings_for_stimuli(
