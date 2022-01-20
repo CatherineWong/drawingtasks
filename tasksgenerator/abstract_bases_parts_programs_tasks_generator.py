@@ -199,7 +199,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         """Utility function for calculating float offsets as strings. Only supports vertical floating."""
         object_center_x, object_center_y = object_center
         if float_location == FLOAT_CENTER:
-            float_offset = f"(- 0 {object_center_y})"
+            float_offset = "0"
             object_max_y, object_min_y = (
                 f"(* {object_height} 0.5)",
                 f"(* (- 0 {object_height}) 0.5)",
@@ -209,7 +209,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
             float_offset = f"(+ (- 0 {object_center_y}) (* {object_height} 0.5))"
             object_max_y, object_min_y = object_height, STR_ZERO
         elif float_location == FLOAT_BOTTOM:
-            float_offset = f"(+ (- 0 {object_center_y}) (* {object_height} (- 0 0.5)))"
+            float_offset = f"(+ (- 0 {object_center_y}) -{object_height})"
             object_max_y, object_min_y = STR_ZERO, -object_height
         else:
             assert False
@@ -246,6 +246,7 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
             return (
                 [[]],
                 "empt",
+                copy.deepcopy(SYNTHETIC_DICT),
                 min_x,
                 max_x,
                 min_y,
@@ -263,18 +264,32 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
             x_spacing = 0
         else:
             x_spacing = f"(/ (- {max_x} {min_x}) {n_columns - 1})"
-        y_spacing = f"(+ (/ (- {max_y} {min_y}) {n_rows}) {y_float_offset})"
+
+        if peval(n_rows) == 1:
+            y_spacing = 0
+        else:
+            y_spacing = f"(/ (- {max_y} {min_y}) {n_rows - 1})"
+
+        if float_location == FLOAT_BOTTOM:
+            y_spacing = f"(- 0 {y_spacing})"
+
+        # First float the object into the right place.
+        _, object_string = T_string(p=object, p_string=object_string, y=y_float_offset)
+
         _, x_shift = M_string(x=x_spacing)
         _, y_shift = M_string(y=y_spacing)
         row_of_objects_string = f"(repeat {object_string} {n_columns} {x_shift})"
         row_of_rows_string = f"(repeat {row_of_objects_string} {n_rows} {y_shift})"
+        row_of_rows = peval(row_of_rows_string)
+        if float_location == FLOAT_CENTER:
+            x_shift = f"(/ (- {max_x} {min_x}) -2)"
 
-        x_shift = f"(/ (- {max_x} {min_x}) -2)"
-        y_shift = f"(+ (+ (/ (- {max_y} {min_y}) -2) {y_float_offset}) {min_y})"
+            y_shift = f"(/ (- {max_y} {min_y}) -2)"
+            # y_shift = f"(+ {y_shift} {min_y})"  # Shift it into place.
 
-        row_of_rows, row_of_rows_string = T_string(
-            peval(row_of_rows_string), row_of_rows_string, x=x_shift, y=y_shift
-        )
+            row_of_rows, row_of_rows_string = T_string(
+                peval(row_of_rows_string), row_of_rows_string, x=x_shift, y=y_shift
+            )
 
         # Add a low-level abstraction for each object.
         object_synthetic_dict[LOW_LEVEL] = object_synthetic_dict[LOW_LEVEL] * int(

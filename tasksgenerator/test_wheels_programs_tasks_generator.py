@@ -59,46 +59,55 @@ def test_wheeled_vehicles_tasks_generator_generate_truck_bases():
 def test_wheeled_vehicles_tasks_generator_generate_train_bases():
     test_strokes, test_stroke_strings = [], []
     generator = TasksGeneratorRegistry[to_test.WheelsProgramsTasksGenerator.name]
-
+    body_height = SMALL * 5
+    caboose_width = MEDIUM
+    caboose_height = body_height * THREE_QUARTER_SCALE
     caboose_primitives, caboose_heights, caboose_widths, caboose_floats = (
-        [RECTANGLE, RECTANGLE],
-        [f"(* {MEDIUM} {THREE_QUARTER_SCALE})", str(MEDIUM)],
-        [str(MEDIUM), str(MEDIUM)],
-        [FLOAT_TOP, FLOAT_TOP],
+        [
+            RECTANGLE,
+        ],
+        [caboose_height],
+        [caboose_width],
+        [
+            FLOAT_TOP,
+        ],
     )
 
-    for body_heights in [str(MEDIUM), str(LARGE)]:
-        for body_widths in [str(LARGE * 2), str(LARGE * 3)]:
-            for body_repetitions in [2, 3]:
-                for car_margins in [str(0.25), str(0.5)]:
-                    (
-                        strokes,
-                        stroke_strings,
-                        synthetic_dict,
-                        min_x,
-                        max_x,
-                        min_y,
-                        max_y,
-                    ) = generator._generate_train_bases_strings(
-                        caboose_primitives=caboose_primitives,
-                        caboose_heights=caboose_heights,
-                        caboose_widths=caboose_widths,
-                        caboose_floats=caboose_floats,
-                        reflect_caboose_for_head=True,
-                        body_primitives=[RECTANGLE],
-                        body_heights=[body_heights],
-                        body_widths=[body_widths],
-                        body_floats=[FLOAT_TOP],
-                        body_repetitions=body_repetitions,
-                        car_margins=car_margins,
-                    )
-                    test_strokes += strokes
-                    test_stroke_strings.append(stroke_strings)
+    small_width, large_width = SMALL * 7, SMALL * 9
+    for body_heights in [body_height]:
+        for body_widths in [small_width, large_width]:
+            body_repetitions = [2] if body_widths > small_width else [2, 3]
+            for body_repetitions in body_repetitions:
+                for car_margins in [QUARTER_SCALE]:
+                    for show_doors in [True, False]:
+                        (
+                            strokes,
+                            stroke_strings,
+                            synthetic_dict,
+                            min_x,
+                            max_x,
+                            min_y,
+                            max_y,
+                        ) = generator._generate_train_bases_strings(
+                            caboose_primitives=caboose_primitives,
+                            caboose_heights=caboose_heights,
+                            caboose_widths=caboose_widths,
+                            caboose_floats=caboose_floats,
+                            reflect_caboose_for_head=True,
+                            body_primitives=[RECTANGLE],
+                            body_heights=[body_heights],
+                            body_widths=[body_widths],
+                            body_floats=[FLOAT_TOP],
+                            body_repetitions=body_repetitions,
+                            car_margins=car_margins,
+                        )
+                        test_strokes += strokes
+                        test_stroke_strings.append(stroke_strings)
 
-        # _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
-        _test_parse_render_save_programs(
-            program_strings=test_stroke_strings, tmpdir=DESKTOP
-        )
+    # _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
+    _test_parse_render_save_programs(
+        program_strings=test_stroke_strings, tmpdir=DESKTOP
+    )
 
 
 def test_wheeled_vehicles_tasks_generator_generate_buggy_bases():
