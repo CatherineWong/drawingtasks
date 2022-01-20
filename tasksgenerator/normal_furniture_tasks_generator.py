@@ -4,7 +4,6 @@ Defines TasksGenerators that produce tasks for furniture drawings.
 """
 import math, random, itertools, copy
 
-from numpy.core.fromnumeric import repeat
 import primitives.object_primitives as object_primitives
 from dreamcoder.grammar import Grammar
 from tasksgenerator.tasks_generator import (

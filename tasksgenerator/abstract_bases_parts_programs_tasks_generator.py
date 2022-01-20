@@ -281,15 +281,17 @@ class AbstractBasesAndPartsProgramsTasksGenerator(AbstractTasksGenerator):
         row_of_objects_string = f"(repeat {object_string} {n_columns} {x_shift})"
         row_of_rows_string = f"(repeat {row_of_objects_string} {n_rows} {y_shift})"
         row_of_rows = peval(row_of_rows_string)
-        if float_location == FLOAT_CENTER:
-            x_shift = f"(/ (- {max_x} {min_x}) -2)"
+        x_shift = f"(/ (- {max_x} {min_x}) -2)"
 
+        if float_location == FLOAT_CENTER:
             y_shift = f"(/ (- {max_y} {min_y}) -2)"
             # y_shift = f"(+ {y_shift} {min_y})"  # Shift it into place.
+        else:
+            y_shift = "0"
 
-            row_of_rows, row_of_rows_string = T_string(
-                peval(row_of_rows_string), row_of_rows_string, x=x_shift, y=y_shift
-            )
+        row_of_rows, row_of_rows_string = T_string(
+            peval(row_of_rows_string), row_of_rows_string, x=x_shift, y=y_shift
+        )
 
         # Add a low-level abstraction for each object.
         object_synthetic_dict[LOW_LEVEL] = object_synthetic_dict[LOW_LEVEL] * int(

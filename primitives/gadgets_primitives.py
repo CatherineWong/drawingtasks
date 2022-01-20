@@ -177,30 +177,27 @@ objects = [
 
 
 def peval(program_string):
-    if type(program_string) == int:
-        return program_string
-    elif type(program_string) == float:
-        return program_string
-    p = Program.parse(program_string)
-    output = p.evaluate([])
-    return output
+    try:
+        return float(program_string)
+    except:
+        p = Program.parse(program_string)
+        output = p.evaluate([])
+        return output
 
 
 def get_simplified(program_string):
-    if type(program_string) == int:
-        return f"{program_string:g}"
-    elif type(program_string) == float:
-        return f"{program_string:g}"
-
-    p = Program.parse(program_string)
-    output = p.evaluate([])
-    output = f"{output:g}"
     try:
-        p = Program.parse(output)
-        _ = p.evaluate([])
-        return str(output)
+        return f"{float(program_string):g}"
     except:
-        return program_string
+        p = Program.parse(program_string)
+        output = p.evaluate([])
+        output = f"{output:g}"
+        try:
+            p = Program.parse(output)
+            _ = p.evaluate([])
+            return str(output)
+        except:
+            return program_string
 
 
 def M_string(s="1", theta="0", x="0", y="0", simplify=True):

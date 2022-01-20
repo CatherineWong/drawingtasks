@@ -207,13 +207,14 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     yield (
                         drawer_strokes,
                         drawer_stroke_string,
+                        drawer_synthetic_dict,
                         enclosure_min_x,
                         enclosure_max_x,
                         enclosure_min_y,
                         enclosure_max_y,
                     )
 
-    def _generate_feet_iterator(
+    def _generate_feet_strings_iterator(
         self,
         n_feet,
         min_x,
@@ -240,7 +241,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     foot_width = 0
                     foot = T_string(short_v_line[0], short_v_line[1], s=foot_height)
 
-                    foot_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+                foot_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
                 (
                     feet_strokes,
                     feet_strokes_string,
@@ -249,16 +250,17 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     feet_strokes_max_x,
                     feet_strokes_min_y,
                     feet_strokes_max_y,
-                ) = self._generate_n_objects_on_grid_x_y_limits(
+                ) = self._generate_n_objects_on_grid_x_y_limits_string(
                     object=foot[0],
                     object_string=foot[1],
                     object_center=(0, 0),
-                    object_height=foot_height,
+                    object_height=foot_height
+                    * 0.5,  # TODO: figure out what's going on.
                     object_width=foot_width if foot_width > 0 else 1,
-                    min_x=min_x + (foot_width * 0.5),
-                    max_x=max_x - (foot_width * 0.5),
+                    min_x=peval(min_x) + foot_width * 0.5,
+                    max_x=peval(max_x) - foot_width * 0.5,
                     min_y=min_y,
-                    max_y=min_y,
+                    max_y=max_y,
                     n_rows=1,
                     n_columns=n_feet,
                     float_location=FLOAT_BOTTOM,
@@ -296,7 +298,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
             strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
         )
 
-    def _generate_stacked_drawers_strings_stimuli(
+    def _generate_stacked_drawers_stimuli_strings(
         self, total_drawers=4, train_ratio=1.0, generation_probability=0.45
     ):
         stimuli_strokes, stimuli_strings = [], []
@@ -310,7 +312,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                 enclosure_max_x,
                 enclosure_min_y,
                 enclosure_max_y,
-            ) in self._generate_drawers_iterator(
+            ) in self._generate_drawers_strings_iterator(
                 n_drawers=n_drawers,
                 generation_probability=generation_probability,
             ):
@@ -332,19 +334,20 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                 enclosure_max_x,
                 enclosure_min_y,
                 enclosure_max_y,
-            ) in self._generate_drawers_iterator(
+            ) in self._generate_drawers_strings_iterator(
                 n_drawers=n_drawers,
                 base_heights_and_widths=base_heights_and_widths,
                 stack_float_locations=FLOAT_TOP,
                 generation_probability=generation_probability,
             ):
-                if drawer_strokes:
+
+                if enclosure_strokes:
                     for n_feet in [2, 3, 4]:
                         for (
                             feet_strokes,
                             feet_string,
                             feet_synthetic_dict,
-                        ) in self._generate_feet_iterator(
+                        ) in self._generate_feet_strings_iterator(
                             n_feet=n_feet,
                             min_x=enclosure_min_x,
                             max_x=enclosure_max_x,
@@ -358,12 +361,305 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                             drawer_string = connect_strokes(
                                 [enclosure_stroke_strings, feet_string]
                             )
-                            stimuli_strings.append(drawer_strings)
+                            stimuli_strings.append(drawer_string)
 
         # Shuffle before returning.
-        stimuli_data = zip(stimuli_strokes, stimuli_strings)
+        stimuli_data = list(zip(stimuli_strokes, stimuli_strings))
         random.shuffle(stimuli_data)
         stimuli_strokes, stimuli_strings = zip(*stimuli_data)
         return random_sample_ratio_ordered_array(
             stimuli_strokes, train_ratio, strings_array=stimuli_strings
         )
+
+    def _generate_lounges_stimuli_strings(
+        self, train_ratio=1.0, generation_probability=0.6
+    ):
+        # Generates lounges containing a large base and one or more rectangular pillows on top. Lounges may or may not have an inset drawer.
+        # Grab the drawer stack enclosure and add pillows, etc.
+        stimuli_strokes, stimuli_strings = [], []
+        # Draw short drawers with long legs.
+        base_heights_and_widths = [
+            (SMALL * 3, MEDIUM * 9),
+            (SMALL * 3, MEDIUM * 10),
+        ]
+        for (
+            enclosure_strokes,
+            enclosure_stroke_strings,
+            enclosure_synthetic_dict,
+            enclosure_min_x,
+            enclosure_max_x,
+            enclosure_min_y,
+            enclosure_max_y,
+        ) in self._generate_drawers_strings_iterator(
+            n_drawers=1,
+            base_heights_and_widths=base_heights_and_widths,
+            stack_float_locations=FLOAT_BOTTOM,
+            generation_probability=1.0,
+        ):
+            enclosure_width = enclosure_max_x - enclosure_min_x
+            if enclosure_strokes:
+                # Now add pillows.
+                all_seat_back_primitives = [
+                    [CIRCLE, CIRCLE, ([], "empt")],
+                    [RECTANGLE, ([], "empt"), RECTANGLE],
+                    [RECTANGLE, CIRCLE, ([], "empt"), RECTANGLE],
+                ]
+                for seat_back_primitives in all_seat_back_primitives:
+                    for base_height in [MEDIUM, MEDIUM * 2]:
+                        n_segments = len(seat_back_primitives)
+                        shape_heights = [base_height] * n_segments
+
+                        def get_width(shape, base_height):
+                            if type(shape) == tuple:
+                                return 0
+                            elif shape == RECTANGLE:
+                                return base_height * 0.5
+                            else:
+                                return base_height
+
+                        shape_widths = [
+                            get_width(shape, base_height)
+                            for shape in seat_back_primitives
+                        ]
+
+                        seat_spacer_width = enclosure_width - np.sum(shape_widths)
+
+                        shape_widths = [
+                            w if w > 0 else seat_spacer_width for w in shape_widths
+                        ]
+
+                        (
+                            seat_back_strokes,
+                            seat_back_strokes_string,
+                            seat_back_synthetic_dict,
+                            _,
+                            _,
+                            _,
+                            _,
+                        ) = self._generate_basic_n_segment_bases_string(
+                            primitives=seat_back_primitives,
+                            heights=shape_heights,
+                            widths=shape_widths,
+                            float_locations=[FLOAT_TOP for x in range(n_segments)],
+                            right_margins=[0 for x in range(n_segments)],
+                        )
+
+                        for n_feet in [2, 3, 4]:
+                            for (
+                                feet_strokes,
+                                feet_string,
+                                feet_synthetic_dict,
+                            ) in self._generate_feet_strings_iterator(
+                                n_feet=n_feet,
+                                min_x=enclosure_min_x,
+                                max_x=enclosure_max_x,
+                                min_y=enclosure_min_y,
+                                max_y=enclosure_max_y,
+                                feet_heights=[SMALL, MEDIUM * 2],
+                                generation_probability=1.0,
+                            ):
+                                feet_strokes, feet_string = T_string(
+                                    feet_strokes, feet_string, y=float(enclosure_min_y)
+                                )
+                                drawer_strokes = [
+                                    seat_back_strokes[0]
+                                    + enclosure_strokes[0]
+                                    + feet_strokes[0]
+                                ]
+                                drawer_string = connect_strokes(
+                                    [
+                                        seat_back_strokes_string,
+                                        enclosure_stroke_strings,
+                                        feet_string,
+                                    ]
+                                )
+                                if random.uniform(0, 1) > generation_probability:
+                                    continue
+
+                                stimuli_strokes += drawer_strokes
+                                stimuli_strings.append(drawer_string)
+
+        # Shuffle before returning.
+        stimuli_data = list(zip(stimuli_strokes, stimuli_strings))
+        random.shuffle(stimuli_data)
+        stimuli_strokes, stimuli_strings = zip(*stimuli_data)
+        return random_sample_ratio_ordered_array(
+            stimuli_strokes, train_ratio, strings_array=stimuli_strings
+        )
+
+    def _generate_seat_drawers_stimuli_strings(
+        self, train_ratio=1.0, generation_probability=0.7
+    ):
+        # Generates lounges containing a large base and one or more rectangular pillows on top. Lounges may or may not have an inset drawer.
+        # Grab the drawer stack enclosure and add pillows, etc.
+        stimuli_strokes, stimuli_strings = [], []
+        # Draw short drawers with long legs.
+        base_heights_and_widths = [
+            (SMALL * 2, SMALL * 5),
+            (SMALL * 4, SMALL * 8),
+        ]
+        for (
+            enclosure_strokes,
+            enclosure_strokes_strings,
+            enclosure_synthetic_dict,
+            enclosure_min_x,
+            enclosure_max_x,
+            enclosure_min_y,
+            enclosure_max_y,
+        ) in self._generate_drawers_strings_iterator(
+            n_drawers=1,
+            base_heights_and_widths=base_heights_and_widths,
+            stack_float_locations=FLOAT_TOP,
+            generation_probability=1.0,
+        ):
+            enclosure_width = enclosure_max_x - enclosure_min_x
+            # Shift it to one side.
+            for shifted_location in [enclosure_width * 0.5, -enclosure_width * 0.5]:
+                shifted_enclosure_strokes, shifted_enclosure_string = T_string(
+                    enclosure_strokes, enclosure_strokes_strings, x=shifted_location
+                )
+
+                # Generate a seat base.
+                seat_base_height = SMALL
+                (
+                    seat_strokes,
+                    seat_strokes_string,
+                    seat_strokes_dict,
+                    seat_min_x,
+                    seat_max_x,
+                    seat_min_y,
+                    seat_max_y,
+                ) = self._generate_basic_n_segment_bases_string(
+                    primitives=[RECTANGLE],
+                    heights=[seat_base_height],
+                    widths=[2 * enclosure_width],
+                    float_locations=[FLOAT_BOTTOM],
+                    right_margins=[0],
+                )
+
+                # Add feet.
+                for n_feet in [2]:
+                    for (
+                        feet_strokes,
+                        feet_string,
+                        feet_synthetic_dict,
+                    ) in self._generate_feet_strings_iterator(
+                        n_feet=n_feet,
+                        min_x=seat_min_x,
+                        max_x=seat_max_x,
+                        min_y=seat_min_y,
+                        max_y=seat_max_y,
+                        feet_heights=[SMALL, SMALL * 4],
+                        generation_probability=1.0,
+                    ):
+                        feet_strokes, feet_string = T_string(
+                            feet_strokes, feet_string, y=float(seat_min_y)
+                        )
+                        drawer_strokes = [
+                            seat_strokes[0]
+                            + shifted_enclosure_strokes[0]
+                            + feet_strokes[0]
+                        ]
+                        drawer_string = connect_strokes(
+                            [
+                                seat_strokes_string,
+                                shifted_enclosure_string,
+                                feet_string,
+                            ]
+                        )
+                        if random.uniform(0, 1) > generation_probability:
+                            continue
+
+                        stimuli_strokes += drawer_strokes
+                        stimuli_strings.append(drawer_string)
+
+        # Shuffle before returning.
+        stimuli_data = list(zip(stimuli_strokes, stimuli_strings))
+        random.shuffle(stimuli_data)
+        stimuli_strokes, stimuli_strings = zip(*stimuli_data)
+        return random_sample_ratio_ordered_array(
+            stimuli_strokes, train_ratio, strings_array=stimuli_strings
+        )
+
+    def _generate_strokes_strings_for_stimuli(
+        self,
+        train_ratio=0.8,
+        generation_probability=1.0,  # Probabilistically generate from space
+    ):
+        """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
+        train, test = [], []
+        train_strings, test_strings = [], []
+        for generator_fn in [
+            self._generate_parts_stimuli_strings,
+            self._generate_stacked_drawers_stimuli_strings,
+            self._generate_lounges_stimuli_strings,
+            self._generate_seat_drawers_stimuli_strings,
+        ]:
+            (
+                generator_train,
+                generator_test,
+                generator_train_strings,
+                generator_test_strings,
+            ) = generator_fn(train_ratio)
+            train += generator_train
+            test += generator_test
+            train_strings += generator_train_strings
+            test_strings += generator_test_strings
+
+        return train, test, train_strings, test_strings
+
+    def _generate_train_test_tasks(
+        self,
+        num_tasks_to_generate_per_condition=AbstractTasksGenerator.GENERATE_ALL,
+        train_ratio=0.8,
+        max_train=200,
+        max_test=50,
+    ):
+        # Currently generates all tasks as single entities. Does not generate a curriculum.
+        train_tasks, test_tasks = self._generate_drawing_tasks_from_strokes(
+            num_tasks_to_generate_per_condition,
+            request_type=object_primitives.tstroke,
+            render_parsed_program_fn=object_primitives.render_parsed_program,
+            task_generator_name=self.name,
+            train_ratio=train_ratio,
+        )
+        max_train = len(train_tasks) if max_train == None else max_train
+        max_test = len(test_tasks) if max_test == None else max_test
+        return train_tasks[:max_train], test_tasks[:max_test]
+
+    def generate_tasks_curriculum(
+        self, num_tasks_to_generate_per_condition, train_ratio=0.8
+    ):
+        """:ret: a curriculum that randomly samples among the train ratio for the simple and complex stimuli."""
+        (
+            num_tasks_to_generate_per_condition,
+            human_readable,
+        ) = self._get_number_tasks_to_generate_per_condition(
+            num_tasks_to_generate_per_condition, train_ratio
+        )
+        task_curriculum = TaskCurriculum(
+            curriculum_id=human_readable,
+            task_generator_name=self.name,
+            grammar=self.grammar,
+        )
+
+        train_tasks, test_tasks = self._generate_train_test_tasks(
+            num_tasks_to_generate_per_condition, train_ratio=train_ratio
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TRAIN,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=train_tasks,
+        )
+
+        # Add the train tasks.
+        task_curriculum.add_tasks(
+            split=TaskCurriculum.SPLIT_TEST,
+            condition=self.name,
+            curriculum_block=0,
+            tasks=test_tasks,
+        )
+        return task_curriculum
