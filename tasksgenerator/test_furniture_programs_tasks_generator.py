@@ -58,7 +58,10 @@ def test_furniture_tasks_generator_generate_lounges_stimuli_strings(tmpdir):
     for split, objects, test_stroke_strings in [
         ("train", train, train_strings),
     ]:
-        # test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        import pdb
+
+        pdb.set_trace()
 
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
@@ -79,7 +82,7 @@ def test_furniture_tasks_generator_generate_seat_drawers_stimuli_strings(tmpdir)
     for split, objects, test_stroke_strings in [
         ("train", train, train_strings),
     ]:
-        # test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
 
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
@@ -100,7 +103,10 @@ def test_furniture_tasks_generator_generate_stacked_drawers_strings_stimuli(tmpd
     for split, objects, test_stroke_strings in [
         ("train", train, train_strings),
     ]:
-        # test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        import pdb
+
+        pdb.set_trace()
 
         # _test_render_save_programs(
         #     stroke_arrays=objects, export_dir=DESKTOP, no_blanks=False, split=split
@@ -130,6 +136,11 @@ def test_furniture_tasks_generator_generate_drawers_iterator():
             ):
                 test_strokes += drawer_strokes
                 test_stroke_strings.append(drawer_stroke_strings)
+
+                import pdb
+
+                pdb.set_trace()
+
     # _test_render_save_programs(stroke_arrays=test_strokes, export_dir=DESKTOP)
     _test_parse_render_save_programs(
         program_strings=test_stroke_strings, tmpdir=DESKTOP

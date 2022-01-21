@@ -7,6 +7,8 @@ Threads program string generating logic through the generation.
 """
 from inspect import stack
 import math, random, itertools, copy
+from turtle import shape
+from xxlimited import foo
 from primitives.gadgets_primitives import *
 from dreamcoder.grammar import Grammar
 
@@ -141,8 +143,13 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                         total_height * 0.5,
                     )
 
-                    # TODO: Make the drawer synthetic dic.
-                    drawer_synthetic_dict = base_synthetic_dict
+                    drawer_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+                    # Add the drawer pulls.
+                    for k in drawer_pull_synthetic_dict:
+                        drawer_synthetic_dict[k] += drawer_pull_synthetic_dict[k]
+                    # Add the base.
+                    for k in base_synthetic_dict:
+                        drawer_synthetic_dict[k] += base_synthetic_dict[k]
 
                     (
                         drawer_stack_strokes,
@@ -200,6 +207,9 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     drawer_stroke_string = connect_strokes(
                         [drawer_stack_stroke_strings, enclosure_stroke_string]
                     )
+                    drawer_synthetic_dict = drawer_stack_synthetic_dict
+                    for k in enclosure_synthetic_dict:
+                        drawer_stack_synthetic_dict[k] += enclosure_synthetic_dict[k]
 
                     if random.uniform(0, 1) > generation_probability:
                         continue
@@ -230,6 +240,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         # Adds a row of feet to the object. These can be short or tall.
         for foot_primitive in [RECTANGLE, LINE]:
             for foot_height in feet_heights:
+                foot_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
                 if foot_primitive == RECTANGLE:
                     foot_width = SMALL
 
@@ -237,11 +248,27 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
 
                     if n_feet > 2:
                         continue
+
+                    shape_abstraction = "foot"
+                    foot_synthetic_dict[LOW_LEVEL] = [shape_abstraction]
+                    foot_synthetic_dict[LOW_LEVEL_PARTS] = ["r_s"]
+                    foot_synthetic_dict[LOW_LEVEL_PARAMS] = [foot_width, foot_height]
+
+                    foot_synthetic_dict[MID_LEVEL] = [shape_abstraction]
+                    foot_synthetic_dict[MID_LEVEL_PARTS] = ["r_s"]
+                    foot_synthetic_dict[MID_LEVEL_PARAMS] = [foot_width, foot_height]
                 else:
                     foot_width = 0
                     foot = T_string(short_v_line[0], short_v_line[1], s=foot_height)
+                    shape_abstraction = "foot"
+                    foot_synthetic_dict[LOW_LEVEL] = [shape_abstraction]
+                    foot_synthetic_dict[LOW_LEVEL_PARTS] = [short_v_line[-1]]
+                    foot_synthetic_dict[LOW_LEVEL_PARAMS] = [foot_height]
 
-                foot_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+                    foot_synthetic_dict[MID_LEVEL] = [shape_abstraction]
+                    foot_synthetic_dict[MID_LEVEL_PARTS] = [short_v_line[-1]]
+                    foot_synthetic_dict[MID_LEVEL_PARAMS] = [foot_height]
+
                 (
                     feet_strokes,
                     feet_strokes_string,
@@ -301,9 +328,9 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
     def _generate_stacked_drawers_stimuli_strings(
         self, total_drawers=4, train_ratio=1.0, generation_probability=0.45
     ):
-        stimuli_strokes, stimuli_strings = [], []
+        stimuli_strokes, stimuli_strings, stroke_dicts = [], [], []
         # Draw stacked bookshelves with no legs.
-        for n_drawers in range(2, total_drawers + 1):
+        for n_drawers in range(2, int(total_drawers) + 1):
             for (
                 drawer_strokes,
                 drawer_strings,
@@ -319,6 +346,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                 if drawer_strokes:
                     stimuli_strokes += drawer_strokes
                     stimuli_strings.append(drawer_strings)
+                    stroke_dicts.append(drawer_synthetic_dict)
 
         # Draw short drawers with long legs.
         max_short_drawers = 2
@@ -363,12 +391,22 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                             )
                             stimuli_strings.append(drawer_string)
 
+                            synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+                            for k in enclosure_synthetic_dict:
+                                synthetic_dict[k] += enclosure_synthetic_dict[k]
+                            for k in feet_synthetic_dict:
+                                synthetic_dict[k] += enclosure_synthetic_dict[k]
+                            stroke_dicts.append(synthetic_dict)
+
         # Shuffle before returning.
-        stimuli_data = list(zip(stimuli_strokes, stimuli_strings))
+        stimuli_data = list(zip(stimuli_strokes, stimuli_strings, stroke_dicts))
         random.shuffle(stimuli_data)
-        stimuli_strokes, stimuli_strings = zip(*stimuli_data)
+        stimuli_strokes, stimuli_strings, stroke_dicts = zip(*stimuli_data)
+
         return random_sample_ratio_ordered_array(
-            stimuli_strokes, train_ratio, strings_array=stimuli_strings
+            stimuli_strokes,
+            train_ratio,
+            strings_array=list(zip(stimuli_strings, stroke_dicts)),
         )
 
     def _generate_lounges_stimuli_strings(
@@ -376,7 +414,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
     ):
         # Generates lounges containing a large base and one or more rectangular pillows on top. Lounges may or may not have an inset drawer.
         # Grab the drawer stack enclosure and add pillows, etc.
-        stimuli_strokes, stimuli_strings = [], []
+        stimuli_strokes, stimuli_strings, stroke_dicts = [], [], []
         # Draw short drawers with long legs.
         base_heights_and_widths = [
             (SMALL * 3, MEDIUM * 9),
@@ -473,18 +511,33 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                                         feet_string,
                                     ]
                                 )
+                                drawer_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+                                for k in seat_back_synthetic_dict:
+                                    drawer_synthetic_dict[
+                                        k
+                                    ] += seat_back_synthetic_dict[k]
+                                for k in enclosure_synthetic_dict:
+                                    drawer_synthetic_dict[
+                                        k
+                                    ] += enclosure_synthetic_dict[k]
+                                for k in feet_synthetic_dict:
+                                    drawer_synthetic_dict[k] += feet_synthetic_dict[k]
                                 if random.uniform(0, 1) > generation_probability:
                                     continue
 
                                 stimuli_strokes += drawer_strokes
                                 stimuli_strings.append(drawer_string)
+                                stroke_dicts.append(drawer_synthetic_dict)
 
         # Shuffle before returning.
-        stimuli_data = list(zip(stimuli_strokes, stimuli_strings))
+        stimuli_data = list(zip(stimuli_strokes, stimuli_strings, stroke_dicts))
         random.shuffle(stimuli_data)
-        stimuli_strokes, stimuli_strings = zip(*stimuli_data)
+        stimuli_strokes, stimuli_strings, stroke_dicts = zip(*stimuli_data)
+
         return random_sample_ratio_ordered_array(
-            stimuli_strokes, train_ratio, strings_array=stimuli_strings
+            stimuli_strokes,
+            train_ratio,
+            strings_array=list(zip(stimuli_strings, stroke_dicts)),
         )
 
     def _generate_seat_drawers_stimuli_strings(
@@ -492,7 +545,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
     ):
         # Generates lounges containing a large base and one or more rectangular pillows on top. Lounges may or may not have an inset drawer.
         # Grab the drawer stack enclosure and add pillows, etc.
-        stimuli_strokes, stimuli_strings = [], []
+        stimuli_strokes, stimuli_strings, stroke_dicts = [], [], []
         # Draw short drawers with long legs.
         base_heights_and_widths = [
             (SMALL * 2, SMALL * 5),
@@ -567,18 +620,29 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                                 feet_string,
                             ]
                         )
+                        drawer_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
+                        for k in seat_strokes_dict:
+                            drawer_synthetic_dict[k] += seat_strokes_dict[k]
+                        for k in enclosure_synthetic_dict:
+                            drawer_synthetic_dict[k] += enclosure_synthetic_dict[k]
+                        for k in feet_synthetic_dict:
+                            drawer_synthetic_dict[k] += feet_synthetic_dict[k]
                         if random.uniform(0, 1) > generation_probability:
                             continue
 
                         stimuli_strokes += drawer_strokes
                         stimuli_strings.append(drawer_string)
+                        stroke_dicts.append(drawer_synthetic_dict)
 
         # Shuffle before returning.
-        stimuli_data = list(zip(stimuli_strokes, stimuli_strings))
+        stimuli_data = list(zip(stimuli_strokes, stimuli_strings, stroke_dicts))
         random.shuffle(stimuli_data)
-        stimuli_strokes, stimuli_strings = zip(*stimuli_data)
+        stimuli_strokes, stimuli_strings, stroke_dicts = zip(*stimuli_data)
+
         return random_sample_ratio_ordered_array(
-            stimuli_strokes, train_ratio, strings_array=stimuli_strings
+            stimuli_strokes,
+            train_ratio,
+            strings_array=list(zip(stimuli_strings, stroke_dicts)),
         )
 
     def _generate_strokes_strings_for_stimuli(
