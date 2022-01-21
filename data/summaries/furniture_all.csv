@@ -1,5 +1,5 @@
-task_name,task_generator,dreamcoder_program,ground_truth_strokes,n_strokes,s3_stimuli
-furniture_test_000,furniture_test,,"[[array([[-5.81250000e+00,  0.00000000e+00],
+task_name,task_generator,dreamcoder_program_dsl_0,dreamcoder_program_dsl_0_tokens,ground_truth_strokes,n_strokes,s3_stimuli
+furniture_test_000,furniture_test,,,"[[array([[-5.81250000e+00,  0.00000000e+00],
        [-5.83880187e+00,  2.41841745e-01],
        [-5.91647765e+00,  4.72375239e-01],
        [-6.04189530e+00,  6.80820992e-01],
@@ -61,8 +61,8 @@ furniture_test_000,furniture_test,,"[[array([[-5.81250000e+00,  0.00000000e+00],
        [-6.515625, -0.421875],
        [-6.515625,  0.421875],
        [-7.359375,  0.421875],
-       [-7.359375, -0.421875]])]]",3,lax-drawing-furniture-all-000.png
-furniture_test_001,furniture_test,,"[[array([[-7.75  , -0.5625],
+       [-7.359375, -0.421875]])]]",3,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-000.png
+furniture_test_001,furniture_test,,,"[[array([[-7.75  , -0.5625],
        [-6.625 , -0.5625],
        [-6.625 ,  0.5625],
        [-7.75  ,  0.5625],
@@ -95,8 +95,8 @@ furniture_test_001,furniture_test,,"[[array([[-7.75  , -0.5625],
        [-6.85164824e+00, -2.55307872e-01],
        [-6.80461662e+00, -1.77140715e-01],
        [-6.77548820e+00, -9.06906545e-02],
-       [-6.76562500e+00, -1.03329574e-16]])]]",2,lax-drawing-furniture-all-001.png
-furniture_test_002,furniture_test,,"[[array([[-7.609375  ,  1.01849635],
+       [-6.76562500e+00, -1.03329574e-16]])]]",2,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-001.png
+furniture_test_002,furniture_test,,,"[[array([[-7.609375  ,  1.01849635],
        [-6.765625  ,  1.01849635]]), array([[-8.20599635,  0.421875  ],
        [-7.609375  ,  1.01849635]]), array([[-8.20599635, -0.421875  ],
        [-8.20599635,  0.421875  ]]), array([[-7.609375  , -1.01849635],
@@ -133,8 +133,8 @@ furniture_test_002,furniture_test,,"[[array([[-7.609375  ,  1.01849635],
        [-6.85164824e+00, -2.55307872e-01],
        [-6.80461662e+00, -1.77140715e-01],
        [-6.77548820e+00, -9.06906545e-02],
-       [-6.76562500e+00, -1.03329574e-16]])]]",9,lax-drawing-furniture-all-002.png
-furniture_test_003,furniture_test,,"[[array([[-7.609375  ,  1.01849635],
+       [-6.76562500e+00, -1.03329574e-16]])]]",9,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-002.png
+furniture_test_003,furniture_test,,,"[[array([[-7.609375  ,  1.01849635],
        [-6.765625  ,  1.01849635]]), array([[-8.20599635,  0.421875  ],
        [-7.609375  ,  1.01849635]]), array([[-8.20599635, -0.421875  ],
        [-8.20599635,  0.421875  ]]), array([[-7.609375  , -1.01849635],
@@ -208,8 +208,8 @@ furniture_test_003,furniture_test,,"[[array([[-7.609375  ,  1.01849635],
        [ 7.52335176e+00, -2.55307872e-01],
        [ 7.57038338e+00, -1.77140715e-01],
        [ 7.59951180e+00, -9.06906545e-02],
-       [ 7.60937500e+00, -1.03329574e-16]])]]",18,lax-drawing-furniture-all-003.png
-furniture_test_004,furniture_test,,"[[array([[-6.75,  3.75],
+       [ 7.60937500e+00, -1.03329574e-16]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-003.png
+furniture_test_004,furniture_test,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -340,8 +340,8 @@ furniture_test_004,furniture_test,,"[[array([[-6.75,  3.75],
        [-7.5 ,  8.25]]), array([[-7.5, -3. ],
        [-7.5,  0. ]]), array([[-9.18485099e-17, -3.00000000e+00],
        [ 9.18485099e-17,  0.00000000e+00]]), array([[ 7.5, -3. ],
-       [ 7.5,  0. ]])]]",19,lax-drawing-furniture-all-004.png
-furniture_test_005,furniture_test,,"[[array([[-6.75,  3.75],
+       [ 7.5,  0. ]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-004.png
+furniture_test_005,furniture_test,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -471,8 +471,8 @@ furniture_test_005,furniture_test,,"[[array([[-6.75,  3.75],
        [7.5 , 8.25]]), array([[-7.5 ,  0.  ],
        [-7.5 ,  8.25]]), array([[-7.5, -6. ],
        [-7.5,  0. ]]), array([[ 7.5, -6. ],
-       [ 7.5,  0. ]])]]",18,lax-drawing-furniture-all-005.png
-furniture_test_006,furniture_test,,"[[array([[-4.5, -5.5],
+       [ 7.5,  0. ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-005.png
+furniture_test_006,furniture_test,,,"[[array([[-4.5, -5.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
        [ 4.5, -9.5]]), array([[ 4.5, -9.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
@@ -788,8 +788,8 @@ furniture_test_006,furniture_test,,"[[array([[-4.5, -5.5],
        [ 5.5, 10.5]]), array([[ -5.5, -10.5],
        [  5.5, -10.5]]), array([[  5.5, -10.5],
        [  5.5,  10.5]]), array([[ -5.5, -10.5],
-       [ -5.5,  10.5]])]]",92,lax-drawing-furniture-all-006.png
-furniture_test_007,furniture_test,,"[[array([[-6.75,  3.75],
+       [ -5.5,  10.5]])]]",92,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-006.png
+furniture_test_007,furniture_test,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -821,8 +821,8 @@ furniture_test_007,furniture_test,,"[[array([[-6.75,  3.75],
        [-7.5,  0. ]]), array([[-2.5, -6. ],
        [-2.5,  0. ]]), array([[ 2.5, -6. ],
        [ 2.5,  0. ]]), array([[ 7.5, -6. ],
-       [ 7.5,  0. ]])]]",20,lax-drawing-furniture-all-007.png
-furniture_test_008,furniture_test,,"[[array([[-4.5, -0.5],
+       [ 7.5,  0. ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-007.png
+furniture_test_008,furniture_test,,,"[[array([[-4.5, -0.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
        [ 4.5, -4.5]]), array([[ 4.5, -4.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
@@ -950,8 +950,8 @@ furniture_test_008,furniture_test,,"[[array([[-4.5, -0.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
        [ 5.5, -5.5]]), array([[ 5.5, -5.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
-       [-5.5,  5.5]])]]",16,lax-drawing-furniture-all-008.png
-furniture_test_009,furniture_test,,"[[array([[-6.75,  3.75],
+       [-5.5,  5.5]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-008.png
+furniture_test_009,furniture_test,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -1083,8 +1083,8 @@ furniture_test_009,furniture_test,,"[[array([[-6.75,  3.75],
        [-7.5,  0. ]]), array([[-2.5, -3. ],
        [-2.5,  0. ]]), array([[ 2.5, -3. ],
        [ 2.5,  0. ]]), array([[ 7.5, -3. ],
-       [ 7.5,  0. ]])]]",20,lax-drawing-furniture-all-009.png
-furniture_test_010,furniture_test,,"[[array([[-8.25,  1.5 ],
+       [ 7.5,  0. ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-009.png
+furniture_test_010,furniture_test,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -1108,8 +1108,8 @@ furniture_test_010,furniture_test,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",24,lax-drawing-furniture-all-010.png
-furniture_test_011,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 7.25, -4.5 ]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-010.png
+furniture_test_011,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -1133,8 +1133,8 @@ furniture_test_011,furniture_test,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",24,lax-drawing-furniture-all-011.png
-furniture_test_012,furniture_test,,"[[array([[-8.25,  1.5 ],
+       [ 6.5, -4.5]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-011.png
+furniture_test_012,furniture_test,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -1210,8 +1210,8 @@ furniture_test_012,furniture_test,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-012.png
-furniture_test_013,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-012.png
+furniture_test_013,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -1316,8 +1316,8 @@ furniture_test_013,furniture_test,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-013.png
-furniture_test_014,furniture_test,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-013.png
+furniture_test_014,furniture_test,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -1364,8 +1364,8 @@ furniture_test_014,furniture_test,,"[[array([[-8.25,  3.  ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",19,lax-drawing-furniture-all-014.png
-furniture_test_015,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-014.png
+furniture_test_015,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -1385,8 +1385,8 @@ furniture_test_015,furniture_test,,"[[array([[-7.5,  3. ],
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-015.png
-furniture_test_016,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-015.png
+furniture_test_016,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -1434,8 +1434,8 @@ furniture_test_016,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-016.png
-furniture_test_017,furniture_test,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-016.png
+furniture_test_017,furniture_test,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -1511,8 +1511,8 @@ furniture_test_017,furniture_test,,"[[array([[-8.25,  3.  ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-017.png
-furniture_test_018,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-017.png
+furniture_test_018,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -1530,8 +1530,8 @@ furniture_test_018,furniture_test,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",18,lax-drawing-furniture-all-018.png
-furniture_test_019,furniture_test,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-018.png
+furniture_test_019,furniture_test,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -1637,8 +1637,8 @@ furniture_test_019,furniture_test,,"[[array([[-8.25,  3.  ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-019.png
-furniture_test_020,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-019.png
+furniture_test_020,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -1716,8 +1716,8 @@ furniture_test_020,furniture_test,,"[[array([[-7.5,  3. ],
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-020.png
-furniture_test_021,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-020.png
+furniture_test_021,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -1735,8 +1735,8 @@ furniture_test_021,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",18,lax-drawing-furniture-all-021.png
-furniture_test_022,furniture_test,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-021.png
+furniture_test_022,furniture_test,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -1862,8 +1862,8 @@ furniture_test_022,furniture_test,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",14,lax-drawing-furniture-all-022.png
-furniture_test_023,furniture_test,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-022.png
+furniture_test_023,furniture_test,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -1945,8 +1945,8 @@ furniture_test_023,furniture_test,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",20,lax-drawing-furniture-all-023.png
-furniture_test_024,furniture_test,,"[[array([[-8.25,  3.  ],
+       [ 6.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-023.png
+furniture_test_024,furniture_test,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -2052,8 +2052,8 @@ furniture_test_024,furniture_test,,"[[array([[-8.25,  3.  ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-024.png
-furniture_test_025,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-024.png
+furniture_test_025,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -2079,8 +2079,8 @@ furniture_test_025,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-025.png
-furniture_test_026,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-025.png
+furniture_test_026,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -2157,8 +2157,8 @@ furniture_test_026,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-026.png
-furniture_test_027,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-026.png
+furniture_test_027,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -2265,8 +2265,8 @@ furniture_test_027,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",23,lax-drawing-furniture-all-027.png
-furniture_test_028,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-027.png
+furniture_test_028,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -2342,8 +2342,8 @@ furniture_test_028,furniture_test,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-028.png
-furniture_test_029,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-028.png
+furniture_test_029,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -2421,8 +2421,8 @@ furniture_test_029,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-029.png
-furniture_test_030,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-029.png
+furniture_test_030,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -2475,8 +2475,8 @@ furniture_test_030,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",25,lax-drawing-furniture-all-030.png
-furniture_test_031,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 6.5, -4.5]])]]",25,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-030.png
+furniture_test_031,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -2582,8 +2582,8 @@ furniture_test_031,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-031.png
-furniture_test_032,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-031.png
+furniture_test_032,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -2644,8 +2644,8 @@ furniture_test_032,furniture_test,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-032.png
-furniture_test_033,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-032.png
+furniture_test_033,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -2727,8 +2727,8 @@ furniture_test_033,furniture_test,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",26,lax-drawing-furniture-all-033.png
-furniture_test_034,furniture_test,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 6.5, -4.5]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-033.png
+furniture_test_034,furniture_test,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -2802,8 +2802,8 @@ furniture_test_034,furniture_test,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",18,lax-drawing-furniture-all-034.png
-furniture_test_035,furniture_test,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 6.5, -4.5]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-034.png
+furniture_test_035,furniture_test,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -2930,8 +2930,8 @@ furniture_test_035,furniture_test,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",15,lax-drawing-furniture-all-035.png
-furniture_test_036,furniture_test,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",15,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-035.png
+furniture_test_036,furniture_test,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -2999,8 +2999,8 @@ furniture_test_036,furniture_test,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",12,lax-drawing-furniture-all-036.png
-furniture_test_037,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",12,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-036.png
+furniture_test_037,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -3057,8 +3057,8 @@ furniture_test_037,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",23,lax-drawing-furniture-all-037.png
-furniture_test_038,furniture_test,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-037.png
+furniture_test_038,furniture_test,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -3165,8 +3165,8 @@ furniture_test_038,furniture_test,,"[[array([[-8.25,  3.  ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",23,lax-drawing-furniture-all-038.png
-furniture_test_039,furniture_test,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-038.png
+furniture_test_039,furniture_test,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -3186,8 +3186,8 @@ furniture_test_039,furniture_test,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-039.png
-furniture_test_040,furniture_test,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-039.png
+furniture_test_040,furniture_test,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -3264,8 +3264,8 @@ furniture_test_040,furniture_test,,"[[array([[-7.5,  3. ],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-040.png
-furniture_test_041,furniture_test,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-040.png
+furniture_test_041,furniture_test,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -3376,8 +3376,8 @@ furniture_test_041,furniture_test,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",27,lax-drawing-furniture-all-041.png
-furniture_test_042,furniture_test,,"[[array([[-8.25,  3.  ],
+       [ 7.25, -4.5 ]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-041.png
+furniture_test_042,furniture_test,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -3432,8 +3432,8 @@ furniture_test_042,furniture_test,,"[[array([[-8.25,  3.  ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-042.png
-furniture_test_043,furniture_test,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-042.png
+furniture_test_043,furniture_test,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -3507,8 +3507,8 @@ furniture_test_043,furniture_test,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",18,lax-drawing-furniture-all-043.png
-furniture_test_044,furniture_test,,"[[array([[-10.,   0.],
+       [ 6.5, -4.5]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-043.png
+furniture_test_044,furniture_test,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -3580,8 +3580,8 @@ furniture_test_044,furniture_test,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",16,lax-drawing-furniture-all-044.png
-furniture_test_045,furniture_test,,"[[array([[-6.,  0.],
+       [10., -1.]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-044.png
+furniture_test_045,furniture_test,,,"[[array([[-6.,  0.],
        [ 6.,  0.]]), array([[-6., -1.],
        [ 6., -1.]]), array([[ 6., -1.],
        [ 6.,  0.]]), array([[-6., -1.],
@@ -3595,8 +3595,8 @@ furniture_test_045,furniture_test,,"[[array([[-6.,  0.],
        [0., 3.]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-6., -5.],
        [-6., -1.]]), array([[ 6., -5.],
-       [ 6., -1.]])]]",14,lax-drawing-furniture-all-045.png
-furniture_test_046,furniture_test,,"[[array([[-10.,   0.],
+       [ 6., -1.]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-045.png
+furniture_test_046,furniture_test,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -3610,8 +3610,8 @@ furniture_test_046,furniture_test,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",14,lax-drawing-furniture-all-046.png
-furniture_test_047,furniture_test,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-046.png
+furniture_test_047,furniture_test,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -3631,8 +3631,8 @@ furniture_test_047,furniture_test,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",20,lax-drawing-furniture-all-047.png
-furniture_test_048,furniture_test,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-047.png
+furniture_test_048,furniture_test,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -3704,8 +3704,8 @@ furniture_test_048,furniture_test,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -2.],
        [-10.,  -1.]]), array([[10., -2.],
-       [10., -1.]])]]",16,lax-drawing-furniture-all-048.png
-furniture_test_049,furniture_test,,"[[array([[-6.,  0.],
+       [10., -1.]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-048.png
+furniture_test_049,furniture_test,,,"[[array([[-6.,  0.],
        [ 6.,  0.]]), array([[-6., -1.],
        [ 6., -1.]]), array([[ 6., -1.],
        [ 6.,  0.]]), array([[-6., -1.],
@@ -3725,8 +3725,8 @@ furniture_test_049,furniture_test,,"[[array([[-6.,  0.],
        [ 6., -1.]]), array([[ 5., -2.],
        [ 6., -2.]]), array([[ 6., -2.],
        [ 6., -1.]]), array([[ 5., -2.],
-       [ 5., -1.]])]]",20,lax-drawing-furniture-all-049.png
-furniture_train_000,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00],
+       [ 5., -1.]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-049.png
+furniture_train_000,furniture_train,,,"[[array([[-6.06250000e+00,  0.00000000e+00],
        [-6.08880187e+00,  2.41841745e-01],
        [-6.16647765e+00,  4.72375239e-01],
        [-6.29189530e+00,  6.80820992e-01],
@@ -3784,8 +3784,8 @@ furniture_train_000,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00
        [-6.85164824e+00, -2.55307872e-01],
        [-6.80461662e+00, -1.77140715e-01],
        [-6.77548820e+00, -9.06906545e-02],
-       [-6.76562500e+00, -1.03329574e-16]])]]",2,lax-drawing-furniture-all-050.png
-furniture_train_001,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00],
+       [-6.76562500e+00, -1.03329574e-16]])]]",2,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-050.png
+furniture_train_001,furniture_train,,,"[[array([[-6.06250000e+00,  0.00000000e+00],
        [-6.08880187e+00,  2.41841745e-01],
        [-6.16647765e+00,  4.72375239e-01],
        [-6.29189530e+00,  6.80820992e-01],
@@ -3818,8 +3818,8 @@ furniture_train_001,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00
        [-6.765625, -0.421875],
        [-6.765625,  0.421875],
        [-7.609375,  0.421875],
-       [-7.609375, -0.421875]])]]",2,lax-drawing-furniture-all-051.png
-furniture_train_002,furniture_train,,"[[array([[-5.81250000e+00,  0.00000000e+00],
+       [-7.609375, -0.421875]])]]",2,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-051.png
+furniture_train_002,furniture_train,,,"[[array([[-5.81250000e+00,  0.00000000e+00],
        [-5.83880187e+00,  2.41841745e-01],
        [-5.91647765e+00,  4.72375239e-01],
        [-6.04189530e+00,  6.80820992e-01],
@@ -3906,8 +3906,8 @@ furniture_train_002,furniture_train,,"[[array([[-5.81250000e+00,  0.00000000e+00
        [-6.60164824e+00, -2.55307872e-01],
        [-6.55461662e+00, -1.77140715e-01],
        [-6.52548820e+00, -9.06906545e-02],
-       [-6.51562500e+00, -1.03329574e-16]])]]",3,lax-drawing-furniture-all-052.png
-furniture_train_003,furniture_train,,"[[array([[-7.609375  ,  1.01849635],
+       [-6.51562500e+00, -1.03329574e-16]])]]",3,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-052.png
+furniture_train_003,furniture_train,,,"[[array([[-7.609375  ,  1.01849635],
        [-6.765625  ,  1.01849635]]), array([[-8.20599635,  0.421875  ],
        [-7.609375  ,  1.01849635]]), array([[-8.20599635, -0.421875  ],
        [-8.20599635,  0.421875  ]]), array([[-7.609375  , -1.01849635],
@@ -3919,8 +3919,8 @@ furniture_train_003,furniture_train,,"[[array([[-7.609375  ,  1.01849635],
        [-6.765625, -0.421875],
        [-6.765625,  0.421875],
        [-7.609375,  0.421875],
-       [-7.609375, -0.421875]])]]",9,lax-drawing-furniture-all-053.png
-furniture_train_004,furniture_train,,"[[array([[-7.01562500e+00,  0.00000000e+00],
+       [-7.609375, -0.421875]])]]",9,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-053.png
+furniture_train_004,furniture_train,,,"[[array([[-7.01562500e+00,  0.00000000e+00],
        [-7.02548820e+00,  9.06906545e-02],
        [-7.05461662e+00,  1.77140715e-01],
        [-7.10164824e+00,  2.55307872e-01],
@@ -3949,13 +3949,13 @@ furniture_train_004,furniture_train,,"[[array([[-7.01562500e+00,  0.00000000e+00
        [-7.10164824e+00, -2.55307872e-01],
        [-7.05461662e+00, -1.77140715e-01],
        [-7.02548820e+00, -9.06906545e-02],
-       [-7.01562500e+00, -1.03329574e-16]])]]",1,lax-drawing-furniture-all-054.png
-furniture_train_005,furniture_train,,"[[array([[-7.859375, -0.421875],
+       [-7.01562500e+00, -1.03329574e-16]])]]",1,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-054.png
+furniture_train_005,furniture_train,,,"[[array([[-7.859375, -0.421875],
        [-7.015625, -0.421875],
        [-7.015625,  0.421875],
        [-7.859375,  0.421875],
-       [-7.859375, -0.421875]])]]",1,lax-drawing-furniture-all-055.png
-furniture_train_006,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00],
+       [-7.859375, -0.421875]])]]",1,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-055.png
+furniture_train_006,furniture_train,,,"[[array([[-6.06250000e+00,  0.00000000e+00],
        [-6.08880187e+00,  2.41841745e-01],
        [-6.16647765e+00,  4.72375239e-01],
        [-6.29189530e+00,  6.80820992e-01],
@@ -4071,8 +4071,8 @@ furniture_train_006,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00
        [ 7.52335176e+00, -2.55307872e-01],
        [ 7.57038338e+00, -1.77140715e-01],
        [ 7.59951180e+00, -9.06906545e-02],
-       [ 7.60937500e+00, -1.03329574e-16]])]]",4,lax-drawing-furniture-all-056.png
-furniture_train_007,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00],
+       [ 7.60937500e+00, -1.03329574e-16]])]]",4,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-056.png
+furniture_train_007,furniture_train,,,"[[array([[-6.06250000e+00,  0.00000000e+00],
        [-6.08880187e+00,  2.41841745e-01],
        [-6.16647765e+00,  4.72375239e-01],
        [-6.29189530e+00,  6.80820992e-01],
@@ -4138,8 +4138,8 @@ furniture_train_007,furniture_train,,"[[array([[-6.06250000e+00,  0.00000000e+00
        [ 7.609375, -0.421875],
        [ 7.609375,  0.421875],
        [ 6.765625,  0.421875],
-       [ 6.765625, -0.421875]])]]",4,lax-drawing-furniture-all-057.png
-furniture_train_008,furniture_train,,"[[array([[-5.81250000e+00,  0.00000000e+00],
+       [ 6.765625, -0.421875]])]]",4,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-057.png
+furniture_train_008,furniture_train,,,"[[array([[-5.81250000e+00,  0.00000000e+00],
        [-5.83880187e+00,  2.41841745e-01],
        [-5.91647765e+00,  4.72375239e-01],
        [-6.04189530e+00,  6.80820992e-01],
@@ -4313,8 +4313,8 @@ furniture_train_008,furniture_train,,"[[array([[-5.81250000e+00,  0.00000000e+00
        [ 7.27335176e+00, -2.55307872e-01],
        [ 7.32038338e+00, -1.77140715e-01],
        [ 7.34951180e+00, -9.06906545e-02],
-       [ 7.35937500e+00, -1.03329574e-16]])]]",6,lax-drawing-furniture-all-058.png
-furniture_train_009,furniture_train,,"[[array([[-5.81250000e+00,  0.00000000e+00],
+       [ 7.35937500e+00, -1.03329574e-16]])]]",6,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-058.png
+furniture_train_009,furniture_train,,,"[[array([[-5.81250000e+00,  0.00000000e+00],
        [-5.83880187e+00,  2.41841745e-01],
        [-5.91647765e+00,  4.72375239e-01],
        [-6.04189530e+00,  6.80820992e-01],
@@ -4438,8 +4438,8 @@ furniture_train_009,furniture_train,,"[[array([[-5.81250000e+00,  0.00000000e+00
        [ 7.359375, -0.421875],
        [ 7.359375,  0.421875],
        [ 6.515625,  0.421875],
-       [ 6.515625, -0.421875]])]]",6,lax-drawing-furniture-all-059.png
-furniture_train_010,furniture_train,,"[[array([[-7.75  , -0.5625],
+       [ 6.515625, -0.421875]])]]",6,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-059.png
+furniture_train_010,furniture_train,,,"[[array([[-7.75  , -0.5625],
        [-6.625 , -0.5625],
        [-6.625 ,  0.5625],
        [-7.75  ,  0.5625],
@@ -4505,8 +4505,8 @@ furniture_train_010,furniture_train,,"[[array([[-7.75  , -0.5625],
        [ 7.52335176e+00, -2.55307872e-01],
        [ 7.57038338e+00, -1.77140715e-01],
        [ 7.59951180e+00, -9.06906545e-02],
-       [ 7.60937500e+00, -1.03329574e-16]])]]",4,lax-drawing-furniture-all-060.png
-furniture_train_011,furniture_train,,"[[array([[-7.609375  ,  1.01849635],
+       [ 7.60937500e+00, -1.03329574e-16]])]]",4,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-060.png
+furniture_train_011,furniture_train,,,"[[array([[-7.609375  ,  1.01849635],
        [-6.765625  ,  1.01849635]]), array([[-8.20599635,  0.421875  ],
        [-7.609375  ,  1.01849635]]), array([[-8.20599635, -0.421875  ],
        [-8.20599635,  0.421875  ]]), array([[-7.609375  , -1.01849635],
@@ -4530,8 +4530,8 @@ furniture_train_011,furniture_train,,"[[array([[-7.609375  ,  1.01849635],
        [ 7.609375, -0.421875],
        [ 7.609375,  0.421875],
        [ 6.765625,  0.421875],
-       [ 6.765625, -0.421875]])]]",18,lax-drawing-furniture-all-061.png
-furniture_train_012,furniture_train,,"[[array([[-7.01562500e+00,  0.00000000e+00],
+       [ 6.765625, -0.421875]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-061.png
+furniture_train_012,furniture_train,,,"[[array([[-7.01562500e+00,  0.00000000e+00],
        [-7.02548820e+00,  9.06906545e-02],
        [-7.05461662e+00,  1.77140715e-01],
        [-7.10164824e+00,  2.55307872e-01],
@@ -4589,8 +4589,8 @@ furniture_train_012,furniture_train,,"[[array([[-7.01562500e+00,  0.00000000e+00
        [ 7.77335176e+00, -2.55307872e-01],
        [ 7.82038338e+00, -1.77140715e-01],
        [ 7.84951180e+00, -9.06906545e-02],
-       [ 7.85937500e+00, -1.03329574e-16]])]]",2,lax-drawing-furniture-all-062.png
-furniture_train_013,furniture_train,,"[[array([[-7.859375, -0.421875],
+       [ 7.85937500e+00, -1.03329574e-16]])]]",2,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-062.png
+furniture_train_013,furniture_train,,,"[[array([[-7.859375, -0.421875],
        [-7.015625, -0.421875],
        [-7.015625,  0.421875],
        [-7.859375,  0.421875],
@@ -4598,8 +4598,8 @@ furniture_train_013,furniture_train,,"[[array([[-7.859375, -0.421875],
        [ 7.859375, -0.421875],
        [ 7.859375,  0.421875],
        [ 7.015625,  0.421875],
-       [ 7.015625, -0.421875]])]]",2,lax-drawing-furniture-all-063.png
-furniture_train_014,furniture_train,,"[[array([[-4.5, -0.5],
+       [ 7.015625, -0.421875]])]]",2,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-063.png
+furniture_train_014,furniture_train,,,"[[array([[-4.5, -0.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
        [ 4.5, -4.5]]), array([[ 4.5, -4.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
@@ -4759,8 +4759,8 @@ furniture_train_014,furniture_train,,"[[array([[-4.5, -0.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
        [ 5.5, -5.5]]), array([[ 5.5, -5.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
-       [-5.5,  5.5]])]]",48,lax-drawing-furniture-all-064.png
-furniture_train_015,furniture_train,,"[[array([[-6.75,  3.75],
+       [-5.5,  5.5]])]]",48,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-064.png
+furniture_train_015,furniture_train,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -4896,8 +4896,8 @@ furniture_train_015,furniture_train,,"[[array([[-6.75,  3.75],
        [7.5, 0. ]]), array([[ 6.5, -6. ],
        [ 7.5, -6. ]]), array([[ 7.5, -6. ],
        [ 7.5,  0. ]]), array([[ 6.5, -6. ],
-       [ 6.5,  0. ]])]]",24,lax-drawing-furniture-all-065.png
-furniture_train_016,furniture_train,,"[[array([[-6.75 , -4.125],
+       [ 6.5,  0. ]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-065.png
+furniture_train_016,furniture_train,,,"[[array([[-6.75 , -4.125],
        [ 6.75 , -4.125]]), array([[-6.75 , -7.125],
        [ 6.75 , -7.125]]), array([[ 6.75 , -7.125],
        [ 6.75 , -4.125]]), array([[-6.75 , -7.125],
@@ -5149,8 +5149,8 @@ furniture_train_016,furniture_train,,"[[array([[-6.75 , -4.125],
        [ 7.5  ,  7.875]]), array([[-7.5  , -7.875],
        [ 7.5  , -7.875]]), array([[ 7.5  , -7.875],
        [ 7.5  ,  7.875]]), array([[-7.5  , -7.875],
-       [-7.5  ,  7.875]])]]",28,lax-drawing-furniture-all-066.png
-furniture_train_017,furniture_train,,"[[array([[-4.5, -0.5],
+       [-7.5  ,  7.875]])]]",28,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-066.png
+furniture_train_017,furniture_train,,,"[[array([[-4.5, -0.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
        [ 4.5, -4.5]]), array([[ 4.5, -4.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
@@ -5394,8 +5394,8 @@ furniture_train_017,furniture_train,,"[[array([[-4.5, -0.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
        [ 5.5, -5.5]]), array([[ 5.5, -5.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
-       [-5.5,  5.5]])]]",20,lax-drawing-furniture-all-067.png
-furniture_train_018,furniture_train,,"[[array([[-6.   , -0.625],
+       [-5.5,  5.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-067.png
+furniture_train_018,furniture_train,,,"[[array([[-6.   , -0.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
        [ 6.   , -5.625]]), array([[ 6.   , -5.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
@@ -5755,8 +5755,8 @@ furniture_train_018,furniture_train,,"[[array([[-6.   , -0.625],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
        [ 7.25 , -6.875]]), array([[ 7.25 , -6.875],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
-       [-7.25 ,  6.875]])]]",24,lax-drawing-furniture-all-068.png
-furniture_train_019,furniture_train,,"[[array([[-6.  , -3.75],
+       [-7.25 ,  6.875]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-068.png
+furniture_train_019,furniture_train,,,"[[array([[-6.  , -3.75],
        [ 6.  , -3.75]]), array([[-6.  , -8.75],
        [ 6.  , -8.75]]), array([[ 6.  , -8.75],
        [ 6.  , -3.75]]), array([[-6.  , -8.75],
@@ -5844,8 +5844,8 @@ furniture_train_019,furniture_train,,"[[array([[-6.  , -3.75],
        [ 7.25, 10.  ]]), array([[ -7.25, -10.  ],
        [  7.25, -10.  ]]), array([[  7.25, -10.  ],
        [  7.25,  10.  ]]), array([[ -7.25, -10.  ],
-       [ -7.25,  10.  ]])]]",70,lax-drawing-furniture-all-069.png
-furniture_train_020,furniture_train,,"[[array([[-6.75,  3.75],
+       [ -7.25,  10.  ]])]]",70,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-069.png
+furniture_train_020,furniture_train,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -5976,8 +5976,8 @@ furniture_train_020,furniture_train,,"[[array([[-6.75,  3.75],
        [-7.5 ,  8.25]]), array([[-7.5, -1. ],
        [-7.5,  0. ]]), array([[-3.061617e-17, -1.000000e+00],
        [ 3.061617e-17,  0.000000e+00]]), array([[ 7.5, -1. ],
-       [ 7.5,  0. ]])]]",19,lax-drawing-furniture-all-070.png
-furniture_train_021,furniture_train,,"[[array([[-6.   , -0.625],
+       [ 7.5,  0. ]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-070.png
+furniture_train_021,furniture_train,,,"[[array([[-6.   , -0.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
        [ 6.   , -5.625]]), array([[ 6.   , -5.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
@@ -6121,8 +6121,8 @@ furniture_train_021,furniture_train,,"[[array([[-6.   , -0.625],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
        [ 7.25 , -6.875]]), array([[ 7.25 , -6.875],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
-       [-7.25 ,  6.875]])]]",20,lax-drawing-furniture-all-071.png
-furniture_train_022,furniture_train,,"[[array([[-6.75,  3.75],
+       [-7.25 ,  6.875]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-071.png
+furniture_train_022,furniture_train,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -6252,8 +6252,8 @@ furniture_train_022,furniture_train,,"[[array([[-6.75,  3.75],
        [7.5 , 8.25]]), array([[-7.5 ,  0.  ],
        [-7.5 ,  8.25]]), array([[-7.5, -3. ],
        [-7.5,  0. ]]), array([[ 7.5, -3. ],
-       [ 7.5,  0. ]])]]",18,lax-drawing-furniture-all-072.png
-furniture_train_023,furniture_train,,"[[array([[-4.5, -5.5],
+       [ 7.5,  0. ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-072.png
+furniture_train_023,furniture_train,,,"[[array([[-4.5, -5.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
        [ 4.5, -9.5]]), array([[ 4.5, -9.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
@@ -6505,8 +6505,8 @@ furniture_train_023,furniture_train,,"[[array([[-4.5, -5.5],
        [ 5.5, 10.5]]), array([[ -5.5, -10.5],
        [  5.5, -10.5]]), array([[  5.5, -10.5],
        [  5.5,  10.5]]), array([[ -5.5, -10.5],
-       [ -5.5,  10.5]])]]",28,lax-drawing-furniture-all-073.png
-furniture_train_024,furniture_train,,"[[array([[-4.5, -5.5],
+       [ -5.5,  10.5]])]]",28,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-073.png
+furniture_train_024,furniture_train,,,"[[array([[-4.5, -5.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
        [ 4.5, -9.5]]), array([[ 4.5, -9.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
@@ -6526,8 +6526,8 @@ furniture_train_024,furniture_train,,"[[array([[-4.5, -5.5],
        [ 5.5, 10.5]]), array([[ -5.5, -10.5],
        [  5.5, -10.5]]), array([[  5.5, -10.5],
        [  5.5,  10.5]]), array([[ -5.5, -10.5],
-       [ -5.5,  10.5]])]]",20,lax-drawing-furniture-all-074.png
-furniture_train_025,furniture_train,,"[[array([[-6.75, -2.25],
+       [ -5.5,  10.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-074.png
+furniture_train_025,furniture_train,,,"[[array([[-6.75, -2.25],
        [ 6.75, -2.25]]), array([[-6.75, -5.25],
        [ 6.75, -5.25]]), array([[ 6.75, -5.25],
        [ 6.75, -2.25]]), array([[-6.75, -5.25],
@@ -6543,8 +6543,8 @@ furniture_train_025,furniture_train,,"[[array([[-6.75, -2.25],
        [ 7.5,  6. ]]), array([[-7.5, -6. ],
        [ 7.5, -6. ]]), array([[ 7.5, -6. ],
        [ 7.5,  6. ]]), array([[-7.5, -6. ],
-       [-7.5,  6. ]])]]",16,lax-drawing-furniture-all-075.png
-furniture_train_026,furniture_train,,"[[array([[-4.5, -5.5],
+       [-7.5,  6. ]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-075.png
+furniture_train_026,furniture_train,,,"[[array([[-4.5, -5.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
        [ 4.5, -9.5]]), array([[ 4.5, -9.5],
        [ 4.5, -5.5]]), array([[-4.5, -9.5],
@@ -6660,8 +6660,8 @@ furniture_train_026,furniture_train,,"[[array([[-4.5, -5.5],
        [ 5.5, 10.5]]), array([[ -5.5, -10.5],
        [  5.5, -10.5]]), array([[  5.5, -10.5],
        [  5.5,  10.5]]), array([[ -5.5, -10.5],
-       [ -5.5,  10.5]])]]",92,lax-drawing-furniture-all-076.png
-furniture_train_027,furniture_train,,"[[array([[-4.5, -3. ],
+       [ -5.5,  10.5]])]]",92,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-076.png
+furniture_train_027,furniture_train,,,"[[array([[-4.5, -3. ],
        [ 4.5, -3. ]]), array([[-4.5, -7. ],
        [ 4.5, -7. ]]), array([[ 4.5, -7. ],
        [ 4.5, -3. ]]), array([[-4.5, -7. ],
@@ -6851,8 +6851,8 @@ furniture_train_027,furniture_train,,"[[array([[-4.5, -3. ],
        [ 5.5,  8. ]]), array([[-5.5, -8. ],
        [ 5.5, -8. ]]), array([[ 5.5, -8. ],
        [ 5.5,  8. ]]), array([[-5.5, -8. ],
-       [-5.5,  8. ]])]]",22,lax-drawing-furniture-all-077.png
-furniture_train_028,furniture_train,,"[[array([[-4.5, -0.5],
+       [-5.5,  8. ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-077.png
+furniture_train_028,furniture_train,,,"[[array([[-4.5, -0.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
        [ 4.5, -4.5]]), array([[ 4.5, -4.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
@@ -6864,8 +6864,8 @@ furniture_train_028,furniture_train,,"[[array([[-4.5, -0.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
        [ 5.5, -5.5]]), array([[ 5.5, -5.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
-       [-5.5,  5.5]])]]",12,lax-drawing-furniture-all-078.png
-furniture_train_029,furniture_train,,"[[array([[-4.5, -3. ],
+       [-5.5,  5.5]])]]",12,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-078.png
+furniture_train_029,furniture_train,,,"[[array([[-4.5, -3. ],
        [ 4.5, -3. ]]), array([[-4.5, -7. ],
        [ 4.5, -7. ]]), array([[ 4.5, -7. ],
        [ 4.5, -3. ]]), array([[-4.5, -7. ],
@@ -7079,8 +7079,8 @@ furniture_train_029,furniture_train,,"[[array([[-4.5, -3. ],
        [ 5.5,  8. ]]), array([[-5.5, -8. ],
        [ 5.5, -8. ]]), array([[ 5.5, -8. ],
        [ 5.5,  8. ]]), array([[-5.5, -8. ],
-       [-5.5,  8. ]])]]",28,lax-drawing-furniture-all-079.png
-furniture_train_030,furniture_train,,"[[array([[-4.5, -0.5],
+       [-5.5,  8. ]])]]",28,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-079.png
+furniture_train_030,furniture_train,,,"[[array([[-4.5, -0.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
        [ 4.5, -4.5]]), array([[ 4.5, -4.5],
        [ 4.5, -0.5]]), array([[-4.5, -4.5],
@@ -7224,8 +7224,8 @@ furniture_train_030,furniture_train,,"[[array([[-4.5, -0.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
        [ 5.5, -5.5]]), array([[ 5.5, -5.5],
        [ 5.5,  5.5]]), array([[-5.5, -5.5],
-       [-5.5,  5.5]])]]",20,lax-drawing-furniture-all-080.png
-furniture_train_031,furniture_train,,"[[array([[-6.   , -0.625],
+       [-5.5,  5.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-080.png
+furniture_train_031,furniture_train,,,"[[array([[-6.   , -0.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
        [ 6.   , -5.625]]), array([[ 6.   , -5.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
@@ -7253,8 +7253,8 @@ furniture_train_031,furniture_train,,"[[array([[-6.   , -0.625],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
        [ 7.25 , -6.875]]), array([[ 7.25 , -6.875],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
-       [-7.25 ,  6.875]])]]",16,lax-drawing-furniture-all-081.png
-furniture_train_032,furniture_train,,"[[array([[-6.75,  3.75],
+       [-7.25 ,  6.875]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-081.png
+furniture_train_032,furniture_train,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -7290,8 +7290,8 @@ furniture_train_032,furniture_train,,"[[array([[-6.75,  3.75],
        [7.5, 0. ]]), array([[ 6.5, -1. ],
        [ 7.5, -1. ]]), array([[ 7.5, -1. ],
        [ 7.5,  0. ]]), array([[ 6.5, -1. ],
-       [ 6.5,  0. ]])]]",24,lax-drawing-furniture-all-082.png
-furniture_train_033,furniture_train,,"[[array([[-6.   , -0.625],
+       [ 6.5,  0. ]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-082.png
+furniture_train_033,furniture_train,,,"[[array([[-6.   , -0.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
        [ 6.   , -5.625]]), array([[ 6.   , -5.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
@@ -7451,8 +7451,8 @@ furniture_train_033,furniture_train,,"[[array([[-6.   , -0.625],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
        [ 7.25 , -6.875]]), array([[ 7.25 , -6.875],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
-       [-7.25 ,  6.875]])]]",48,lax-drawing-furniture-all-083.png
-furniture_train_034,furniture_train,,"[[array([[-6.   , -0.625],
+       [-7.25 ,  6.875]])]]",48,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-083.png
+furniture_train_034,furniture_train,,,"[[array([[-6.   , -0.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
        [ 6.   , -5.625]]), array([[ 6.   , -5.625],
        [ 6.   , -0.625]]), array([[-6.   , -5.625],
@@ -7580,8 +7580,8 @@ furniture_train_034,furniture_train,,"[[array([[-6.   , -0.625],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
        [ 7.25 , -6.875]]), array([[ 7.25 , -6.875],
        [ 7.25 ,  6.875]]), array([[-7.25 , -6.875],
-       [-7.25 ,  6.875]])]]",16,lax-drawing-furniture-all-084.png
-furniture_train_035,furniture_train,,"[[array([[-6.75,  3.75],
+       [-7.25 ,  6.875]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-084.png
+furniture_train_035,furniture_train,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -7611,8 +7611,8 @@ furniture_train_035,furniture_train,,"[[array([[-6.75,  3.75],
        [7.5 , 8.25]]), array([[-7.5 ,  0.  ],
        [-7.5 ,  8.25]]), array([[-7.5, -1. ],
        [-7.5,  0. ]]), array([[ 7.5, -1. ],
-       [ 7.5,  0. ]])]]",18,lax-drawing-furniture-all-085.png
-furniture_train_036,furniture_train,,"[[array([[-6.75,  3.75],
+       [ 7.5,  0. ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-085.png
+furniture_train_036,furniture_train,,,"[[array([[-6.75,  3.75],
        [ 6.75,  3.75]]), array([[-6.75,  0.75],
        [ 6.75,  0.75]]), array([[6.75, 0.75],
        [6.75, 3.75]]), array([[-6.75,  0.75],
@@ -7748,8 +7748,8 @@ furniture_train_036,furniture_train,,"[[array([[-6.75,  3.75],
        [7.5, 0. ]]), array([[ 6.5, -3. ],
        [ 7.5, -3. ]]), array([[ 7.5, -3. ],
        [ 7.5,  0. ]]), array([[ 6.5, -3. ],
-       [ 6.5,  0. ]])]]",24,lax-drawing-furniture-all-086.png
-furniture_train_037,furniture_train,,"[[array([[-6.  , -3.75],
+       [ 6.5,  0. ]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-086.png
+furniture_train_037,furniture_train,,,"[[array([[-6.  , -3.75],
        [ 6.  , -3.75]]), array([[-6.  , -8.75],
        [ 6.  , -8.75]]), array([[ 6.  , -8.75],
        [ 6.  , -3.75]]), array([[-6.  , -8.75],
@@ -7939,8 +7939,8 @@ furniture_train_037,furniture_train,,"[[array([[-6.  , -3.75],
        [ 7.25, 10.  ]]), array([[ -7.25, -10.  ],
        [  7.25, -10.  ]]), array([[  7.25, -10.  ],
        [  7.25,  10.  ]]), array([[ -7.25, -10.  ],
-       [ -7.25,  10.  ]])]]",22,lax-drawing-furniture-all-087.png
-furniture_train_038,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ -7.25,  10.  ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-087.png
+furniture_train_038,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -7960,8 +7960,8 @@ furniture_train_038,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-088.png
-furniture_train_039,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-088.png
+furniture_train_039,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -8089,8 +8089,8 @@ furniture_train_039,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",16,lax-drawing-furniture-all-089.png
-furniture_train_040,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-089.png
+furniture_train_040,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -8160,8 +8160,8 @@ furniture_train_040,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-090.png
-furniture_train_041,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-090.png
+furniture_train_041,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -8222,8 +8222,8 @@ furniture_train_041,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",27,lax-drawing-furniture-all-091.png
-furniture_train_042,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.25, -4.5 ]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-091.png
+furniture_train_042,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -8243,8 +8243,8 @@ furniture_train_042,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-092.png
-furniture_train_043,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-092.png
+furniture_train_043,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -8370,8 +8370,8 @@ furniture_train_043,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-093.png
-furniture_train_044,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-093.png
+furniture_train_044,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -8427,8 +8427,8 @@ furniture_train_044,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-094.png
-furniture_train_045,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-094.png
+furniture_train_045,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -8452,8 +8452,8 @@ furniture_train_045,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",24,lax-drawing-furniture-all-095.png
-furniture_train_046,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 6.5, -4.5]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-095.png
+furniture_train_046,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -8530,8 +8530,8 @@ furniture_train_046,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-096.png
-furniture_train_047,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-096.png
+furniture_train_047,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -8557,8 +8557,8 @@ furniture_train_047,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-097.png
-furniture_train_048,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-097.png
+furniture_train_048,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -8613,8 +8613,8 @@ furniture_train_048,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-098.png
-furniture_train_049,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-098.png
+furniture_train_049,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -8719,8 +8719,8 @@ furniture_train_049,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-099.png
-furniture_train_050,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-099.png
+furniture_train_050,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -8798,8 +8798,8 @@ furniture_train_050,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-100.png
-furniture_train_051,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-100.png
+furniture_train_051,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -8927,8 +8927,8 @@ furniture_train_051,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",16,lax-drawing-furniture-all-101.png
-furniture_train_052,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-101.png
+furniture_train_052,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -9033,8 +9033,8 @@ furniture_train_052,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-102.png
-furniture_train_053,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-102.png
+furniture_train_053,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -9095,8 +9095,8 @@ furniture_train_053,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-103.png
-furniture_train_054,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-103.png
+furniture_train_054,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -9149,8 +9149,8 @@ furniture_train_054,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",25,lax-drawing-furniture-all-104.png
-furniture_train_055,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 6.5, -4.5]])]]",25,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-104.png
+furniture_train_055,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -9278,8 +9278,8 @@ furniture_train_055,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",16,lax-drawing-furniture-all-105.png
-furniture_train_056,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-105.png
+furniture_train_056,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -9299,8 +9299,8 @@ furniture_train_056,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-106.png
-furniture_train_057,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-106.png
+furniture_train_057,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -9378,8 +9378,8 @@ furniture_train_057,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",16,lax-drawing-furniture-all-107.png
-furniture_train_058,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-107.png
+furniture_train_058,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -9461,8 +9461,8 @@ furniture_train_058,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",20,lax-drawing-furniture-all-108.png
-furniture_train_059,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 6.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-108.png
+furniture_train_059,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -9594,8 +9594,8 @@ furniture_train_059,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",20,lax-drawing-furniture-all-109.png
-furniture_train_060,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 6.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-109.png
+furniture_train_060,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -9721,8 +9721,8 @@ furniture_train_060,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-110.png
-furniture_train_061,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-110.png
+furniture_train_061,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -9750,8 +9750,8 @@ furniture_train_061,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-111.png
-furniture_train_062,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-111.png
+furniture_train_062,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -9778,8 +9778,8 @@ furniture_train_062,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-112.png
-furniture_train_063,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-112.png
+furniture_train_063,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -9847,8 +9847,8 @@ furniture_train_063,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",12,lax-drawing-furniture-all-113.png
-furniture_train_064,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",12,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-113.png
+furniture_train_064,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -9918,8 +9918,8 @@ furniture_train_064,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",14,lax-drawing-furniture-all-114.png
-furniture_train_065,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-114.png
+furniture_train_065,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -10051,8 +10051,8 @@ furniture_train_065,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",20,lax-drawing-furniture-all-115.png
-furniture_train_066,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 7.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-115.png
+furniture_train_066,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -10128,8 +10128,8 @@ furniture_train_066,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",14,lax-drawing-furniture-all-116.png
-furniture_train_067,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-116.png
+furniture_train_067,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -10157,8 +10157,8 @@ furniture_train_067,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-117.png
-furniture_train_068,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-117.png
+furniture_train_068,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -10286,8 +10286,8 @@ furniture_train_068,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",16,lax-drawing-furniture-all-118.png
-furniture_train_069,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-118.png
+furniture_train_069,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -10311,8 +10311,8 @@ furniture_train_069,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",24,lax-drawing-furniture-all-119.png
-furniture_train_070,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.25, -4.5 ]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-119.png
+furniture_train_070,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -10444,8 +10444,8 @@ furniture_train_070,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",20,lax-drawing-furniture-all-120.png
-furniture_train_071,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-120.png
+furniture_train_071,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -10463,8 +10463,8 @@ furniture_train_071,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",18,lax-drawing-furniture-all-121.png
-furniture_train_072,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-121.png
+furniture_train_072,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -10592,8 +10592,8 @@ furniture_train_072,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",16,lax-drawing-furniture-all-122.png
-furniture_train_073,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-122.png
+furniture_train_073,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -10613,8 +10613,8 @@ furniture_train_073,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-123.png
-furniture_train_074,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-123.png
+furniture_train_074,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -10670,8 +10670,8 @@ furniture_train_074,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-124.png
-furniture_train_075,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-124.png
+furniture_train_075,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -10753,8 +10753,8 @@ furniture_train_075,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",20,lax-drawing-furniture-all-125.png
-furniture_train_076,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 7.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-125.png
+furniture_train_076,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -10830,8 +10830,8 @@ furniture_train_076,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-126.png
-furniture_train_077,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-126.png
+furniture_train_077,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -10863,8 +10863,8 @@ furniture_train_077,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",26,lax-drawing-furniture-all-127.png
-furniture_train_078,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.25, -4.5 ]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-127.png
+furniture_train_078,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -10883,8 +10883,8 @@ furniture_train_078,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",19,lax-drawing-furniture-all-128.png
-furniture_train_079,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-128.png
+furniture_train_079,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -10958,8 +10958,8 @@ furniture_train_079,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",18,lax-drawing-furniture-all-129.png
-furniture_train_080,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.25, -4.5 ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-129.png
+furniture_train_080,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -11014,8 +11014,8 @@ furniture_train_080,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-130.png
-furniture_train_081,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-130.png
+furniture_train_081,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -11097,8 +11097,8 @@ furniture_train_081,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",20,lax-drawing-furniture-all-131.png
-furniture_train_082,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-131.png
+furniture_train_082,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -11209,8 +11209,8 @@ furniture_train_082,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-132.png
-furniture_train_083,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-132.png
+furniture_train_083,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -11287,8 +11287,8 @@ furniture_train_083,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",15,lax-drawing-furniture-all-133.png
-furniture_train_084,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",15,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-133.png
+furniture_train_084,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -11364,8 +11364,8 @@ furniture_train_084,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",14,lax-drawing-furniture-all-134.png
-furniture_train_085,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-134.png
+furniture_train_085,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -11418,8 +11418,8 @@ furniture_train_085,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",25,lax-drawing-furniture-all-135.png
-furniture_train_086,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 7.25, -4.5 ]])]]",25,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-135.png
+furniture_train_086,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -11495,8 +11495,8 @@ furniture_train_086,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",14,lax-drawing-furniture-all-136.png
-furniture_train_087,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-136.png
+furniture_train_087,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -11565,8 +11565,8 @@ furniture_train_087,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",13,lax-drawing-furniture-all-137.png
-furniture_train_088,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",13,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-137.png
+furniture_train_088,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -11622,8 +11622,8 @@ furniture_train_088,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-138.png
-furniture_train_089,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-138.png
+furniture_train_089,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -11670,8 +11670,8 @@ furniture_train_089,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",19,lax-drawing-furniture-all-139.png
-furniture_train_090,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-139.png
+furniture_train_090,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -11803,8 +11803,8 @@ furniture_train_090,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",20,lax-drawing-furniture-all-140.png
-furniture_train_091,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-140.png
+furniture_train_091,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -11836,8 +11836,8 @@ furniture_train_091,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",26,lax-drawing-furniture-all-141.png
-furniture_train_092,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 6.5, -4.5]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-141.png
+furniture_train_092,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -11944,8 +11944,8 @@ furniture_train_092,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",23,lax-drawing-furniture-all-142.png
-furniture_train_093,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-142.png
+furniture_train_093,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -11971,8 +11971,8 @@ furniture_train_093,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-143.png
-furniture_train_094,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-143.png
+furniture_train_094,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -12050,8 +12050,8 @@ furniture_train_094,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",16,lax-drawing-furniture-all-144.png
-furniture_train_095,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-144.png
+furniture_train_095,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -12156,8 +12156,8 @@ furniture_train_095,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-145.png
-furniture_train_096,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-145.png
+furniture_train_096,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -12234,8 +12234,8 @@ furniture_train_096,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",15,lax-drawing-furniture-all-146.png
-furniture_train_097,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",15,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-146.png
+furniture_train_097,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -12367,8 +12367,8 @@ furniture_train_097,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",20,lax-drawing-furniture-all-147.png
-furniture_train_098,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 6.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-147.png
+furniture_train_098,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -12450,8 +12450,8 @@ furniture_train_098,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",26,lax-drawing-furniture-all-148.png
-furniture_train_099,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 6.5, -4.5]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-148.png
+furniture_train_099,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -12528,8 +12528,8 @@ furniture_train_099,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",15,lax-drawing-furniture-all-149.png
-furniture_train_100,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",15,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-149.png
+furniture_train_100,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -12578,8 +12578,8 @@ furniture_train_100,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-150.png
-furniture_train_101,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-150.png
+furniture_train_101,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -12655,8 +12655,8 @@ furniture_train_101,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-151.png
-furniture_train_102,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-151.png
+furniture_train_102,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -12761,8 +12761,8 @@ furniture_train_102,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-152.png
-furniture_train_103,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-152.png
+furniture_train_103,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -12788,8 +12788,8 @@ furniture_train_103,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-153.png
-furniture_train_104,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-153.png
+furniture_train_104,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -12808,8 +12808,8 @@ furniture_train_104,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",19,lax-drawing-furniture-all-154.png
-furniture_train_105,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-154.png
+furniture_train_105,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -12885,8 +12885,8 @@ furniture_train_105,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-155.png
-furniture_train_106,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-155.png
+furniture_train_106,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -12918,8 +12918,8 @@ furniture_train_106,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",26,lax-drawing-furniture-all-156.png
-furniture_train_107,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 6.5, -4.5]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-156.png
+furniture_train_107,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -13001,8 +13001,8 @@ furniture_train_107,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",26,lax-drawing-furniture-all-157.png
-furniture_train_108,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.25, -4.5 ]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-157.png
+furniture_train_108,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -13051,8 +13051,8 @@ furniture_train_108,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-158.png
-furniture_train_109,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-158.png
+furniture_train_109,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -13101,8 +13101,8 @@ furniture_train_109,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-159.png
-furniture_train_110,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-159.png
+furniture_train_110,furniture_train,,,"[[array([[-6.00000000e+00,  7.50000000e-01],
        [-6.01753458e+00,  9.11227830e-01],
        [-6.06931844e+00,  1.06491683e+00],
        [-6.15293020e+00,  1.20388066e+00],
@@ -13170,8 +13170,8 @@ furniture_train_110,furniture_train,,"[[array([[-6.00000000e+00,  7.50000000e-01
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",12,lax-drawing-furniture-all-160.png
-furniture_train_111,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",12,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-160.png
+furniture_train_111,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -13277,8 +13277,8 @@ furniture_train_111,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-161.png
-furniture_train_112,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-161.png
+furniture_train_112,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -13383,8 +13383,8 @@ furniture_train_112,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-162.png
-furniture_train_113,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-162.png
+furniture_train_113,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -13411,8 +13411,8 @@ furniture_train_113,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-163.png
-furniture_train_114,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-163.png
+furniture_train_114,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -13490,8 +13490,8 @@ furniture_train_114,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-164.png
-furniture_train_115,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-164.png
+furniture_train_115,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -13561,8 +13561,8 @@ furniture_train_115,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-165.png
-furniture_train_116,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-165.png
+furniture_train_116,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -13588,8 +13588,8 @@ furniture_train_116,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-166.png
-furniture_train_117,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-166.png
+furniture_train_117,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -13663,8 +13663,8 @@ furniture_train_117,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",18,lax-drawing-furniture-all-167.png
-furniture_train_118,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 6.5, -4.5]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-167.png
+furniture_train_118,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -13734,8 +13734,8 @@ furniture_train_118,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-168.png
-furniture_train_119,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-168.png
+furniture_train_119,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -13763,8 +13763,8 @@ furniture_train_119,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-169.png
-furniture_train_120,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-169.png
+furniture_train_120,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -13817,8 +13817,8 @@ furniture_train_120,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",25,lax-drawing-furniture-all-170.png
-furniture_train_121,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 6.5, -4.5]])]]",25,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-170.png
+furniture_train_121,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -13929,8 +13929,8 @@ furniture_train_121,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-171.png
-furniture_train_122,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-171.png
+furniture_train_122,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -14041,8 +14041,8 @@ furniture_train_122,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-172.png
-furniture_train_123,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-172.png
+furniture_train_123,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -14124,8 +14124,8 @@ furniture_train_123,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",26,lax-drawing-furniture-all-173.png
-furniture_train_124,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.25, -4.5 ]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-173.png
+furniture_train_124,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -14153,8 +14153,8 @@ furniture_train_124,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-174.png
-furniture_train_125,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-174.png
+furniture_train_125,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -14231,8 +14231,8 @@ furniture_train_125,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",15,lax-drawing-furniture-all-175.png
-furniture_train_126,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",15,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-175.png
+furniture_train_126,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -14288,8 +14288,8 @@ furniture_train_126,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-176.png
-furniture_train_127,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-176.png
+furniture_train_127,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -14344,8 +14344,8 @@ furniture_train_127,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-177.png
-furniture_train_128,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-177.png
+furniture_train_128,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -14365,8 +14365,8 @@ furniture_train_128,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-178.png
-furniture_train_129,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-178.png
+furniture_train_129,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -14413,8 +14413,8 @@ furniture_train_129,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",19,lax-drawing-furniture-all-179.png
-furniture_train_130,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-179.png
+furniture_train_130,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -14488,8 +14488,8 @@ furniture_train_130,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",18,lax-drawing-furniture-all-180.png
-furniture_train_131,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.25, -4.5 ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-180.png
+furniture_train_131,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -14538,8 +14538,8 @@ furniture_train_131,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-181.png
-furniture_train_132,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-181.png
+furniture_train_132,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -14557,8 +14557,8 @@ furniture_train_132,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",18,lax-drawing-furniture-all-182.png
-furniture_train_133,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-182.png
+furniture_train_133,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -14665,8 +14665,8 @@ furniture_train_133,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",23,lax-drawing-furniture-all-183.png
-furniture_train_134,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-183.png
+furniture_train_134,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -14692,8 +14692,8 @@ furniture_train_134,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",20,lax-drawing-furniture-all-184.png
-furniture_train_135,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-184.png
+furniture_train_135,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -14763,8 +14763,8 @@ furniture_train_135,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [-7.5, -4.5]]), array([[-2.5, -7.5],
        [-2.5, -4.5]]), array([[ 2.5, -7.5],
        [ 2.5, -4.5]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",14,lax-drawing-furniture-all-185.png
-furniture_train_136,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-185.png
+furniture_train_136,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -14783,8 +14783,8 @@ furniture_train_136,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",19,lax-drawing-furniture-all-186.png
-furniture_train_137,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-186.png
+furniture_train_137,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -14832,8 +14832,8 @@ furniture_train_137,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-187.png
-furniture_train_138,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-187.png
+furniture_train_138,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -14910,8 +14910,8 @@ furniture_train_138,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-188.png
-furniture_train_139,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-188.png
+furniture_train_139,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -14989,8 +14989,8 @@ furniture_train_139,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",16,lax-drawing-furniture-all-189.png
-furniture_train_140,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-189.png
+furniture_train_140,furniture_train,,,"[[array([[-4.50000000e+00,  1.50000000e+00],
        [-4.53506917e+00,  1.82245566e+00],
        [-4.63863687e+00,  2.12983365e+00],
        [-4.80586040e+00,  2.40776132e+00],
@@ -15059,8 +15059,8 @@ furniture_train_140,furniture_train,,"[[array([[-4.50000000e+00,  1.50000000e+00
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",13,lax-drawing-furniture-all-190.png
-furniture_train_141,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.5, -4.5]])]]",13,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-190.png
+furniture_train_141,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -15092,8 +15092,8 @@ furniture_train_141,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",26,lax-drawing-furniture-all-191.png
-furniture_train_142,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.25, -4.5 ]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-191.png
+furniture_train_142,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -15199,8 +15199,8 @@ furniture_train_142,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-192.png
-furniture_train_143,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-192.png
+furniture_train_143,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -15257,8 +15257,8 @@ furniture_train_143,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",23,lax-drawing-furniture-all-193.png
-furniture_train_144,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-193.png
+furniture_train_144,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -15305,8 +15305,8 @@ furniture_train_144,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",19,lax-drawing-furniture-all-194.png
-furniture_train_145,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",19,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-194.png
+furniture_train_145,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -15362,8 +15362,8 @@ furniture_train_145,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-195.png
-furniture_train_146,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-195.png
+furniture_train_146,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -15469,8 +15469,8 @@ furniture_train_146,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-196.png
-furniture_train_147,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-196.png
+furniture_train_147,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -15552,8 +15552,8 @@ furniture_train_147,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",26,lax-drawing-furniture-all-197.png
-furniture_train_148,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 6.5, -4.5]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-197.png
+furniture_train_148,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -15630,8 +15630,8 @@ furniture_train_148,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[-3.061617e-17, -5.500000e+00],
        [ 3.061617e-17, -4.500000e+00]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-198.png
-furniture_train_149,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-198.png
+furniture_train_149,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -15738,8 +15738,8 @@ furniture_train_149,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5, -4.5]]), array([[-2.5, -5.5],
        [-2.5, -4.5]]), array([[ 2.5, -5.5],
        [ 2.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",23,lax-drawing-furniture-all-199.png
-furniture_train_150,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.5, -4.5]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-199.png
+furniture_train_150,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -15800,8 +15800,8 @@ furniture_train_150,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-200.png
-furniture_train_151,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-200.png
+furniture_train_151,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -15856,8 +15856,8 @@ furniture_train_151,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5,  0. ]]), array([[-7.5, -4.5],
        [-7.5,  0. ]]), array([[-7.5, -5.5],
        [-7.5, -4.5]]), array([[ 7.5, -5.5],
-       [ 7.5, -4.5]])]]",21,lax-drawing-furniture-all-201.png
-furniture_train_152,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 7.5, -4.5]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-201.png
+furniture_train_152,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -15906,8 +15906,8 @@ furniture_train_152,furniture_train,,"[[array([[-8.25,  3.  ],
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",21,lax-drawing-furniture-all-202.png
-furniture_train_153,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",21,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-202.png
+furniture_train_153,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -15925,8 +15925,8 @@ furniture_train_153,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -5.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",18,lax-drawing-furniture-all-203.png
-furniture_train_154,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-203.png
+furniture_train_154,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -16004,8 +16004,8 @@ furniture_train_154,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",16,lax-drawing-furniture-all-204.png
-furniture_train_155,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 8.25, -4.5 ]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-204.png
+furniture_train_155,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -16083,8 +16083,8 @@ furniture_train_155,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",16,lax-drawing-furniture-all-205.png
-furniture_train_156,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 8.25, -4.5 ]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-205.png
+furniture_train_156,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -16160,8 +16160,8 @@ furniture_train_156,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-206.png
-furniture_train_157,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-206.png
+furniture_train_157,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -16272,8 +16272,8 @@ furniture_train_157,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",27,lax-drawing-furniture-all-207.png
-furniture_train_158,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00],
+       [ 7.25, -4.5 ]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-207.png
+furniture_train_158,furniture_train,,,"[[array([[-5.25000000e+00,  1.50000000e+00],
        [-5.28506917e+00,  1.82245566e+00],
        [-5.38863687e+00,  2.12983365e+00],
        [-5.55586040e+00,  2.40776132e+00],
@@ -16400,8 +16400,8 @@ furniture_train_158,furniture_train,,"[[array([[-5.25000000e+00,  1.50000000e+00
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",15,lax-drawing-furniture-all-208.png
-furniture_train_159,furniture_train,,"[[array([[-8.25,  3.  ],
+       [ 8.25, -4.5 ]])]]",15,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-208.png
+furniture_train_159,furniture_train,,,"[[array([[-8.25,  3.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  3.  ]]), array([[-8.25,  0.  ],
@@ -16433,8 +16433,8 @@ furniture_train_159,furniture_train,,"[[array([[-8.25,  3.  ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",26,lax-drawing-furniture-all-209.png
-furniture_train_160,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.25, -4.5 ]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-209.png
+furniture_train_160,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -16560,8 +16560,8 @@ furniture_train_160,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [ 8.25,  0.  ]]), array([[-8.25, -4.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",14,lax-drawing-furniture-all-210.png
-furniture_train_161,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 8.25, -4.5 ]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-210.png
+furniture_train_161,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -16622,8 +16622,8 @@ furniture_train_161,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-211.png
-furniture_train_162,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-211.png
+furniture_train_162,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -16671,8 +16671,8 @@ furniture_train_162,furniture_train,,"[[array([[-7.5,  3. ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",20,lax-drawing-furniture-all-212.png
-furniture_train_163,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01],
+       [ 7.5, -4.5]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-212.png
+furniture_train_163,furniture_train,,,"[[array([[-6.75000000e+00,  7.50000000e-01],
        [-6.76753458e+00,  9.11227830e-01],
        [-6.81931844e+00,  1.06491683e+00],
        [-6.90293020e+00,  1.20388066e+00],
@@ -16754,8 +16754,8 @@ furniture_train_163,furniture_train,,"[[array([[-6.75000000e+00,  7.50000000e-01
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",20,lax-drawing-furniture-all-213.png
-furniture_train_164,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.25, -4.5 ]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-213.png
+furniture_train_164,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -16861,8 +16861,8 @@ furniture_train_164,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [-7.5,  0. ]]), array([[-7.5, -7.5],
        [-7.5, -4.5]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 7.5, -7.5],
-       [ 7.5, -4.5]])]]",22,lax-drawing-furniture-all-214.png
-furniture_train_165,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 7.5, -4.5]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-214.png
+furniture_train_165,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -16973,8 +16973,8 @@ furniture_train_165,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",27,lax-drawing-furniture-all-215.png
-furniture_train_166,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 6.5, -4.5]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-215.png
+furniture_train_166,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -17030,8 +17030,8 @@ furniture_train_166,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25,  0.  ]]), array([[-8.25, -7.5 ],
        [-8.25, -4.5 ]]), array([[-9.18485099e-17, -7.50000000e+00],
        [ 9.18485099e-17, -4.50000000e+00]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-216.png
-furniture_train_167,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-216.png
+furniture_train_167,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -17092,8 +17092,8 @@ furniture_train_167,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
        [ 8.25, -5.5 ]]), array([[ 8.25, -5.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -5.5 ],
-       [ 7.25, -4.5 ]])]]",27,lax-drawing-furniture-all-217.png
-furniture_train_168,furniture_train,,"[[array([[-7.5,  3. ],
+       [ 7.25, -4.5 ]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-217.png
+furniture_train_168,furniture_train,,,"[[array([[-7.5,  3. ],
        [-6. ,  3. ]]), array([[-7.5,  0. ],
        [-6. ,  0. ]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-7.5,  0. ],
@@ -17125,8 +17125,8 @@ furniture_train_168,furniture_train,,"[[array([[-7.5,  3. ],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
        [ 7.5, -7.5]]), array([[ 7.5, -7.5],
        [ 7.5, -4.5]]), array([[ 6.5, -7.5],
-       [ 6.5, -4.5]])]]",26,lax-drawing-furniture-all-218.png
-furniture_train_169,furniture_train,,"[[array([[-7.5 ,  1.5 ],
+       [ 6.5, -4.5]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-218.png
+furniture_train_169,furniture_train,,,"[[array([[-7.5 ,  1.5 ],
        [-6.75,  1.5 ]]), array([[-7.5 ,  0.  ],
        [-6.75,  0.  ]]), array([[-6.75,  0.  ],
        [-6.75,  1.5 ]]), array([[-7.5,  0. ],
@@ -17158,8 +17158,8 @@ furniture_train_169,furniture_train,,"[[array([[-7.5 ,  1.5 ],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
        [ 7.5, -5.5]]), array([[ 7.5, -5.5],
        [ 7.5, -4.5]]), array([[ 6.5, -5.5],
-       [ 6.5, -4.5]])]]",26,lax-drawing-furniture-all-219.png
-furniture_train_170,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 6.5, -4.5]])]]",26,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-219.png
+furniture_train_170,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -17270,8 +17270,8 @@ furniture_train_170,furniture_train,,"[[array([[-8.25,  1.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
        [ 8.25, -7.5 ]]), array([[ 8.25, -7.5 ],
        [ 8.25, -4.5 ]]), array([[ 7.25, -7.5 ],
-       [ 7.25, -4.5 ]])]]",27,lax-drawing-furniture-all-220.png
-furniture_train_171,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 7.25, -4.5 ]])]]",27,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-220.png
+furniture_train_171,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -17349,8 +17349,8 @@ furniture_train_171,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -5.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -5.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -5.5 ],
-       [ 8.25, -4.5 ]])]]",22,lax-drawing-furniture-all-221.png
-furniture_train_172,furniture_train,,"[[array([[-8.25,  1.5 ],
+       [ 8.25, -4.5 ]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-221.png
+furniture_train_172,furniture_train,,,"[[array([[-8.25,  1.5 ],
        [-7.5 ,  1.5 ]]), array([[-8.25,  0.  ],
        [-7.5 ,  0.  ]]), array([[-7.5,  0. ],
        [-7.5,  1.5]]), array([[-8.25,  0.  ],
@@ -17407,8 +17407,8 @@ furniture_train_172,furniture_train,,"[[array([[-8.25,  1.5 ],
        [-8.25, -4.5 ]]), array([[-2.75, -7.5 ],
        [-2.75, -4.5 ]]), array([[ 2.75, -7.5 ],
        [ 2.75, -4.5 ]]), array([[ 8.25, -7.5 ],
-       [ 8.25, -4.5 ]])]]",23,lax-drawing-furniture-all-222.png
-furniture_train_173,furniture_train,,"[[array([[-10.,   0.],
+       [ 8.25, -4.5 ]])]]",23,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-222.png
+furniture_train_173,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17494,8 +17494,8 @@ furniture_train_173,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",24,lax-drawing-furniture-all-223.png
-furniture_train_174,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-223.png
+furniture_train_174,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17581,8 +17581,8 @@ furniture_train_174,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",24,lax-drawing-furniture-all-224.png
-furniture_train_175,furniture_train,,"[[array([[-6.,  0.],
+       [ 9., -1.]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-224.png
+furniture_train_175,furniture_train,,,"[[array([[-6.,  0.],
        [ 6.,  0.]]), array([[-6., -1.],
        [ 6., -1.]]), array([[ 6., -1.],
        [ 6.,  0.]]), array([[-6., -1.],
@@ -17602,8 +17602,8 @@ furniture_train_175,furniture_train,,"[[array([[-6.,  0.],
        [ 6., -1.]]), array([[ 5., -5.],
        [ 6., -5.]]), array([[ 6., -5.],
        [ 6., -1.]]), array([[ 5., -5.],
-       [ 5., -1.]])]]",20,lax-drawing-furniture-all-225.png
-furniture_train_176,furniture_train,,"[[array([[-10.,   0.],
+       [ 5., -1.]])]]",20,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-225.png
+furniture_train_176,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17625,8 +17625,8 @@ furniture_train_176,furniture_train,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",16,lax-drawing-furniture-all-226.png
-furniture_train_177,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-226.png
+furniture_train_177,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17664,8 +17664,8 @@ furniture_train_177,furniture_train,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",32,lax-drawing-furniture-all-227.png
-furniture_train_178,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",32,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-227.png
+furniture_train_178,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17745,8 +17745,8 @@ furniture_train_178,furniture_train,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",18,lax-drawing-furniture-all-228.png
-furniture_train_179,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-228.png
+furniture_train_179,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17840,8 +17840,8 @@ furniture_train_179,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -2.],
        [10., -2.]]), array([[10., -2.],
        [10., -1.]]), array([[ 9., -2.],
-       [ 9., -1.]])]]",38,lax-drawing-furniture-all-229.png
-furniture_train_180,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",38,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-229.png
+furniture_train_180,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17935,8 +17935,8 @@ furniture_train_180,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",38,lax-drawing-furniture-all-230.png
-furniture_train_181,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",38,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-230.png
+furniture_train_181,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -17980,8 +17980,8 @@ furniture_train_181,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -2.],
        [10., -2.]]), array([[10., -2.],
        [10., -1.]]), array([[ 9., -2.],
-       [ 9., -1.]])]]",38,lax-drawing-furniture-all-231.png
-furniture_train_182,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",38,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-231.png
+furniture_train_182,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18059,8 +18059,8 @@ furniture_train_182,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -2.],
        [10., -2.]]), array([[10., -2.],
        [10., -1.]]), array([[ 9., -2.],
-       [ 9., -1.]])]]",22,lax-drawing-furniture-all-232.png
-furniture_train_183,furniture_train,,"[[array([[-6.,  0.],
+       [ 9., -1.]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-232.png
+furniture_train_183,furniture_train,,,"[[array([[-6.,  0.],
        [ 6.,  0.]]), array([[-6., -1.],
        [ 6., -1.]]), array([[ 6., -1.],
        [ 6.,  0.]]), array([[-6., -1.],
@@ -18074,8 +18074,8 @@ furniture_train_183,furniture_train,,"[[array([[-6.,  0.],
        [0., 3.]]), array([[-6.,  0.],
        [-6.,  3.]]), array([[-6., -2.],
        [-6., -1.]]), array([[ 6., -2.],
-       [ 6., -1.]])]]",14,lax-drawing-furniture-all-233.png
-furniture_train_184,furniture_train,,"[[array([[-10.,   0.],
+       [ 6., -1.]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-233.png
+furniture_train_184,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18163,8 +18163,8 @@ furniture_train_184,furniture_train,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -2.],
        [-10.,  -1.]]), array([[10., -2.],
-       [10., -1.]])]]",32,lax-drawing-furniture-all-234.png
-furniture_train_185,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",32,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-234.png
+furniture_train_185,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18202,8 +18202,8 @@ furniture_train_185,furniture_train,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",32,lax-drawing-furniture-all-235.png
-furniture_train_186,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",32,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-235.png
+furniture_train_186,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18283,8 +18283,8 @@ furniture_train_186,furniture_train,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -2.],
        [-10.,  -1.]]), array([[10., -2.],
-       [10., -1.]])]]",18,lax-drawing-furniture-all-236.png
-furniture_train_187,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-236.png
+furniture_train_187,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18364,8 +18364,8 @@ furniture_train_187,furniture_train,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",18,lax-drawing-furniture-all-237.png
-furniture_train_188,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",18,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-237.png
+furniture_train_188,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18409,8 +18409,8 @@ furniture_train_188,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",38,lax-drawing-furniture-all-238.png
-furniture_train_189,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",38,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-238.png
+furniture_train_189,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18496,8 +18496,8 @@ furniture_train_189,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -2.],
        [10., -2.]]), array([[10., -2.],
        [10., -1.]]), array([[ 9., -2.],
-       [ 9., -1.]])]]",24,lax-drawing-furniture-all-239.png
-furniture_train_190,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-239.png
+furniture_train_190,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18525,8 +18525,8 @@ furniture_train_190,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",22,lax-drawing-furniture-all-240.png
-furniture_train_191,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-240.png
+furniture_train_191,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18614,8 +18614,8 @@ furniture_train_191,furniture_train,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -2.],
        [-10.,  -1.]]), array([[10., -2.],
-       [10., -1.]])]]",32,lax-drawing-furniture-all-241.png
-furniture_train_192,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",32,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-241.png
+furniture_train_192,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18693,8 +18693,8 @@ furniture_train_192,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",22,lax-drawing-furniture-all-242.png
-furniture_train_193,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",22,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-242.png
+furniture_train_193,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18782,8 +18782,8 @@ furniture_train_193,furniture_train,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",32,lax-drawing-furniture-all-243.png
-furniture_train_194,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",32,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-243.png
+furniture_train_194,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18871,8 +18871,8 @@ furniture_train_194,furniture_train,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",32,lax-drawing-furniture-all-244.png
-furniture_train_195,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",32,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-244.png
+furniture_train_195,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18886,8 +18886,8 @@ furniture_train_195,furniture_train,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -5.],
        [-10.,  -1.]]), array([[10., -5.],
-       [10., -1.]])]]",14,lax-drawing-furniture-all-245.png
-furniture_train_196,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-245.png
+furniture_train_196,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -18909,8 +18909,8 @@ furniture_train_196,furniture_train,,"[[array([[-10.,   0.],
        [10.,  6.]]), array([[0., 0.],
        [0., 6.]]), array([[-10.,  -2.],
        [-10.,  -1.]]), array([[10., -2.],
-       [10., -1.]])]]",16,lax-drawing-furniture-all-246.png
-furniture_train_197,furniture_train,,"[[array([[-10.,   0.],
+       [10., -1.]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-246.png
+furniture_train_197,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -19046,8 +19046,8 @@ furniture_train_197,furniture_train,,"[[array([[-10.,   0.],
        [10., -1.]]), array([[ 9., -5.],
        [10., -5.]]), array([[10., -5.],
        [10., -1.]]), array([[ 9., -5.],
-       [ 9., -1.]])]]",24,lax-drawing-furniture-all-247.png
-furniture_train_198,furniture_train,,"[[array([[-10.,   0.],
+       [ 9., -1.]])]]",24,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-247.png
+furniture_train_198,furniture_train,,,"[[array([[-10.,   0.],
        [ 10.,   0.]]), array([[-10.,  -1.],
        [ 10.,  -1.]]), array([[10., -1.],
        [10.,  0.]]), array([[-10.,  -1.],
@@ -19069,8 +19069,8 @@ furniture_train_198,furniture_train,,"[[array([[-10.,   0.],
        [0., 6.]]), array([[-10.,   0.],
        [-10.,   6.]]), array([[-10.,  -2.],
        [-10.,  -1.]]), array([[10., -2.],
-       [10., -1.]])]]",16,lax-drawing-furniture-all-248.png
-furniture_train_199,furniture_train,,"[[array([[-6.,  0.],
+       [10., -1.]])]]",16,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-248.png
+furniture_train_199,furniture_train,,,"[[array([[-6.,  0.],
        [ 6.,  0.]]), array([[-6., -1.],
        [ 6., -1.]]), array([[ 6., -1.],
        [ 6.,  0.]]), array([[-6., -1.],
@@ -19084,4 +19084,4 @@ furniture_train_199,furniture_train,,"[[array([[-6.,  0.],
        [6., 3.]]), array([[0., 0.],
        [0., 3.]]), array([[-6., -2.],
        [-6., -1.]]), array([[ 6., -2.],
-       [ 6., -1.]])]]",14,lax-drawing-furniture-all-249.png
+       [ 6., -1.]])]]",14,https://lax-drawing-furniture-all-all.s3.amazonaws.com/lax-drawing-furniture-all-all-249.png

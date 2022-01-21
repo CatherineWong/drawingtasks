@@ -449,7 +449,8 @@ class DrawingTask(Task):
             "n_strokes": len(strokes),
         }
         # Add any synthetic abstractions we have. Take the cross product of params.
-        summary.update(self._get_crossed_abstractions(self.synthetic_abstractions))
+        if "program" in self.task_generator_name:
+            summary.update(self._get_crossed_abstractions(self.synthetic_abstractions))
         return summary
 
     def _get_crossed_abstractions(self, synthetic_abstractions):

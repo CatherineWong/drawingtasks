@@ -5,25 +5,28 @@ Defines TaskGenerators that produce tasks for furniture drawings.
 
 Threads program string generating logic through the generation.
 """
-from inspect import stack
-import math, random, itertools, copy
-from turtle import shape
-from xxlimited import foo
-from primitives.gadgets_primitives import *
-from dreamcoder.grammar import Grammar
+import copy
+import itertools
+import math
+import random
 
+from dreamcoder.grammar import Grammar
+from primitives.gadgets_primitives import *
+
+from tasksgenerator.bases_parts_tasks_generator import *
+from tasksgenerator.s12_s13_tasks_generator import RANDOM_SEED
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
-    ManualCurriculumTasksGenerator,
-    TasksGeneratorRegistry,
-    TaskCurriculum,
     DrawingTask,
+    ManualCurriculumTasksGenerator,
+    TaskCurriculum,
+    TasksGeneratorRegistry,
     random_sample_ratio_ordered_array,
 )
-from tasksgenerator.bases_parts_tasks_generator import *
 from tasksgenerator.wheels_programs_tasks_generator import *
+from tasksgenerator.furniture_tasks_generator import FurnitureTasksGenerator
 
-from tasksgenerator.s12_s13_tasks_generator import RANDOM_SEED
+octagon_string = T_string(octagon_string[0], octagon_string[1], s=THREE_QUARTER_SCALE)
 
 
 @TasksGeneratorRegistry.register
@@ -81,6 +84,9 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         stack_float_locations=FLOAT_CENTER,
         generation_probability=1.0,
     ):
+        original_generator = generator = TasksGeneratorRegistry[
+            FurnitureTasksGenerator.name
+        ]
         # Generates strokes for drawers with and without drawer pulls. Returns strokes at the center.
         for (base_height, base_width) in base_heights_and_widths:
             if base_height > SMALL * 4 and n_drawers > 3:
@@ -100,8 +106,9 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                 float_locations=[FLOAT_CENTER],
             )
             drawn_blank = False
+
             for n_drawer_pulls in [0, 2]:
-                for (
+                for drawer_pull_idx, (
                     drawer_pull_strokes,
                     drawer_pull_strings,
                     drawer_pull_synthetic_dict,
@@ -109,21 +116,54 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     drawer_pull_strokes_max_x,
                     drawer_pull_strokes_min_y,
                     drawer_pull_strokes_max_y,
-                ) in self._generate_drawer_pulls_strings_iterator(
-                    min_x=base_min_x + (base_width * QUARTER_SCALE),
-                    max_x=base_max_x - (base_width * QUARTER_SCALE),
-                    n_drawer_pulls=n_drawer_pulls,
-                    float_location=FLOAT_CENTER,
-                    drawer_pull_scale=SCALE_UNIT,
+                ) in enumerate(
+                    self._generate_drawer_pulls_strings_iterator(
+                        min_x=base_min_x + (base_width * QUARTER_SCALE),
+                        max_x=base_max_x - (base_width * QUARTER_SCALE),
+                        n_drawer_pulls=n_drawer_pulls,
+                        float_location=FLOAT_CENTER,
+                        drawer_pull_scale=SCALE_UNIT,
+                    )
                 ):
                     drawer_spacing = base_height * QUARTER_SCALE
-                    if peval(drawer_pull_strokes_max_y) >= (
+
+                    original_drawer_pulls = list(
+                        original_generator._generate_drawer_pulls_iterator(
+                            min_x=base_min_x + (base_width * QUARTER_SCALE),
+                            max_x=base_max_x - (base_width * QUARTER_SCALE),
+                            n_drawer_pulls=n_drawer_pulls,
+                            float_location=FLOAT_CENTER,
+                            drawer_pull_scale=SCALE_UNIT,
+                        )
+                    )
+
+                    (
+                        _,
+                        original_drawer_pull_strokes_min_x,
+                        original_drawer_pull_strokes_max_x,
+                        original_drawer_pull_strokes_min_y,
+                        original_drawer_pull_strokes_max_y,
+                    ) = original_drawer_pulls[drawer_pull_idx]
+
+                    if original_drawer_pull_strokes_max_y >= (
                         base_max_y - (drawer_spacing)
-                    ) or peval(drawer_pull_strokes_max_x) >= (
+                    ) or original_drawer_pull_strokes_max_x >= (
                         base_max_x - (drawer_spacing)
                     ):
 
                         continue
+                    # if peval(drawer_pull_strokes_max_y) >= (
+                    #     base_max_y - (drawer_spacing)
+                    # ) or peval(drawer_pull_strokes_max_x) >= (
+                    #     base_max_x - (drawer_spacing)
+                    # ):
+                    #     print(
+                    #         peval(drawer_pull_strokes_max_y),
+                    #         peval(drawer_pull_strokes_max_x),
+                    #     )
+                    #     continue
+
+                    # Insanely, let's copy the logic.
 
                     if n_drawer_pulls < 1 and drawn_blank:
                         continue
@@ -347,7 +387,6 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                     stimuli_strokes += drawer_strokes
                     stimuli_strings.append(drawer_strings)
                     stroke_dicts.append(drawer_synthetic_dict)
-
         # Draw short drawers with long legs.
         max_short_drawers = 2
         for n_drawers in range(1, max_short_drawers + 1):
@@ -647,7 +686,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
 
     def _generate_strokes_strings_for_stimuli(
         self,
-        train_ratio=0.8,
+        train_ratio=1.0,
         generation_probability=1.0,  # Probabilistically generate from space
     ):
         """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
@@ -664,7 +703,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                 generator_test,
                 generator_train_strings,
                 generator_test_strings,
-            ) = generator_fn(train_ratio)
+            ) = generator_fn(train_ratio=train_ratio)
             train += generator_train
             test += generator_test
             train_strings += generator_train_strings

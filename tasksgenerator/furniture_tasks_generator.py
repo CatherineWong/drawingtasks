@@ -72,6 +72,7 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                     for inner_shapes_max_size in [base_min_size * THREE_QUARTER_SCALE]:
                         for n_decorators in [0]:
                             if outer_shapes + inner_shapes == [r, r]:
+
                                 continue
                             # Row of wheels is very similar to a set of drawer pulls.
                             yield wheels_generator._generate_row_of_wheels(
@@ -132,6 +133,7 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                     drawer_pull_scale=SCALE_UNIT,
                 ):
                     drawer_spacing = base_height * QUARTER_SCALE
+
                     if drawer_pull_strokes_max_y >= (
                         base_max_y - (drawer_spacing)
                     ) or drawer_pull_strokes_max_x >= (base_max_x - (drawer_spacing)):
@@ -504,6 +506,7 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
             self._generate_lounges_stimuli,
             self._generate_seat_drawers_stimuli,
         ]:
+
             generator_train, generator_test = generator_fn(train_ratio=train_ratio)
             train += generator_train
             test += generator_test
