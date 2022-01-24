@@ -14,6 +14,8 @@ from dreamcoder.domains.tower.towerPrimitives import *
 from dreamcoder.domains.tower.tower_common import renderPlan
 from dreamcoder.domains.tower.makeTowerTasks import *
 
+def get_default_structures_grammar():
+    structures_primitives = []
 
 def render_block_jsons_to_canvas(block_json):
     program = convert(block_json, whole_squares=False)

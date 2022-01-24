@@ -35,3 +35,5 @@ def test_render_parsed_jsons_to_canvas():
     _test_render_save_programs(
         [test_block_dict], export_dir=DESKTOP, no_blanks=True, split="train"
     )
+
+def test_render_dreamcoder
