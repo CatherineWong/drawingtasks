@@ -9,12 +9,14 @@ Usage:
         --language_column lemmatized_whats
         --program_column dreamcoder_program_dsl_0_tokens dreamcoder_program_dsl_1_tokens dreamcoder_program_dsl_2_tokens dreamcoder_program_dsl_3_tokens dreamcoder_program_dsl_4_tokens dreamcoder_program_dsl_5_tokens
 """
+from collections import defaultdict
 import csv, os, json, argparse
 import itertools
 
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 
 
 LIBRARY = "library"
@@ -189,22 +191,33 @@ def generate_program_length_plots(args, summaries_dict, libraries_dict, bitexts_
             )
         print(program_column, library_size)
         for task_name in summaries_dict:
-            library_sizes.append(library_size)
-            program_sizes.append(len(eval(summaries_dict[task_name][program_column])))
-    ax = sns.regplot(
+            library_sizes.append(np.log(library_size))
+
+            program_size = len(eval(summaries_dict[task_name][program_column]))
+            program_and_library_size = np.log(library_size + program_size)
+            program_sizes.append(program_and_library_size)
+    plt.figure(figsize=(3, 2))
+    ax = sns.lineplot(
         x=library_sizes,
         y=program_sizes,
-        x_estimator=np.mean,
-        scatter_kws={"color": "black"},
+        err_style="bars",
+        # x_estimator=np.mean,
+        ci=95,
+        color="red",
     )
     fig = ax.get_figure()
 
     output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_lengths.png"
     output = os.path.join(args.export_dir, output_plot)
-
-    plt.title(f"{args.task_summaries}")
-    plt.xlabel("log(|DSL|)")
-    plt.ylabel("log(|Program|)")
+    ax.xaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
+    )
+    ax.yaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
+    )
+    # plt.title(f"{get_subdomain_name(args.task_summaries)}")
+    # plt.xlabel("log(|DSL|)")
+    # plt.ylabel("log(|Program|)")
 
     fig.savefig(output)
     print(f"...saved lengths plot to {output}.")
@@ -214,6 +227,7 @@ def generate_program_likelihood_plots(
     args, summaries_dict, libraries_dict, translations_dict, bitexts_dict
 ):
     library_sizes, translation_probabilities, random_probabilities = [], [], []
+    library_to_translation_probabilities = defaultdict(list)
     for program_column in args.program_column:
         # Get the library size.
         if program_column in libraries_dict:
@@ -228,18 +242,28 @@ def generate_program_likelihood_plots(
             ]:
                 library_sizes.append(np.log(library_size))
                 translation_probabilities.append(likelihood)
+                library_to_translation_probabilities[np.log(library_size)].append(
+                    likelihood
+                )
             for likelihood in translations_dict[program_column][task_name][
                 RANDOM_TRANSLATION_BEST_LOG_LIKELIHOODS
             ]:
                 random_probabilities.append(likelihood)
     plt.clf()
-    plt.figure(figsize=(3, 4.5))
-    ax = sns.regplot(
+    plt.figure(figsize=(3, 2))
+    ax = sns.lineplot(
         x=library_sizes,
         y=translation_probabilities,
-        x_estimator=np.mean,
-        label="Translation",
-        order=2,
+        err_style="bars",
+        # x_estimator=np.mean,
+        # label="Translation",
+        ci=95,
+    )
+    ax.xaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
+    )
+    ax.yaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
     )
     # ax = sns.regplot(
     #     x=library_sizes,
@@ -254,12 +278,39 @@ def generate_program_likelihood_plots(
     output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_ibm.png"
     output = os.path.join(args.export_dir, output_plot)
 
-    plt.title(f"{get_subdomain_name(args.task_summaries)}")
+    # plt.title(f"{get_subdomain_name(args.task_summaries)}")
     # plt.ylabel("P(language | program, T, DSL)")
     # plt.xlabel("log(|DSL|)")
 
     fig.savefig(output)
     print(f"...saved lengths plot to {output}.")
+
+    # Now, run an ANOVA to determine that there is a meaningful mean.
+    from scipy.stats import f_oneway
+
+    translation_probs = [
+        library_to_translation_probabilities[size]
+        for size in sorted(list(library_to_translation_probabilities.keys()))
+    ]
+    F, p = f_oneway(*translation_probs)
+    print(f"F one way results: F: {F}; {p}")
+
+    # Now, run a nested linear model to determine that there is a non-linear mean in each.
+    from sklearn.linear_model import LinearRegression
+    import statsmodels.api as sm
+    import scipy
+
+    # Compare full model w. polynomial term.
+    y = np.array([translation_probabilities]).T
+    x_linear = np.array([library_sizes]).T  # Linear
+    x_polynomial = np.hstack((x_linear, np.square(x_linear)))
+
+    poly_model = sm.OLS(y, x_polynomial).fit()
+    linear_model = sm.OLS(y, x_linear).fit()
+
+    LR_statistic = -2 * (linear_model.llf - poly_model.llf)
+    p_val = scipy.stats.chi2.sf(LR_statistic, 2)
+    print(f"LR statistic x^2 model vs. linear: {LR_statistic}; p_val: {p_val}")
 
 
 def get_subdomain_name(task_summaries_name):
