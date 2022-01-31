@@ -12,10 +12,29 @@ Usage:
 from collections import defaultdict
 import csv, os, json, argparse
 import itertools
+from re import L
+from cycler import cycler
 
 import numpy as np
+from PIL import Image, ImageOps, ImageDraw, ImageFont, ImageColor
+
+from io import BytesIO
+import base64
+
+import random
+import matplotlib
+from matplotlib import pylab, mlab, pyplot
+from matplotlib.colors import LinearSegmentedColormap, ListedColormap
+
+plt = pyplot
+import matplotlib as mpl
+
+mpl.rcParams["pdf.fonttype"] = 42
+
 import seaborn as sns
-import matplotlib.pyplot as plt
+
+sns.set_context("talk")
+sns.set_style("whitegrid")
 import matplotlib.ticker as ticker
 
 
@@ -42,6 +61,126 @@ TRANSLATION_BEST_LOG_LIKELIHOODS = "translation_best_log_likelihoods"
 RANDOM_TRANSLATION_MARGINAL_LOG_LIKELIHOODS = "random_translation_log_likelihoods"
 RANDOM_TRANSLATION_BEST_LOG_LIKELIHOODS = "random_translation_best_log_likelihoods"
 
+# styling for paper_figures following @Will McCarthy
+subdomains = {
+    "structures": ["bridge", "city", "house", "castle"],
+    "drawing": ["nuts-bolts", "wheels", "dials", "furniture"],
+}
+
+domains = list(subdomains.keys())
+
+sns.set_style("white", {"axes.linewidth": 0.5})
+plt.rcParams["xtick.major.size"] = 6
+plt.rcParams["ytick.major.size"] = 6
+plt.rcParams["xtick.major.width"] = 2
+plt.rcParams["ytick.major.width"] = 2
+plt.rcParams["xtick.bottom"] = True
+plt.rcParams["ytick.left"] = True
+
+LIGHT_BLUE = "#56B0CD"
+LIGHT_ORANGE = "#FFCE78"
+LIGHT_GREEN = "#95C793"
+LIGHT_RED = "#CC867A"
+
+BLUE = "#009BCD"
+ORANGE = "#FFA300"
+GREEN = "#688B67"
+RED = "#CC5945"
+
+DARK_BLUE = "#0E4478"
+DARK_ORANGE = "#A46400"
+DARK_GREEN = "#275C4A"
+DARK_RED = "#9B3024"
+
+domain_palettes_light = {
+    domains[0]: {
+        subdomains[domains[0]][0]: LIGHT_BLUE,
+        subdomains[domains[0]][1]: LIGHT_ORANGE,
+        subdomains[domains[0]][2]: LIGHT_GREEN,
+        subdomains[domains[0]][3]: LIGHT_RED,
+    },
+    domains[1]: {
+        subdomains[domains[1]][0]: LIGHT_BLUE,
+        subdomains[domains[1]][1]: LIGHT_ORANGE,
+        subdomains[domains[1]][2]: LIGHT_GREEN,
+        subdomains[domains[1]][3]: LIGHT_RED,
+    },
+}
+
+domain_palettes = {
+    domains[0]: {
+        subdomains[domains[0]][0]: BLUE,
+        subdomains[domains[0]][1]: ORANGE,
+        subdomains[domains[0]][2]: GREEN,
+        subdomains[domains[0]][3]: RED,
+    },
+    domains[1]: {
+        subdomains[domains[1]][0]: BLUE,
+        subdomains[domains[1]][1]: ORANGE,
+        subdomains[domains[1]][2]: GREEN,
+        subdomains[domains[1]][3]: RED,
+    },
+}
+
+domain_palettes_dark = {
+    domains[0]: {
+        subdomains[domains[0]][0]: DARK_BLUE,
+        subdomains[domains[0]][1]: DARK_ORANGE,
+        subdomains[domains[0]][2]: DARK_GREEN,
+        subdomains[domains[0]][3]: DARK_RED,
+    },
+    domains[1]: {
+        subdomains[domains[1]][0]: DARK_BLUE,
+        subdomains[domains[1]][1]: DARK_ORANGE,
+        subdomains[domains[1]][2]: DARK_GREEN,
+        subdomains[domains[1]][3]: DARK_RED,
+    },
+}
+
+N = 256
+gradients = []
+
+for light, mid, dark in zip(
+    [LIGHT_BLUE, LIGHT_ORANGE, LIGHT_GREEN, LIGHT_RED],
+    [BLUE, ORANGE, GREEN, RED],
+    [DARK_BLUE, DARK_ORANGE, DARK_GREEN, DARK_RED],
+):
+    light_rgb = list(ImageColor.getcolor(light, "RGB"))
+    mid_rgb = list(ImageColor.getcolor(mid, "RGB"))
+    dark_rgb = list(ImageColor.getcolor(dark, "RGB"))
+    vals = np.ones((N, 4))
+    vals[:, 0] = np.append(
+        np.linspace(light_rgb[0] / 255, mid_rgb[0] / 255, int(N / 2)),
+        np.linspace(mid_rgb[0] / 255, dark_rgb[0] / 255, int(N / 2)),
+    )  # R
+    vals[:, 1] = np.append(
+        np.linspace(light_rgb[1] / 255, mid_rgb[1] / 255, int(N / 2)),
+        np.linspace(mid_rgb[1] / 255, dark_rgb[1] / 255, int(N / 2)),
+    )  # G
+    vals[:, 2] = np.append(
+        np.linspace(light_rgb[2] / 255, mid_rgb[2] / 255, int(N / 2)),
+        np.linspace(mid_rgb[2] / 255, dark_rgb[2] / 255, int(N / 2)),
+    )  # B
+    newcmp = ListedColormap(vals)
+
+    gradients.append(newcmp)
+
+domain_gradients = {
+    domains[0]: {
+        subdomains[domains[0]][0]: gradients[0],
+        subdomains[domains[0]][1]: gradients[1],
+        subdomains[domains[0]][2]: gradients[2],
+        subdomains[domains[0]][3]: gradients[3],
+    },
+    domains[1]: {
+        subdomains[domains[1]][0]: gradients[0],
+        subdomains[domains[1]][1]: gradients[1],
+        subdomains[domains[1]][2]: gradients[2],
+        subdomains[domains[1]][3]: gradients[3],
+    },
+}
+
+library_names = {"dsl_0": "Base", "low": "L1", "mid": "L2", "high": "L3"}
 
 TOKENS_SUFFIX = "_tokens"
 
@@ -97,6 +236,14 @@ parser.add_argument(
     action="store_true",
     help="If included, uses a bitext for the base DSL.",
 )
+
+
+def get_domain_color(palette, args):
+    domain = args.task_summaries.split("_")[0]
+    for k in palette:
+        for d in palette[k]:
+            if domain in d:
+                return palette[k][d]
 
 
 def get_summaries_dict(args):
@@ -180,7 +327,7 @@ def get_translations(args):
 def generate_program_length_plots(args, summaries_dict, libraries_dict, bitexts_dict):
     # X is: size of program library.
     # Y is: length of program.
-    library_sizes, program_sizes = [], []
+    library_sizes, program_sizes, program_and_library_sizes = [], [], []
     for program_column in args.program_column:
         # Get the library size.
         if program_column in libraries_dict:
@@ -191,34 +338,199 @@ def generate_program_length_plots(args, summaries_dict, libraries_dict, bitexts_
             )
         print(program_column, library_size)
         for task_name in summaries_dict:
-            library_sizes.append(np.log(library_size))
-
             program_size = len(eval(summaries_dict[task_name][program_column]))
-            program_and_library_size = np.log(library_size + program_size)
-            program_sizes.append(program_and_library_size)
+            library_sizes.append(np.log(library_size))
+            program_sizes.append(np.log(program_size))
+            program_and_library_size = library_size + program_size
+            program_and_library_sizes.append(np.log(program_and_library_size))
+
     plt.figure(figsize=(3, 2))
     ax = sns.lineplot(
         x=library_sizes,
-        y=program_sizes,
+        y=library_sizes,
+        ci=95,
+        color="orange",
         err_style="bars",
-        # x_estimator=np.mean,
+        markers=True,
+        dashes=True,
+        marker="o",
+        alpha=0.5,
+    )
+    ax = sns.lineplot(
+        x=library_sizes,
+        y=program_sizes,
         ci=95,
         color="red",
+        err_style="bars",
+        markers=True,
+        dashes=True,
+        marker="o",
+        alpha=0.5,
+    )
+
+    ax = sns.lineplot(
+        x=library_sizes,
+        y=program_and_library_sizes,
+        ci=95,
+        color="blue",
+        err_style="bars",
+        markers=True,
+        dashes=True,
+        marker="o",
+        alpha=0.5,
     )
     fig = ax.get_figure()
 
-    output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_lengths.png"
-    output = os.path.join(args.export_dir, output_plot)
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
     )
     ax.yaxis.set_major_formatter(
         ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
     )
+
+    output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_lengths.png"
+    output = os.path.join(args.export_dir, output_plot)
     # plt.title(f"{get_subdomain_name(args.task_summaries)}")
     # plt.xlabel("log(|DSL|)")
     # plt.ylabel("log(|Program|)")
 
+    fig.savefig(output)
+    print(f"...saved lengths plot to {output}.")
+
+
+def get_library_name(library_names, program_column):
+    for k in library_names:
+        if k in program_column:
+            return program_column[k]
+
+
+def generate_combined_likelihood_plots(
+    args, summaries_dict, libraries_dict, translations_dict, bitexts_dict
+):
+    library_sizes, library_names, translation_probabilities, random_probabilities = (
+        [],
+        [],
+        [],
+        [],
+    )
+    library_to_translation_probabilities = defaultdict(list)
+    for program_column in args.program_column:
+        # Get the library size.
+        if program_column in libraries_dict:
+            library_size = len(libraries_dict[program_column][LIBRARY]["productions"])
+        else:
+            library_size = len(bitexts_dict[program_column]) + len(
+                libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"]
+            )
+
+        library_name = get_library_name(library_names, program_column)
+        library_names.append(library_name)
+
+        # if "high" in program_column:
+        #     library_size += 1
+        for task_name in translations_dict[program_column]:
+            for likelihood in translations_dict[program_column][task_name][
+                TRANSLATION_BEST_LOG_LIKELIHOODS
+            ]:
+                library_sizes.append(np.log(library_size))
+                translation_probabilities.append(likelihood)
+                library_to_translation_probabilities[np.log(library_size)].append(
+                    likelihood
+                )
+            for likelihood in translations_dict[program_column][task_name][
+                RANDOM_TRANSLATION_BEST_LOG_LIKELIHOODS
+            ]:
+                random_probabilities.append(likelihood)
+
+    library_sizes_2, library_names_2, program_sizes, program_and_library_sizes = (
+        [],
+        [],
+        [],
+        [],
+    )
+    for program_column in args.program_column:
+        # Get the library size.
+        if program_column in libraries_dict:
+            library_size = len(libraries_dict[program_column][LIBRARY]["productions"])
+        else:
+            library_size = len(bitexts_dict[program_column]) + len(
+                libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"]
+            )
+        # if "high" in program_column:
+        #     library_size += 1
+        library_name = get_library_name(library_names, program_column)
+        library_names.append(library_name)
+
+        for task_name in summaries_dict:
+            program_size = len(eval(summaries_dict[task_name][program_column]))
+            library_sizes_2.append(np.log(library_size))
+            program_sizes.append(np.log(program_size))
+            program_and_library_size = library_size + program_size
+            program_and_library_sizes.append(np.log(program_and_library_size))
+
+    # Solid line for translation probabilities.
+    plt.clf()
+    plt.figure(figsize=(5, 5))
+
+    ax = sns.lineplot(
+        x=library_sizes,
+        y=translation_probabilities,
+        err_style="bars",
+        # x_estimator=np.mean,
+        # label="Translation",
+        color=get_domain_color(domain_palettes_dark, args),
+        ci=95,
+        markers=True,
+        # dashes=True,
+        alpha=0.9,
+        legend=False,
+    )
+    # TODO: set color on domain axes.
+    ax.yaxis.set_major_formatter(
+        ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
+    )
+
+    ax2 = ax.twinx()
+    # TODO: set color on domain axes.
+    color = get_domain_color(domain_palettes_dark, args)
+    for idx, library in enumerate(["Base", "L1", "L2", "L3"]):
+        # Dashed line for translation probabilities.
+        ax2 = sns.lineplot(
+            x=library_sizes_2,
+            y=program_and_library_sizes,
+            ci=95,
+            color=get_domain_color(domain_palettes_light, args),
+            err_style="bars",
+            markers=True,
+            linestyle="dashed",
+            marker="o",
+            alpha=0.9,
+            legend=False,
+        )
+        lines = ax2.get_lines()
+        line = lines[idx * 2]
+        props = {
+            "marker": markers[idx],
+            "markersize": 15 if idx < 3 else 20,
+            "markeredgewidth": 1.5,
+            "markeredgecolor": get_domain_color(domain_palettes_light, args),
+            "markevery": [idx],
+        }
+        line.set(**props)
+
+        ax2.xaxis.set_major_formatter(
+            ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
+        )
+        ax2.yaxis.set_major_formatter(
+            ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
+        )
+
+    output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_combined.png"
+    output = os.path.join(args.export_dir, output_plot)
+    # plt.title(f"{get_subdomain_name(args.task_summaries)}")
+    # plt.xlabel("log(|DSL|)")
+    # plt.ylabel("log(|Program|)")
+    fig = ax.get_figure()
     fig.savefig(output)
     print(f"...saved lengths plot to {output}.")
 
@@ -257,7 +569,11 @@ def generate_program_likelihood_plots(
         err_style="bars",
         # x_estimator=np.mean,
         # label="Translation",
+        color="green",
         ci=95,
+        markers=True,
+        dashes=True,
+        marker="o",
     )
     ax.xaxis.set_major_formatter(
         ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
@@ -327,6 +643,9 @@ def main(args):
 
     generate_program_length_plots(args, summaries_dict, libraries_dict, bitexts_dict)
     generate_program_likelihood_plots(
+        args, summaries_dict, libraries_dict, translations_dict, bitexts_dict
+    )
+    generate_combined_likelihood_plots(
         args, summaries_dict, libraries_dict, translations_dict, bitexts_dict
     )
 
