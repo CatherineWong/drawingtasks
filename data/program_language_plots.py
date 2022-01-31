@@ -11,10 +11,12 @@ Usage:
 """
 from collections import defaultdict
 import csv, os, json, argparse
+from email.policy import default
 import itertools
 from re import L
 from cycler import cycler
 
+import pandas as pd
 import numpy as np
 from PIL import Image, ImageOps, ImageDraw, ImageFont, ImageColor
 
@@ -76,6 +78,9 @@ plt.rcParams["xtick.major.width"] = 2
 plt.rcParams["ytick.major.width"] = 2
 plt.rcParams["xtick.bottom"] = True
 plt.rcParams["ytick.left"] = True
+matplotlib.rc("ytick", labelsize=25)
+matplotlib.rc("xtick", labelsize=30)
+
 
 LIGHT_BLUE = "#56B0CD"
 LIGHT_ORANGE = "#FFCE78"
@@ -180,7 +185,7 @@ domain_gradients = {
     },
 }
 
-library_names = {"dsl_0": "Base", "low": "L1", "mid": "L2", "high": "L3"}
+all_library_names = {"dsl_0": "Base", "low": "L1", "mid": "L2", "high": "L3"}
 
 TOKENS_SUFFIX = "_tokens"
 
@@ -399,9 +404,10 @@ def generate_program_length_plots(args, summaries_dict, libraries_dict, bitexts_
 
 
 def get_library_name(library_names, program_column):
+
     for k in library_names:
         if k in program_column:
-            return program_column[k]
+            return library_names[k]
 
 
 def generate_combined_likelihood_plots(
@@ -413,6 +419,7 @@ def generate_combined_likelihood_plots(
         [],
         [],
     )
+    library_name_to_translation_probabilities = defaultdict(list)
     library_to_translation_probabilities = defaultdict(list)
     for program_column in args.program_column:
         # Get the library size.
@@ -423,18 +430,18 @@ def generate_combined_likelihood_plots(
                 libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"]
             )
 
-        library_name = get_library_name(library_names, program_column)
-        library_names.append(library_name)
-
-        # if "high" in program_column:
-        #     library_size += 1
         for task_name in translations_dict[program_column]:
             for likelihood in translations_dict[program_column][task_name][
                 TRANSLATION_BEST_LOG_LIKELIHOODS
             ]:
+                library_name = get_library_name(all_library_names, program_column)
+                library_names.append(library_name)
                 library_sizes.append(np.log(library_size))
                 translation_probabilities.append(likelihood)
                 library_to_translation_probabilities[np.log(library_size)].append(
+                    likelihood
+                )
+                library_name_to_translation_probabilities[library_name].append(
                     likelihood
                 )
             for likelihood in translations_dict[program_column][task_name][
@@ -448,6 +455,9 @@ def generate_combined_likelihood_plots(
         [],
         [],
     )
+    library_name_to_library_size = defaultdict(float)
+    library_name_to_program_size = defaultdict(list)
+    library_name_to_cost = defaultdict(list)
     for program_column in args.program_column:
         # Get the library size.
         if program_column in libraries_dict:
@@ -458,72 +468,92 @@ def generate_combined_likelihood_plots(
             )
         # if "high" in program_column:
         #     library_size += 1
-        library_name = get_library_name(library_names, program_column)
-        library_names.append(library_name)
 
         for task_name in summaries_dict:
+            library_name = get_library_name(all_library_names, program_column)
+            library_names_2.append(library_name)
             program_size = len(eval(summaries_dict[task_name][program_column]))
             library_sizes_2.append(np.log(library_size))
-            program_sizes.append(np.log(program_size))
+            program_sizes.append(program_size)
             program_and_library_size = library_size + program_size
-            program_and_library_sizes.append(np.log(program_and_library_size))
+            program_and_library_sizes.append(program_and_library_size)
+            library_name_to_cost[library_name].append(
+                np.log(program_and_library_size)
+            )  # TODO: consider changing.
+            library_name_to_library_size[library_name] = library_size
+            library_name_to_program_size[library_name].append(program_size)
+
+    # library_name_to_cumulative_cost = dict()
+    # for k in library_name_to_library_size:
+    #     cost = library_size + np.sum(library_name_to_program_size[k])
+    #     library_name_to_cumulative_cost[k] = cost
 
     # Solid line for translation probabilities.
     plt.clf()
-    plt.figure(figsize=(5, 5))
+    plt.figure(figsize=(8, 8))
+    library_order = ["Base", "L1", "L2", "L3"]
 
+    data = {
+        "library_names": library_names_2,
+        "costs": program_and_library_sizes,
+    }
+    data = pd.DataFrame.from_dict(data)
+    # # TODO: set color on domain axes.
+    color = get_domain_color(domain_palettes_dark, args)
+
+    # Dashed line for translation probabilities.
     ax = sns.lineplot(
-        x=library_sizes,
-        y=translation_probabilities,
+        x="library_names",
+        y="costs",
+        data=data,
+        ci=95,
+        color=get_domain_color(domain_palettes_light, args),
+        err_style="bars",
+        markers=True,
+        linestyle="dashed",
+        marker="o",
+        alpha=0.9,
+        legend=False,
+        markersize=15,
+    )
+    ax.set(xlabel=None)
+    ax.set(ylabel=None)
+    ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, pos: "{:,g}".format(x)))
+
+    for axis in ["top", "bottom", "left", "right"]:
+        ax.spines[axis].set_linewidth(4)
+
+    data = {
+        "library_names": library_names,
+        "translation_probabilities": translation_probabilities,
+    }
+    data = pd.DataFrame.from_dict(data)
+    ax2 = ax.twinx()
+    ax2 = sns.lineplot(
+        x="library_names",
+        y="translation_probabilities",
+        data=data,
         err_style="bars",
         # x_estimator=np.mean,
         # label="Translation",
         color=get_domain_color(domain_palettes_dark, args),
-        ci=95,
-        markers=True,
-        # dashes=True,
+        # order=library_order,
+        # ci=95,
+        # markers=True,
+        marker="o",
+        # # dashes=True,
         alpha=0.9,
         legend=False,
+        markersize=15,
     )
-    # TODO: set color on domain axes.
-    ax.yaxis.set_major_formatter(
+
+    ax2.set(xlabel=None)
+    ax2.set(ylabel=None)
+    ax2.set(xticklabels=library_order)
+    # # TODO: set color on domain axes.
+    ax2.yaxis.set_major_formatter(
         ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
     )
-
-    ax2 = ax.twinx()
-    # TODO: set color on domain axes.
-    color = get_domain_color(domain_palettes_dark, args)
-    for idx, library in enumerate(["Base", "L1", "L2", "L3"]):
-        # Dashed line for translation probabilities.
-        ax2 = sns.lineplot(
-            x=library_sizes_2,
-            y=program_and_library_sizes,
-            ci=95,
-            color=get_domain_color(domain_palettes_light, args),
-            err_style="bars",
-            markers=True,
-            linestyle="dashed",
-            marker="o",
-            alpha=0.9,
-            legend=False,
-        )
-        lines = ax2.get_lines()
-        line = lines[idx * 2]
-        props = {
-            "marker": markers[idx],
-            "markersize": 15 if idx < 3 else 20,
-            "markeredgewidth": 1.5,
-            "markeredgecolor": get_domain_color(domain_palettes_light, args),
-            "markevery": [idx],
-        }
-        line.set(**props)
-
-        ax2.xaxis.set_major_formatter(
-            ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
-        )
-        ax2.yaxis.set_major_formatter(
-            ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
-        )
 
     output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_combined.png"
     output = os.path.join(args.export_dir, output_plot)
