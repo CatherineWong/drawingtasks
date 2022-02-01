@@ -38,7 +38,7 @@ import seaborn as sns
 sns.set_context("talk")
 sns.set_style("whitegrid")
 import matplotlib.ticker as ticker
-
+import copy
 
 LIBRARY = "library"
 
@@ -338,9 +338,11 @@ def generate_program_length_plots(args, summaries_dict, libraries_dict, bitexts_
         if program_column in libraries_dict:
             library_size = len(libraries_dict[program_column][LIBRARY]["productions"])
         else:
-            library_size = len(bitexts_dict[program_column]) + len(
+
+            bitexts_dict[program_column].update(
                 libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"]
             )
+            library_size = len(bitexts_dict[program_column])
         print(program_column, library_size)
         for task_name in summaries_dict:
             program_size = len(eval(summaries_dict[task_name][program_column]))
@@ -421,14 +423,25 @@ def generate_combined_likelihood_plots(
     )
     library_name_to_translation_probabilities = defaultdict(list)
     library_to_translation_probabilities = defaultdict(list)
-    for program_column in args.program_column:
+    for idx, program_column in enumerate(args.program_column):
         # Get the library size.
         if program_column in libraries_dict:
             library_size = len(libraries_dict[program_column][LIBRARY]["productions"])
         else:
-            library_size = len(bitexts_dict[program_column]) + len(
-                libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"]
+            # Calculate the libraries cumulatively:
+
+            # Add the base DSL
+            cumulative_dsl = copy.deepcopy(bitexts_dict[program_column])
+            cumulative_dsl.update(
+                set(libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"])
             )
+            for prev_dsls in args.program_column[1:idx]:
+                cumulative_dsl.update(prev_dsls)
+
+            # Add all previous DSLs.
+
+            library_size = len(cumulative_dsl)
+            print(program_column, library_size)
 
         for task_name in translations_dict[program_column]:
             for likelihood in translations_dict[program_column][task_name][
@@ -458,16 +471,24 @@ def generate_combined_likelihood_plots(
     library_name_to_library_size = defaultdict(float)
     library_name_to_program_size = defaultdict(list)
     library_name_to_cost = defaultdict(list)
-    for program_column in args.program_column:
+    for idx, program_column in enumerate(args.program_column):
         # Get the library size.
         if program_column in libraries_dict:
             library_size = len(libraries_dict[program_column][LIBRARY]["productions"])
         else:
-            library_size = len(bitexts_dict[program_column]) + len(
-                libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"]
+            # Calculate the libraries cumulatively:
+
+            # Add the base DSL
+            cumulative_dsl = copy.deepcopy(bitexts_dict[program_column])
+            cumulative_dsl.update(
+                set(libraries_dict[DEFAULT_PROGRAM_COLUMN][LIBRARY]["productions"])
             )
-        # if "high" in program_column:
-        #     library_size += 1
+            for prev_dsls in args.program_column[1:idx]:
+                cumulative_dsl.update(prev_dsls)
+
+            # Add all previous DSLs.
+
+            library_size = len(cumulative_dsl)
 
         for task_name in summaries_dict:
             library_name = get_library_name(all_library_names, program_column)
