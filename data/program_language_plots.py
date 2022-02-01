@@ -79,7 +79,7 @@ plt.rcParams["ytick.major.width"] = 2
 plt.rcParams["xtick.bottom"] = True
 plt.rcParams["ytick.left"] = True
 matplotlib.rc("ytick", labelsize=25)
-matplotlib.rc("xtick", labelsize=30)
+matplotlib.rc("xtick", labelsize=42)
 
 
 LIGHT_BLUE = "#56B0CD"
@@ -571,7 +571,7 @@ def generate_combined_likelihood_plots(
         ticker.FuncFormatter(lambda x, pos: "{:,.1f}".format(x))
     )
 
-    output_plot = f"{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_combined.png"
+    output_plot = f"library_vocab_alignment_pdf/{args.task_summaries}_{args.program_column[-1]}_{args.language_column}_combined.pdf"
     output = os.path.join(args.export_dir, output_plot)
     # plt.title(f"{get_subdomain_name(args.task_summaries)}")
     # plt.xlabel("log(|DSL|)")
