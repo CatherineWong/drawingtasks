@@ -499,15 +499,10 @@ def generate_combined_likelihood_plots(
             program_and_library_size = library_size + program_size
             program_and_library_sizes.append(program_and_library_size)
             library_name_to_cost[library_name].append(
-                np.log(program_and_library_size)
+                program_and_library_size
             )  # TODO: consider changing.
             library_name_to_library_size[library_name] = library_size
             library_name_to_program_size[library_name].append(program_size)
-
-    # library_name_to_cumulative_cost = dict()
-    # for k in library_name_to_library_size:
-    #     cost = library_size + np.sum(library_name_to_program_size[k])
-    #     library_name_to_cumulative_cost[k] = cost
 
     # Solid line for translation probabilities.
     plt.clf()
@@ -585,6 +580,24 @@ def generate_combined_likelihood_plots(
     fig.savefig(output)
     print(f"...saved lengths plot to {output}.")
 
+    ## While we're here, compute statistics of relevance:
+    # First, compute that there is a meaningful difference in the mean COSTs
+    # First, normalize against the baseline.
+    conduct_f_one_way_baseline(library_name_to_cost, "Cumulative length cost")
+
+    # Now, run an ANOVA to determine that there is a meaningful difference in the mean log likelihoods
+    conduct_f_one_way_baseline(
+        library_name_to_translation_probabilities, "Model mean log likelihoods"
+    )
+
+
+def conduct_f_one_way_baseline(dataset, name):
+    from scipy.stats import f_oneway
+
+    samples = [dataset[library_name] for library_name in dataset]
+    F, p = f_oneway(*samples)
+    print(f"F one way results for {name}: F: {F}; {p}")
+
 
 def generate_program_likelihood_plots(
     args, summaries_dict, libraries_dict, translations_dict, bitexts_dict
@@ -651,16 +664,6 @@ def generate_program_likelihood_plots(
 
     fig.savefig(output)
     print(f"...saved lengths plot to {output}.")
-
-    # Now, run an ANOVA to determine that there is a meaningful mean.
-    from scipy.stats import f_oneway
-
-    translation_probs = [
-        library_to_translation_probabilities[size]
-        for size in sorted(list(library_to_translation_probabilities.keys()))
-    ]
-    F, p = f_oneway(*translation_probs)
-    print(f"F one way results: F: {F}; {p}")
 
     # Now, run a nested linear model to determine that there is a non-linear mean in each.
     from sklearn.linear_model import LinearRegression
