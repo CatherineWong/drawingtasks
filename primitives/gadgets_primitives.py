@@ -17,7 +17,7 @@ import cairo
 import imageio
 import numpy as np
 from dreamcoder.utilities import Curried
-from dreamcoder.program import Program, Primitive, tint
+from dreamcoder.program import *
 from dreamcoder.type import baseType, arrow, tmaybe, t0, t1, t2
 
 from primitives.object_primitives import (
@@ -106,18 +106,42 @@ transformations = [
             ttransmat,
         ),
         Curried(_makeAffineSimple),
+        alternate_names={
+            DEFAULT_NAME: "M",
+            VERBOSITY_0: "transform_matrix",
+            VERBOSITY_1: "transform_matrix_scale_angle_x_y",
+        },
     ),
     Primitive(
-        "T", arrow(tstroke, ttransmat, tstroke), Curried(_tform_once)
+        "T",
+        arrow(tstroke, ttransmat, tstroke),
+        Curried(_tform_once),
+        alternate_names={
+            DEFAULT_NAME: "T",
+            VERBOSITY_0: "transform",
+            VERBOSITY_1: "apply_transform_matrix_to_stroke",
+        },
     ),  # Transform: applies a transformation to a stroke array
     Primitive(
-        "C", arrow(tstroke, tstroke, tstroke), Curried(_connect)
+        "C",
+        arrow(tstroke, tstroke, tstroke),
+        Curried(_connect),
+        alternate_names={
+            DEFAULT_NAME: "C",
+            VERBOSITY_0: "connect_strokes",
+            VERBOSITY_1: "connect_strokes",
+        },
     ),  # Connects two strokes into a single new primitive
     Primitive(
         "repeat",
         arrow(tstroke, tfloat, ttransmat, tstroke),
         Curried(_repeat),
         override_globals=True,
+        alternate_names={
+            DEFAULT_NAME: "repeat",
+            VERBOSITY_0: "repeat_transform",
+            VERBOSITY_1: "repeat_transform_n_times",
+        },
     ),  # Repeats a transformation n times against a base primitive.
 ]
 
@@ -166,11 +190,56 @@ def _scaled_rectangle(w):
 
 _emptystroke = []
 objects = [
-    Primitive("empt", tstroke, _emptystroke),
-    Primitive("l", tstroke, _line),
-    Primitive("c", tstroke, _circle),
-    Primitive("r", tstroke, _rectangle),
-    Primitive("r_s", arrow(tfloat, tfloat, tstroke), _scaled_rectangle),
+    Primitive(
+        "empt",
+        tstroke,
+        _emptystroke,
+        alternate_names={
+            DEFAULT_NAME: "empt",
+            VERBOSITY_0: "empty_stroke",
+            VERBOSITY_1: "empty_stroke",
+        },
+    ),
+    Primitive(
+        "l",
+        tstroke,
+        _line,
+        alternate_names={
+            DEFAULT_NAME: "l",
+            VERBOSITY_0: "line",
+            VERBOSITY_1: "base_line",
+        },
+    ),
+    Primitive(
+        "c",
+        tstroke,
+        _circle,
+        alternate_names={
+            DEFAULT_NAME: "c",
+            VERBOSITY_0: "circle",
+            VERBOSITY_1: "base_circle",
+        },
+    ),
+    Primitive(
+        "r",
+        tstroke,
+        _rectangle,
+        alternate_names={
+            DEFAULT_NAME: "r",
+            VERBOSITY_0: "square",
+            VERBOSITY_1: "base_square",
+        },
+    ),
+    Primitive(
+        "r_s",
+        arrow(tfloat, tfloat, tstroke),
+        _scaled_rectangle,
+        alternate_names={
+            DEFAULT_NAME: "r_s",
+            VERBOSITY_0: "rectangle",
+            VERBOSITY_1: "scaled_rectangle_w_h",
+        },
+    ),
 ]
 
 ## Higher order utility functions for generating program strings simultaneously with stroke primitives.

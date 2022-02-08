@@ -23,6 +23,7 @@ TasksGeneratorRegistry = ClassRegistry("name", unique=True)
 RANDOM_SEED = 0
 random.seed(RANDOM_SEED)
 
+# Hand-coded abstractions.
 LOW_LEVEL, MID_LEVEL, HIGH_LEVEL = (
     "low_level_parts",  # ONe element per part abstraction.
     "mid_level_parts",  # Repeated units and stacks.
@@ -37,6 +38,11 @@ LOW_LEVEL_PARAMS, MID_LEVEL_PARAMS, HIGH_LEVEL_PARAMS = (
     "low_level_part_params",  # Add numbers.
     "mid_level_part_params",
     "high_level_part_params",
+)
+LOW_LEVEL_LANG, MID_LEVEL_LANG, HIGH_LEVEL_LANG = (
+    "low_level_part_language",
+    "mid_level_part_language",
+    "high_level_part_language",
 )
 
 SYNTHETIC_DICT = {
@@ -481,11 +487,7 @@ class DrawingTask(Task):
         return np.linalg.norm(img2 - img1)
 
     def logLikelihood(
-        self,
-        parsed_program,
-        timeout=None,
-        loss_fn=None,
-        min_threshold=0.1,
+        self, parsed_program, timeout=None, loss_fn=None, min_threshold=0.1,
     ):
         """Log likelihood function for programs."""
         if not hasattr(parsed_program, "rendering"):
