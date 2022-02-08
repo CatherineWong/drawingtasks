@@ -263,7 +263,7 @@
 },
 "metadata": {
 "name": "furniture_programs_all",
-"timestamp": "2022-01-20T21-10-41-921638",
+"timestamp": "2022-02-08T16-17-58-386383",
 "generating_command": "python generate_drawing_tasks.py --task_export_dir data --synthesis_export_dir None --summaries_export_dir None --libraries_export_dir data/libraries --renders_export_dir None --tasks_generator furniture_programs --num_tasks_per_condition all --train_ratio 0.8 --no_synthesis_tasks False --no_render False --task_summaries True"
 }
 }

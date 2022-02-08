@@ -17,8 +17,7 @@ This set up has been tested on a Mac OS X running Mac OS X Monterey. A setup scr
 3. Install the NLTK word tokenize package. `python -m nltk.downloader 'punkt'`
 
 ### Quickstart: generating the CogSci 2022 dataset.
-A script these commands directly is at `quickstart_gen_dataset_cogsci_2022.sh
-`.
+A script these commands directly is at `quickstart_gen_dataset_cogsci_2022.sh`.
 1. Run the following to generate all four of the technical drawing stimuli (and programs) used in the CogSci 2022 dataset:
 `python generate_drawing_tasks.py --tasks_generator nuts_bolts_programs --num_tasks_per_condition all --train_ratio 0.8 --task_summaries; python generate_drawing_tasks.py --tasks_generator dials_programs --num_tasks_per_condition all --train_ratio 0.8 --task_summaries ; python generate_drawing_tasks.py --tasks_generator wheels_programs --num_tasks_per_condition all --train_ratio 0.8 --task_summaries ; python generate_drawing_tasks.py --tasks_generator furniture_programs --num_tasks_per_condition all --train_ratio 0.8 --task_summaries `
 2. This will generate the following outputs:
@@ -39,5 +38,10 @@ We use the following DSLs, which correspond (respectively) to L0, L1, L2, L3 in 
 ### Generating new drawing stimuli.
 This section describes how to define a generative model that jointly outputs programs and images, using the `nuts_bolts` example.
 
-1. Define base primitives. The base DSL used
-
+1. Define base primitives. The base DSL used for the technical drawings domain is in `primitives/gadgets_primitives.py`. We use the `dreamcoder` library (imported as a submodule) to parse and execute programs.
+2. Define a `TaskGenerator`. All of the generative models derive from the `AbstractTasksGenerator` class in `tasksgenerator/tasks_generator.py`. In our running example, the nuts_bolts tasks generator is defined in `nuts_bolts_programs_tasks_generator.py`. The task generators are designed to simultaneously generate the following for each stimulus:
+    - A 'stroke array' consisting of the numpy-matrix pixel arrays which are added together to generate the image.
+    - A 'stroke string' with an executable string program that can be parsed under the DreamCoder library to generate the same image.
+    - A dictionary class containing the 'hand-coded abstractions' (named `synthetic_dict` in the released code) at different tokenized levels corresponding to different program abstractions.
+We define corresponding tests for each generative model.
+3. Run the generative model. We use the `generate_drawing_tasks.py` script as an entrypoint into all of the generative models. For now, you need to import the task generator class manually at the top of this file (or you could add it to an __init__.py).
