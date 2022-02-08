@@ -1,9 +1,6 @@
 [submodule "dreamcoder"]
 	path = dreamcoder
-	url = https://github.com/CatherineWong/dreamcoder.git
-[submodule "ec"]
-	path = ec
-	url = https://github.com/ellisk42/ec.git
+	url = git@github.com:CatherineWong/dreamcoder.git
 [submodule "block_utils"]
 	path = block_utils
-	url = https://github.com/cogtoolslab/block_utils.git
+	url = git@github.com:cogtoolslab/block_utils.git
