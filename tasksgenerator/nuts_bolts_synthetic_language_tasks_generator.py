@@ -18,12 +18,14 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
 
     name = "nuts_bolts_synthetic"
 
-    def __init__(self):
+    def __init__(self, stochastic_language=False):
         super().__init__(
             grammar=constants + math_operations + objects + transformations
         )
 
-    def _generate_simple_nuts_stimuli_strings(self, train_ratio):
+    def _generate_simple_nuts_stimuli_strings(
+        self, train_ratio, stochastic_language=False
+    ):
         """Generates simple nuts: up to two nested shapes on the outer edge, and no perforations. Generates train and test. Also generates strings. See: nuts_bolts_tasks_generator._generate_simple_nuts_stimuli for original implementation."""
         all_strokes = []
         all_strokes_strings = []
@@ -66,7 +68,9 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
             strings_array=list(zip(all_strokes_strings, all_synthetic)),
         )
 
-    def _generate_perforated_nuts_stimuli_strings(self, train_ratio):
+    def _generate_perforated_nuts_stimuli_strings(
+        self, train_ratio, stochastic_language=False
+    ):
         """Generates nuts with perforated 'decorators' around the center. Also generates strings. See: nuts_bolts_tasks_generator._generate_perforated_nuts_stimuli for original implementation."""
         all_strokes = []
         all_strokes_strings = []
@@ -116,7 +120,9 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
             strings_array=list(zip(all_strokes_strings, all_synthetic)),
         )
 
-    def _generate_dsl_primitives(self, train_ratio):
+    def _generate_perforated_shapes_string(
+        self, train_ratio, stochastic_language=False
+    ):
         """Generates nuts with perforated 'decorators' around the center. Also generates strings. See: nuts_bolts_tasks_generator._generate_perforated_nuts_stimuli for original implementation."""
         all_strokes = []
         all_strokes_strings = []
@@ -152,6 +158,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
                                             decorator_shape=decorator_shape,
                                             decorator_size=f"{decorator_size:g}",
                                             decorator_displacement=decorator_displacement,
+                                            stochastic_language=stochastic_language,
                                         )
                                         all_strokes += object_strokes
                                         all_strokes_strings.append(stroke_strings)
@@ -182,6 +189,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
         n_spokes=STR_ZERO,
         spoke_angle="(/ pi 4)",
         spoke_length=STR_ZERO,
+        stochastic_langugage=False,
     ):
         """Generates perforated shapes and a string program that can be evaluated to generate the perforated shape. See dial_tasks_generator._generate_perforated_shapes for the original implementation.
 
@@ -194,6 +202,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
         # Place outer shapes.
         outer_shape_size = peval(outer_shapes_min_size)
         # # Note: catwong: we don't currently express the looped computation in loop.
+
         if len(outer_shapes) > 0:
             outer_shape_size = peval(outer_shapes_min_size)
             outer_strings = []
@@ -211,6 +220,9 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
                 synthetic_dict[LOW_LEVEL].append(shape_abstraction)
                 synthetic_dict[LOW_LEVEL_PARTS].append(shape_string)
                 synthetic_dict[LOW_LEVEL_PARAMS].append(str(peval(nesting_scale_unit)))
+
+                # Add a low-level abstraction corresponding to each object in the outer loop.
+                synthetic_dict[LOW_LEVEL_LANG]
 
             # Mid-level abstraction corresponding to the outer shape.
             outer_shape_abstraction = "outer_strokes"
@@ -295,7 +307,9 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
             height_string,
         )
 
-    def _generate_strokes_strings_for_stimuli(self, train_ratio):
+    def _generate_strokes_strings_for_stimuli(
+        self, train_ratio, stochastic_language=False
+    ):
         (
             simple_train,
             simple_test,

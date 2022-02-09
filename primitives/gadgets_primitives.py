@@ -349,3 +349,45 @@ l_string = (_line, "l")
 short_l_string = T_string(
     l_string[0], l_string[-1], x="(- 0 0.5)"
 )  # Short horizontal line
+
+# Shape classes.
+LANG_TINY, LANG_SMALL, LANG_MEDIUM, LANG_LARGE = "tiny", "small", "medium", "large"
+LANG_CIRCLE, LANG_RECTANGLE, LANG_LINE, LANG_SQUARE = (
+    "circle",
+    "rectangle",
+    "line",
+    "square",
+)
+LANG_GON_NAMES = {
+    "3": "triangle",
+    "4": "square",
+    "5": "pentagon",
+    "6": "hexagon",
+    "7": "septagon",
+    "8": "octogon",
+    "9": "nonagon",
+}
+
+
+class Shape:
+    def __init__(
+        self,
+        strokes=None,
+        base_program=None,
+        synthetic_adjectives=None,
+        synthetic_noun=None,
+        synthetic_abstractions=None,
+    ):
+        self.strokes = strokes
+        self.base_program = base_program
+        self.synthetic_adjectives = synthetic_adjectives
+        self.synthetic_noun = synthetic_noun
+        self.synthetic_abstractions = synthetic_abstractions
+
+
+c_shape = Shape(
+    _circle, "c", synthetic_adjectives=[LANG_TINY], synthetic_noun=LANG_CIRCLE
+)
+r_shape = Shape(
+    _rectangle, "r", synthetic_adjectives=[LANG_TINY], synthetic_noun=LANG_SQUARE
+)
