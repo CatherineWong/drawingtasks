@@ -38,6 +38,8 @@ import tasksgenerator.nuts_bolts_programs_tasks_generator
 import tasksgenerator.wheels_programs_tasks_generator
 import tasksgenerator.furniture_programs_tasks_generator
 
+import tasksgenerator.nuts_bolts_synthetic_language_tasks_generator
+
 DEFAULT_EXPORT_DIR = "data"
 DEFAULT_SUMMARIES_SUBDIR = "summaries"
 DEFAULT_SYNTHESIS_TASKS_SUBDIR = "synthesis"
@@ -94,9 +96,7 @@ parser.add_argument(
     help="If included, does not export any synthesis tasks.",
 )
 parser.add_argument(
-    "--no_render",
-    action="store_true",
-    help="If included, does not render any images.",
+    "--no_render", action="store_true", help="If included, does not render any images.",
 )
 parser.add_argument(
     "--task_summaries",
@@ -153,10 +153,7 @@ def export_task_summary(args, tasks_curriculum):
     import csv
 
     with open(curriculum_summary_file, "w", encoding="utf8", newline="") as f:
-        fc = csv.DictWriter(
-            f,
-            fieldnames=tasks_summaries[0].keys(),
-        )
+        fc = csv.DictWriter(f, fieldnames=tasks_summaries[0].keys(),)
         fc.writeheader()
         fc.writerows(tasks_summaries)
     return curriculum_summary_file

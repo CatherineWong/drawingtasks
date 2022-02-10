@@ -56,6 +56,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
                             n_decorators=str(0),
                         )
                         all_strokes += object_shape.strokes
+
                         all_shapes.append(object_shape)
         return random_sample_ratio_ordered_array(
             all_strokes, train_ratio, strings_array=all_shapes,
@@ -141,7 +142,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
         :ret: object_shape, height, height_string.
 
         """
-        full_object_shape = Shape()
+        full_object_shape = Shape(strokes=[])
 
         # Place outer shapes.
         outer_shape_size = peval(outer_shapes_min_size)
@@ -272,6 +273,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
         full_object_shape.synthetic_language = full_object_shape.synthetic_language[1:]
         full_object_shape.strokes = [full_object_shape.strokes]
         full_object_shape._connect_language()
+
         return (
             full_object_shape,
             height,
@@ -284,21 +286,22 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
         (
             simple_train,
             simple_test,
-            simple_train_strings,
-            simple_test_strings,
-        ) = self._generate_simple_nuts_stimuli_strings(train_ratio)
+            simple_train_shapes,
+            simple_test_shapes,
+        ) = self._generate_simple_nuts_stimuli_shapes(train_ratio)
+
         (
             perforated_train,
             perforated_test,
-            perforated_train_strings,
-            perforated_test_strings,
-        ) = self._generate_perforated_nuts_stimuli_strings(train_ratio)
+            perforated_train_shapes,
+            perforated_test_shapes,
+        ) = self._generate_perforated_nuts_stimuli_shapes(train_ratio)
 
         return (
             simple_train + perforated_train,
             simple_test + perforated_test,
-            simple_train_strings + perforated_train_strings,
-            simple_test_strings + perforated_test_strings,
+            simple_train_shapes + perforated_train_shapes,
+            simple_test_shapes + perforated_test_shapes,
         )
 
     def _generate_train_test_tasks(
@@ -315,6 +318,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
             render_parsed_program_fn=object_primitives.render_parsed_program,
             task_generator_name=self.name,
             train_ratio=train_ratio,
+            use_object_shapes=True,
         )
         max_train = len(train_tasks) if max_train == None else max_train
         max_test = len(test_tasks) if max_test == None else max_test

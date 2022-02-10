@@ -12,11 +12,12 @@ from class_registry import ClassRegistry
 from dreamcoder.utilities import NEGATIVEINFINITY
 from dreamcoder.task import Task
 from dreamcoder.grammar import Grammar
-from dreamcoder.program import Program
+from dreamcoder.program import VERBOSITY_0, VERBOSITY_1, Program
 import math, random, itertools, copy
 
 DEFAULT_DRAWING_TASK_GENERATOR = "drawing"
 PROGRAMS_NAME = "programs"  # If in name, this has programs.
+SYNTHETIC_NAME = "synthetic"  # If in name, this has synthetic language.
 
 TasksGeneratorRegistry = ClassRegistry("name", unique=True)
 
@@ -239,7 +240,7 @@ class AbstractTasksGenerator:
         self, num_tasks_to_generate_per_condition, train_ratio
     ):
         """Helper method that returns the true number of tasks to generate and a human readable name. Generator must have defined an _generate_strokes_for_stimuli function."""
-        if PROGRAMS_NAME in self.name:
+        if PROGRAMS_NAME in self.name or SYNTHETIC_NAME in self.name:
             train, test, _, _ = self._generate_strokes_strings_for_stimuli(train_ratio)
         else:
             train, test = self._generate_strokes_for_stimuli(train_ratio)
@@ -261,6 +262,7 @@ class AbstractTasksGenerator:
         task_generator_name=None,
         train_ratio=1.0,
         render_parsed_program_fn=None,
+        use_object_shapes=False,
     ):
         """Helper method to generate Drawing Tasks from strokes arrays. Deprecated: number to generate."""
         (
@@ -299,51 +301,86 @@ class AbstractTasksGenerator:
                 for (task_idx, task_strokes) in enumerate(test_tasks)
             ]
         else:
+            # From the 'programs' generators.
             (
                 train_tasks,
                 test_tasks,
-                train_strings,
-                test_strings,
+                train_shapes,
+                test_shapes,
             ) = self._generate_strokes_strings_for_stimuli(train_ratio)
 
-            train_strings, train_synthetic = zip(*train_strings)
-            test_strings, test_synthetic = zip(*test_strings)
+            # Back compatability: separate synthetic dictionaries and programs.
+            if use_object_shapes:
+                train_tasks = [
+                    DrawingTask(
+                        task_id=task_idx,
+                        request=request_type,
+                        ground_truth_strokes=task_strokes,
+                        render_strokes_fn=render_strokes_fn,
+                        task_generator_name=task_generator_name
+                        + f"_{TaskCurriculum.SPLIT_TRAIN}",
+                        render_parsed_program_fn=render_parsed_program_fn,
+                        task_shape=task_shape,
+                    )
+                    for (task_idx, (task_strokes, task_shape),) in enumerate(
+                        zip(train_tasks, train_shapes)
+                    )
+                ]
 
-            train_tasks = [
-                DrawingTask(
-                    task_id=task_idx,
-                    request=request_type,
-                    ground_truth_strokes=task_strokes,
-                    ground_truth_program=task_program,
-                    render_strokes_fn=render_strokes_fn,
-                    task_generator_name=task_generator_name
-                    + f"_{TaskCurriculum.SPLIT_TRAIN}",
-                    render_parsed_program_fn=render_parsed_program_fn,
-                    synthetic_abstractions=task_synthetic,
-                )
-                for (
-                    task_idx,
-                    (task_strokes, task_program, task_synthetic),
-                ) in enumerate(zip(train_tasks, train_strings, train_synthetic))
-            ]
+                test_tasks = [
+                    DrawingTask(
+                        task_id=task_idx,
+                        request=request_type,
+                        ground_truth_strokes=task_strokes,
+                        render_strokes_fn=render_strokes_fn,
+                        task_generator_name=task_generator_name
+                        + f"_{TaskCurriculum.SPLIT_TEST}",
+                        render_parsed_program_fn=render_parsed_program_fn,
+                        task_shape=task_shape,
+                    )
+                    for (task_idx, (task_strokes, task_shape),) in enumerate(
+                        zip(test_tasks, test_shapes)
+                    )
+                ]
+            else:
+                train_strings, train_synthetic = zip(*train_shapes)
+                test_strings, test_synthetic = zip(*test_shapes)
 
-            test_tasks = [
-                DrawingTask(
-                    task_id=task_idx,
-                    request=request_type,
-                    ground_truth_strokes=task_strokes,
-                    ground_truth_program=task_program,
-                    render_strokes_fn=render_strokes_fn,
-                    task_generator_name=task_generator_name
-                    + f"_{TaskCurriculum.SPLIT_TEST}",
-                    render_parsed_program_fn=render_parsed_program_fn,
-                    synthetic_abstractions=task_synthetic,
-                )
-                for (
-                    task_idx,
-                    (task_strokes, task_program, task_synthetic),
-                ) in enumerate(zip(test_tasks, test_strings, test_synthetic))
-            ]
+                train_tasks = [
+                    DrawingTask(
+                        task_id=task_idx,
+                        request=request_type,
+                        ground_truth_strokes=task_strokes,
+                        ground_truth_program=task_program,
+                        render_strokes_fn=render_strokes_fn,
+                        task_generator_name=task_generator_name
+                        + f"_{TaskCurriculum.SPLIT_TRAIN}",
+                        render_parsed_program_fn=render_parsed_program_fn,
+                        synthetic_abstractions=task_synthetic,
+                    )
+                    for (
+                        task_idx,
+                        (task_strokes, task_program, task_synthetic),
+                    ) in enumerate(zip(train_tasks, train_strings, train_synthetic))
+                ]
+
+                test_tasks = [
+                    DrawingTask(
+                        task_id=task_idx,
+                        request=request_type,
+                        ground_truth_strokes=task_strokes,
+                        ground_truth_program=task_program,
+                        render_strokes_fn=render_strokes_fn,
+                        task_generator_name=task_generator_name
+                        + f"_{TaskCurriculum.SPLIT_TEST}",
+                        render_parsed_program_fn=render_parsed_program_fn,
+                        synthetic_abstractions=task_synthetic,
+                    )
+                    for (
+                        task_idx,
+                        (task_strokes, task_program, task_synthetic),
+                    ) in enumerate(zip(test_tasks, test_strings, test_synthetic))
+                ]
 
         return train_tasks, test_tasks
 
@@ -419,6 +456,8 @@ class DrawingTask(Task):
         rendering=None,
         task_generator_name=DEFAULT_DRAWING_TASK_GENERATOR,
         synthetic_abstractions={},
+        task_shape=None,
+        synthetic_language={},
     ):
         padded_index = str.zfill(str(task_id), 3)
 
@@ -429,28 +468,60 @@ class DrawingTask(Task):
             task_name = f"{task_generator_name}_{padded_index}"
         super(DrawingTask, self).__init__(task_name, request, examples=[], features=[])
 
+        self.task_shape = task_shape
         self.task_generator_name = task_generator_name
         self.ground_truth_program = (
             ground_truth_program  # Single canonical ground truth program
         )
+        if ground_truth_program is None and task_shape is not None:
+            self.ground_truth_program = task_shape.base_program
+
         self.ground_truth_strokes = (
             ground_truth_strokes  # Single canonical ground truth strokes
         )
         self.possible_ground_truth_programs = [
-            ground_truth_program
+            self.ground_truth_program
         ]  # For multiple ambiguous parses.
+
+        # Add verbose ground truth programs and unsimplified
+        self.verbose_ground_truth_programs = {
+            verbosity_level: Program.parse(self.ground_truth_program).show(
+                isFunction=False, alternate_names=verbosity_level
+            )
+            for verbosity_level in [VERBOSITY_0, VERBOSITY_1]
+        }
+        # Add unsimplified if we have it.
+        if task_shape is not None:
+            self.verbose_ground_truth_programs[
+                "unfolded"
+            ] = task_shape.unsimplified_program
+            for verbosity_level in [VERBOSITY_0, VERBOSITY_1]:
+                self.verbose_ground_truth_programs[
+                    "unfolded_" + str(verbosity_level)
+                ] = {
+                    Program.parse(task_shape.unsimplified_program).show(
+                        isFunction=False, alternate_names=verbosity_level
+                    )
+                }
+
         self.possible_ground_truth_strokes = [ground_truth_strokes]
         self.rendering = rendering
         self.render_parsed_program = render_parsed_program_fn
         self.render_strokes = render_strokes_fn
         if self.rendering is None:
             if self.ground_truth_program is not None:
-                self.rendering = render_parsed_program_fn(ground_truth_program)
+                self.rendering = render_parsed_program_fn(self.ground_truth_program)
             elif self.ground_truth_strokes is not None:
                 self.rendering = render_strokes_fn(ground_truth_strokes)
         assert self.rendering is not None
 
         self.synthetic_abstractions = synthetic_abstractions
+        if self.synthetic_abstractions == {} and task_shape is not None:
+            self.synthetic_abstractions = task_shape.synthetic_abstractions
+
+        self.synthetic_language = synthetic_language
+        if self.synthetic_language == {} and task_shape is not None:
+            self.synthetic_language = task_shape.synthetic_language
 
     def task_summary(self):
         strokes = (
@@ -468,9 +539,28 @@ class DrawingTask(Task):
             "ground_truth_strokes": [strokes],
             "n_strokes": len(strokes),
         }
+        # Add more verbose programs.
+        for verbosity_level in self.verbose_ground_truth_programs:
+            summary[
+                f"dreamcoder_program_dsl_0_{verbosity_level}"
+            ] = self.verbose_ground_truth_programs[verbosity_level]
+
         # Add any synthetic abstractions we have. Take the cross product of params.
-        if "program" in self.task_generator_name:
+        if (
+            "program" in self.task_generator_name
+            or "synthetic" in self.task_generator_name
+        ):
             summary.update(self._get_crossed_abstractions(self.synthetic_abstractions))
+
+        # Add any synthetic language we have.
+        if "synthetic" in self.task_generator_name:
+            summary["synthetic_language_whats"] = self.task_shape._print_language(
+                silent=True
+            )
+            summary["synthetic_language_wheres"] = self.task_shape._print_language(
+                whats=False, wheres=True, silent=True
+            )
+
         return summary
 
     def _get_crossed_abstractions(self, synthetic_abstractions):

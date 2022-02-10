@@ -420,7 +420,7 @@ class Shape:
             else connect_strokes([self.unsimplified_program, unsimplified_program])
         )
         for s in new_shapes:
-            self.strokes += s.strokes
+            self.strokes += copy.deepcopy(s.strokes)
             for k in s.synthetic_abstractions:
                 self.synthetic_abstractions[k] += s.synthetic_abstractions[k]
             self.synthetic_language += s.synthetic_language
@@ -472,15 +472,21 @@ class Shape:
             n + "s" for n in self.synthetic_language[stroke][level][LANG_NOUNS]
         ]
 
-    def _print_language(self, level=MID_LEVEL_LANG, whats=True, wheres=False):
+    def _print_language(
+        self, level=MID_LEVEL_LANG, whats=True, wheres=False, silent=False
+    ):
         if whats:
             what_lang = [stroke[level][LANG_WHAT] for stroke in self.synthetic_language]
-            print(what_lang)
+            if not silent:
+                print(what_lang)
+            return what_lang
         if wheres:
             where_lang = [
                 stroke[level][LANG_WHERE] for stroke in self.synthetic_language
             ]
-            print(where_lang)
+            if not silent:
+                print(where_lang)
+            return where_lang
 
 
 r_shape = Shape.init_with_language(
