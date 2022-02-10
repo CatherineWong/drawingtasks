@@ -16,6 +16,7 @@ import math
 import cairo
 import imageio
 import numpy as np
+from num2words import num2words
 from dreamcoder.utilities import Curried
 from dreamcoder.program import *
 from dreamcoder.type import baseType, arrow, tmaybe, t0, t1, t2
@@ -354,21 +355,28 @@ short_l_string = T_string(
 
 ### Shape wrapper class. Contains sub-fields for the stroke array, base DSL program, synthetic language, and synthetic abstractions associated with the shape.
 LANG_A = "a"
-LANG_TINY, LANG_SMALL, LANG_MEDIUM, LANG_LARGE = "tiny", "small", "medium", "large"
-LANG_SIZES = [LANG_TINY, LANG_SMALL, LANG_MEDIUM, LANG_LARGE]
+LANG_TINY, LANG_SMALL, LANG_MEDIUM, LANG_LARGE, LANG_VERY_LARGE = (
+    "tiny",
+    "small",
+    "medium",
+    "large",
+    "very large",
+)
+LANG_SIZES = [LANG_TINY, LANG_SMALL, LANG_MEDIUM, LANG_LARGE, LANG_VERY_LARGE]
 LANG_CIRCLE, LANG_RECTANGLE, LANG_LINE, LANG_SQUARE = (
     "circle",
     "rectangle",
     "line",
     "square",
 )
+LANG_CENTER_OF_THE_IMAGE = "center of the image"
 LANG_GON_NAMES = {
     3: "triangle",
     4: "square",
     5: "pentagon",
     6: "hexagon",
     7: "septagon",
-    8: "octogon",
+    8: "octagon",
     9: "nonagon",
 }
 
@@ -380,11 +388,13 @@ class Shape:
         base_program=None,
         unsimplified_program=None,
         synthetic_language=None,  # A list of language dicts for each stroke.
-        synthetic_abstractions=SYNTHETIC_DICT,
+        synthetic_abstractions=None,
     ):
         self.strokes = strokes
         self.base_program = base_program
         self.unsimplified_program = unsimplified_program
+        if self.base_program is not None and self.unsimplified_program is None:
+            self.unsimplified_program = base_program
         self.synthetic_language = synthetic_language
         if synthetic_language is None:
             self.synthetic_language = [copy.deepcopy(SYNTHETIC_LANG_DICT)]
@@ -409,7 +419,7 @@ class Shape:
             else connect_strokes([self.unsimplified_program, unsimplified_program])
         )
         for s in new_shapes:
-            self.strokes += s.object_stroke
+            self.strokes += s.strokes
             for k in s.synthetic_abstractions:
                 self.synthetic_abstractions[k] += s.synthetic_abstractions[k]
             self.synthetic_language += s.synthetic_language
@@ -423,7 +433,7 @@ class Shape:
         nouns=[],
         adjectives=[],
         article=[],
-        where=[],
+        where=[LANG_CENTER_OF_THE_IMAGE],
     ):
         shape = Shape(
             strokes=strokes,
@@ -450,7 +460,16 @@ class Shape:
         new_adjectives = []
         for adjective in self.synthetic_language[stroke][level][LANG_ADJECTIVES]:
             new_adj = adjective if adjective not in LANG_SIZES else new_size
+            new_adjectives.append(new_adj)
         self.synthetic_language[stroke][level][LANG_ADJECTIVES] = new_adjectives
+
+    def _replace_article(self, prefix, n, stroke=0, level=MID_LEVEL_LANG):
+        self.synthetic_language[stroke][level][LANG_ARTICLE] = [
+            prefix + " " + num2words(n)
+        ]
+        self.synthetic_language[stroke][level][LANG_NOUNS] = [
+            n + "s" for n in self.synthetic_language[stroke][level][LANG_NOUNS]
+        ]
 
     def _print_language(self, level=MID_LEVEL_LANG, whats=True, wheres=False):
         if whats:
@@ -484,12 +503,39 @@ cc_shape = Shape.init_with_language(
 
 def T_shape(shape, s="1", theta="0", x="0", y="0", simplify=True):
     tmat, m_string = M_string(s, theta, x, y, simplify=simplify)  # get affine matrix.
+    shape = copy.deepcopy(shape)
     shape.strokes = _tform_once(shape.strokes, tmat)
     shape.base_program = f"(T {shape.base_program} {m_string})"
 
     # Generate an unconstant folded one also.
     tmat, m_string = M_string(s, theta, x, y, simplify=False)
-    shape.unsimplified_program = f"(T {shape.base_program} {m_string})"
+    shape.unsimplified_program = f"(T {shape.unsimplified_program} {m_string})"
+    return shape
+
+
+def rotation_shape(
+    shape,
+    prefix,
+    n,
+    displacement="0.5",
+    decorator_start_angle="(/ pi 4)",
+    simplify=True,
+):
+    rotated_strokes, base_program = rotation_string(
+        shape.strokes, shape.base_program, displacement, decorator_start_angle, simplify
+    )
+    _, unsimplified_program = rotation_string(
+        shape.strokes,
+        shape.unsimplified_program,
+        displacement,
+        decorator_start_angle,
+        simplify,
+    )
+    shape = copy.deepcopy(shape)
+    shape.strokes = rotated_strokes
+    shape.base_program = base_program
+    shape.unsimplified_program = unsimplified_program
+    shape._replace_article(prefix, n)
     return shape
 
 

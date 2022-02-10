@@ -16,7 +16,7 @@ from tasksgenerator.bases_parts_tasks_generator import *
 
 import tasksgenerator.nuts_bolts_programs_tasks_generator as to_test
 
-DESKTOP = f"/Users/catherinewong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/{to_test.NutsBoltsProgramsTasksGenerator.name}"  # Internal for testing purposes.
+DESKTOP = f"/Users/catwong/Desktop/zyzzyva/research/lax-language-abstractions/drawing_tasks_stimuli/{to_test.NutsBoltsProgramsTasksGenerator.name}"  # Internal for testing purposes.
 
 generator = TasksGeneratorRegistry[to_test.NutsBoltsProgramsTasksGenerator.name]
 
@@ -75,12 +75,9 @@ def test_generate_dsl_primitives():
 
 def test_generate_mid_dsl_primitives(tmpdir):
     generator = TasksGeneratorRegistry[to_test.NutsBoltsProgramsTasksGenerator.name]
-    (
-        train,
-        test,
-        train_strings,
-        test_strings,
-    ) = generator._generate_dsl_primitives(train_ratio=0.8)
+    (train, test, train_strings, test_strings,) = generator._generate_dsl_primitives(
+        train_ratio=0.8
+    )
     for split, strings in [("train", train_strings), ("test", test_strings)]:
         objects, synthetic = zip(*strings)
         _test_parse_render_save_programs(

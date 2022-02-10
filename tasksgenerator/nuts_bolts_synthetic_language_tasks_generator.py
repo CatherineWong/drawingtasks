@@ -107,7 +107,19 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
             all_strokes, train_ratio, strings_array=all_shapes,
         )
 
-    def _generate_perforated_shapes_string(
+    def _get_inner_shape_size(self, float_size):
+        INNER_SIZING = {0.5: LANG_TINY, 1: LANG_SMALL, 2: LANG_MEDIUM}
+        return INNER_SIZING[float_size]
+
+    def _get_outer_shape_size(self, float_size):
+        if float_size <= 2:
+            return LANG_MEDIUM
+        elif float_size > 2 and float_size < 4:
+            return LANG_LARGE
+        else:
+            return LANG_VERY_LARGE
+
+    def _generate_perforated_shapes_shape(
         self,
         outer_shapes=[c_shape],
         outer_shapes_min_size=str(LARGE),
@@ -137,12 +149,13 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
 
         if len(outer_shapes) > 0:
             outer_shape_size = peval(outer_shapes_min_size)
-            outer_shapes = []
+            outer_shape_objects = []
             for i, shape in enumerate(outer_shapes):
                 object_shape = T_shape(shape, s=f"{outer_shape_size:g}")
 
-                # full_object_shape.strokes += object_shape.strokes
-                object_shape._replace_size_language(new_size=LANG_LARGE)
+                object_shape._replace_size_language(
+                    new_size=self._get_outer_shape_size(outer_shape_size)
+                )
                 outer_shape_size += peval(nesting_scale_unit)
 
                 # Add a low-level abstraction corresponding to the shape.
@@ -156,8 +169,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
                 )
 
                 # Add a low-level abstraction corresponding to each object in the outer loop.
-                object_shape.synthetic_abstractions[LOW_LEVEL_LANG]
-                outer_shapes.append(object_shape)
+                outer_shape_objects.append(object_shape)
 
             # Mid-level abstraction corresponding to the outer shape.
             outer_shape_abstraction = "outer_strokes"
@@ -171,15 +183,18 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
                 str(outer_shape_size)
             )
 
-            full_object_shape.add_shapes(outer_shapes)
+            full_object_shape.add_shapes(outer_shape_objects)
 
         # Place inner shapes
         if len(inner_shapes) > 0:
             inner_shape_size = peval(inner_shapes_max_size)
-            inner_shapes = []
-            for i, shape in enumerate(outer_shapes):
+            inner_shape_objects = []
+            for i, shape in enumerate(inner_shapes):
                 object_shape = T_shape(shape, s=f"{inner_shape_size:g}")
-                object_shape._replace_size_language(new_size=LANG_SMALL)
+                new_inner_shape_size = self._get_inner_shape_size(
+                    float_size=inner_shape_size
+                )
+                object_shape._replace_size_language(new_size=new_inner_shape_size)
 
                 inner_shape_size -= peval(nesting_scale_unit)
 
@@ -192,7 +207,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
                 object_shape.synthetic_abstractions[LOW_LEVEL_PARAMS].append(
                     str(peval(nesting_scale_unit))
                 )
-                inner_shapes.append(object_shape)
+                inner_shape_objects.append(object_shape)
 
             # Mid-level abstraction corresponding to the outer shape.
             shape_abstraction = "inner_strokes"
@@ -205,21 +220,20 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
             full_object_shape.synthetic_abstractions[MID_LEVEL_PARAMS].append(
                 str(inner_shape_size)
             )
-            full_object_shape.add_shapes(inner_shapes)
+            full_object_shape.add_shapes(inner_shape_objects)
 
         # Place decorators along evenly divided segments of a circle.
         # Note that this does not perfectly replicate the for-loop behavior in the original.
         if n_decorators != STR_ZERO:
-            decorator_shape, decorator_string = T_string(
-                decorator_shape[0], decorator_shape[-1], s=decorator_size
-            )
+            decorator_shape = T_string(decorator_shape, s=decorator_size)
+
             # Add the individual decorators.
             shape_abstraction = "decorator_strokes"
             full_object_shape.synthetic_abstractions[LOW_LEVEL] += [
                 shape_abstraction
             ] * int(peval(n_decorators))
             full_object_shape.synthetic_abstractions[LOW_LEVEL_PARTS] += [
-                decorator_string
+                decorator_shape.base_program
             ] * int(peval(n_decorators))
 
             # Add the whole decorator once as a mid-level abstraction.
@@ -228,33 +242,36 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
                 shape_abstraction
             )
             full_object_shape.synthetic_abstractions[MID_LEVEL_PARTS].append(
-                decorator_string
+                decorator_shape.base_program
             )
             full_object_shape.synthetic_abstractions[MID_LEVEL_PARAMS].append(
                 str(peval(n_decorators))
             )
 
-            decorator_strokes, decorator_string = rotation_string(
+            decorator_shape = rotation_shape(
                 decorator_shape,
-                decorator_string,
-                n_decorators,
-                decorator_displacement,
-                decorator_start_angle,
+                prefix="a ring of",
+                n=n_decorators,
+                displacement=decorator_displacement,
+                decorator_start_angle=decorator_start_angle,
             )
-            object_strokes += decorator_strokes
-            object_strings.append(decorator_string)
+
+            full_object_shape.add_shapes([decorator_shape])
 
         # Note: the original implementation provides the ability to generate spokes.
         # However, this functionality is actually never used.
         height, height_string = outer_shape_size, f"{outer_shape_size:g}"
-        object_string = connect_strokes(object_strings)
 
         # Finally, add the whole thing as a high level abstraction.
         shape_abstraction = "nuts_bolts_strokes"
         full_object_shape.synthetic_abstractions[HIGH_LEVEL].append(shape_abstraction)
-        full_object_shape.synthetic_abstractions[HIGH_LEVEL_PARTS].append(object_string)
-
+        full_object_shape.synthetic_abstractions[HIGH_LEVEL_PARTS].append(
+            full_object_shape.base_program
+        )
+        # Remove the empty first language
+        full_object_shape.synthetic_language = full_object_shape.synthetic_language[1:]
         full_object_shape.strokes = [full_object_shape.strokes]
+        full_object_shape._connect_language()
         return (
             full_object_shape,
             height,
