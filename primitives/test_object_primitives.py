@@ -9,6 +9,11 @@ import primitives.object_primitives as to_test
 SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)", "(rectangle)"]
 
 
+def _test_parse_render_save_shape_programs(shapes, tmpdir, split="train"):
+    program_strings = [shape.base_program for shape in shapes]
+    _test_parse_render_save_programs(program_strings, tmpdir, split)
+
+
 def _test_parse_render_save_programs(program_strings, tmpdir, split="train"):
     export_dir = tmpdir
     for program_id, program_string in enumerate(program_strings):
@@ -23,7 +28,6 @@ def _test_parse_render_save_programs(program_strings, tmpdir, split="train"):
                 to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
                 to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
             )
-            assert np.sum(rendered) > 0
             # Can it save the program?
             saved_file = to_test.export_rendered_program(
                 rendered, f"{split}_{program_id}", export_dir=export_dir
@@ -191,9 +195,7 @@ def _test_render_save_programs(
 
         canvas_size = to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT
         rendered = to_test.render_stroke_arrays_to_canvas(
-            s,
-            stroke_width_height=8 * to_test.XYLIM,
-            canvas_width_height=canvas_size,
+            s, stroke_width_height=8 * to_test.XYLIM, canvas_width_height=canvas_size,
         )
         assert not no_blanks or np.sum(rendered) > 0
         # Can it save the program?

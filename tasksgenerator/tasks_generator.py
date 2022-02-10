@@ -44,6 +44,13 @@ LOW_LEVEL_LANG, MID_LEVEL_LANG, HIGH_LEVEL_LANG = (
     "mid_level_part_language",
     "high_level_part_language",
 )
+LANG_NOUNS, LANG_ADJECTIVES, LANG_ARTICLE, LANG_WHERE, LANG_WHAT = (
+    "nouns",
+    "adjectives",
+    "article",
+    "where",
+    "what",
+)
 
 SYNTHETIC_DICT = {
     k: []
@@ -58,6 +65,12 @@ SYNTHETIC_DICT = {
         MID_LEVEL_PARAMS,
         HIGH_LEVEL_PARAMS,
     ]
+}
+LANG_DICT = {
+    k: [] for k in [LANG_NOUNS, LANG_ADJECTIVES, LANG_ARTICLE, LANG_WHERE, LANG_WHAT]
+}
+SYNTHETIC_LANG_DICT = {
+    k: LANG_DICT for k in [LOW_LEVEL_LANG, MID_LEVEL_LANG, HIGH_LEVEL_LANG]
 }
 
 

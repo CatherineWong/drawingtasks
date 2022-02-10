@@ -9,11 +9,12 @@ import primitives.gadgets_primitives as to_test
 from primitives.test_object_primitives import (
     _test_parse_render_save_programs,
     _test_render_save_programs,
+    _test_parse_render_save_shape_programs,
 )
 from tasksgenerator.bases_parts_tasks_generator import *
 from tasksgenerator.dial_tasks_generator import DIAL_SMALL
 
-DESKTOP = "/Users/catherinewong/Desktop/test"  # Internal for testing purposes.
+DESKTOP = "/Users/catwong/Desktop/test"  # Internal for testing purposes.
 
 
 def assert_evaluation_same(program_string, ground_truth):
@@ -39,13 +40,21 @@ def test_mathematical_constants():
     assert_evaluation_same("(tan pi)", 0.0)
 
 
-def test_T_string():
+def test_T_string_only():
     p, p_string = to_test._line, "l"
 
     n = 1
     y = f"(/ 0.5 (tan (/ pi {n})))"
     p, base_line_string = to_test.T_string(p, p_string, x="-0.5", y=y)
     _test_parse_render_save_programs(program_strings=[base_line_string], tmpdir=DESKTOP)
+
+
+def test_T_shape():
+    shape = to_test.l_shape
+    n = 1
+    y = f"(/ 0.5 (tan (/ pi {n})))"
+    shape = to_test.T_shape(shape, x="-0.5", y=y)
+    _test_parse_render_save_shape_programs([shape], tmpdir=DESKTOP)
 
 
 def test_T_string_human_readable():
@@ -85,12 +94,32 @@ def test_generate_dsl_primitives():
     _test_parse_render_save_programs(program_strings=test_strings, tmpdir=DESKTOP)
 
 
+def test_shape_dsl_primitives():
+    shapes = [to_test.c_shape, to_test.r_shape, to_test.l_shape]
+    for shape in shapes:
+        print(shape.base_program)
+        shape._connect_language()
+        shape._print_language()
+    _test_parse_render_save_shape_programs(shapes, tmpdir=DESKTOP)
+
+
 def test_polygon():
     test_programs = []
 
     for n_sides in range(3, 7):
         test_programs.append(to_test.polygon_string(n_sides)[-1])
     _test_parse_render_save_programs(program_strings=test_programs, tmpdir=DESKTOP)
+
+
+def test_polygon_shape():
+    shapes = [to_test.polygon_shape(n) for n in range(3, 7)]
+    for shape in shapes:
+        print(shape.base_program)
+        shape._connect_language()
+        shape._print_language()
+        if shape.unsimplified_program is not None:
+            print(shape.unsimplified_program)
+    _test_parse_render_save_shape_programs(shapes, tmpdir=DESKTOP)
 
 
 def test_scaled_rectangle_strings():

@@ -19,6 +19,7 @@ import numpy as np
 from dreamcoder.utilities import Curried
 from dreamcoder.program import *
 from dreamcoder.type import baseType, arrow, tmaybe, t0, t1, t2
+from tasksgenerator.tasks_generator import *
 
 from primitives.object_primitives import (
     tstroke,
@@ -300,10 +301,10 @@ def polygon_string(n, simplify=True):
     theta = f"(/ (* 2 pi) {n})"
 
     # Base line that forms the side.
-    _, base_line = T_string(_line, "l", x="-0.5", y=y)
+    _, base_line = T_string(_line, "l", x="-0.5", y=y, simplify=simplify)
 
     # Rotation
-    _, rotation = M_string(theta=theta)
+    _, rotation = M_string(theta=theta, simplify=simplify)
 
     polygon_string = f"(repeat {base_line} {n} {rotation})"
     return peval(polygon_string), polygon_string
@@ -350,8 +351,11 @@ short_l_string = T_string(
     l_string[0], l_string[-1], x="(- 0 0.5)"
 )  # Short horizontal line
 
-# Shape classes.
+
+### Shape wrapper class. Contains sub-fields for the stroke array, base DSL program, synthetic language, and synthetic abstractions associated with the shape.
+LANG_A = "a"
 LANG_TINY, LANG_SMALL, LANG_MEDIUM, LANG_LARGE = "tiny", "small", "medium", "large"
+LANG_SIZES = [LANG_TINY, LANG_SMALL, LANG_MEDIUM, LANG_LARGE]
 LANG_CIRCLE, LANG_RECTANGLE, LANG_LINE, LANG_SQUARE = (
     "circle",
     "rectangle",
@@ -359,35 +363,146 @@ LANG_CIRCLE, LANG_RECTANGLE, LANG_LINE, LANG_SQUARE = (
     "square",
 )
 LANG_GON_NAMES = {
-    "3": "triangle",
-    "4": "square",
-    "5": "pentagon",
-    "6": "hexagon",
-    "7": "septagon",
-    "8": "octogon",
-    "9": "nonagon",
+    3: "triangle",
+    4: "square",
+    5: "pentagon",
+    6: "hexagon",
+    7: "septagon",
+    8: "octogon",
+    9: "nonagon",
 }
 
 
 class Shape:
     def __init__(
         self,
-        strokes=None,
+        strokes=[],
         base_program=None,
-        synthetic_adjectives=None,
-        synthetic_noun=None,
-        synthetic_abstractions=None,
+        unsimplified_program=None,
+        synthetic_language=None,  # A list of language dicts for each stroke.
+        synthetic_abstractions=SYNTHETIC_DICT,
     ):
         self.strokes = strokes
         self.base_program = base_program
-        self.synthetic_adjectives = synthetic_adjectives
-        self.synthetic_noun = synthetic_noun
+        self.unsimplified_program = unsimplified_program
+        self.synthetic_language = synthetic_language
+        if synthetic_language is None:
+            self.synthetic_language = [copy.deepcopy(SYNTHETIC_LANG_DICT)]
         self.synthetic_abstractions = synthetic_abstractions
+        if synthetic_abstractions is None:
+            self.synthetic_abstractions = copy.deepcopy(SYNTHETIC_DICT)
+
+    def add_shapes(self, new_shapes):
+        # Connect all of the programs.
+        base_program = connect_strokes([s.base_program for s in new_shapes])
+        unsimplified_program = connect_strokes(
+            [s.unsimplified_program for s in new_shapes]
+        )
+        self.base_program = (
+            base_program
+            if self.base_program is None
+            else connect_strokes([self.base_program, base_program])
+        )
+        self.unsimplified_program = (
+            unsimplified_program
+            if self.unsimplified_program is None
+            else connect_strokes([self.unsimplified_program, unsimplified_program])
+        )
+        for s in new_shapes:
+            self.strokes += s.object_stroke
+            for k in s.synthetic_abstractions:
+                self.synthetic_abstractions[k] += s.synthetic_abstractions[k]
+            self.synthetic_language += s.synthetic_language
+
+    @staticmethod
+    def init_with_language(
+        strokes,
+        base_program,
+        unsimplified_program=None,
+        level=MID_LEVEL_LANG,
+        nouns=[],
+        adjectives=[],
+        article=[],
+        where=[],
+    ):
+        shape = Shape(
+            strokes=strokes,
+            base_program=base_program,
+            unsimplified_program=unsimplified_program,
+        )
+        shape.synthetic_language[0][level][LANG_NOUNS] = nouns
+        shape.synthetic_language[0][level][LANG_ADJECTIVES] = adjectives
+        shape.synthetic_language[0][level][LANG_ARTICLE] = article
+        shape.synthetic_language[0][level][LANG_WHERE] = where
+        return shape
+
+    def _connect_language(self):
+        # Connects all of the what language into one.
+        for stroke in range(len(self.synthetic_language)):
+            for level in self.synthetic_language[stroke]:
+                self.synthetic_language[stroke][level][LANG_WHAT] = " ".join(
+                    self.synthetic_language[stroke][level][LANG_ARTICLE]
+                    + self.synthetic_language[stroke][level][LANG_ADJECTIVES]
+                    + self.synthetic_language[stroke][level][LANG_NOUNS]
+                )
+
+    def _replace_size_language(self, new_size, stroke=0, level=MID_LEVEL_LANG):
+        new_adjectives = []
+        for adjective in self.synthetic_language[stroke][level][LANG_ADJECTIVES]:
+            new_adj = adjective if adjective not in LANG_SIZES else new_size
+        self.synthetic_language[stroke][level][LANG_ADJECTIVES] = new_adjectives
+
+    def _print_language(self, level=MID_LEVEL_LANG, whats=True, wheres=False):
+        if whats:
+            what_lang = [stroke[level][LANG_WHAT] for stroke in self.synthetic_language]
+            print(what_lang)
+        if wheres:
+            where_lang = [
+                stroke[level][LANG_WHERE] for stroke in self.synthetic_language
+            ]
+            print(where_lang)
 
 
-c_shape = Shape(
-    _circle, "c", synthetic_adjectives=[LANG_TINY], synthetic_noun=LANG_CIRCLE
+r_shape = Shape.init_with_language(
+    _rectangle, "r", nouns=[LANG_SQUARE], adjectives=[LANG_TINY], article=[LANG_A]
 )
-r_shape = Shape(
-    _rectangle, "r", synthetic_adjectives=[LANG_TINY], synthetic_noun=LANG_SQUARE
+l_shape = Shape.init_with_language(
+    _line, "l", nouns=[LANG_LINE], adjectives=[LANG_TINY], article=[LANG_A]
 )
+c_shape = Shape.init_with_language(
+    _circle, "c", nouns=[LANG_CIRCLE], adjectives=[LANG_TINY], article=[LANG_A]
+)
+
+cc_shape = Shape.init_with_language(
+    cc_string[0],
+    cc_string[1],
+    nouns=[LANG_CIRCLE],
+    adjectives=[LANG_SMALL],
+    article=[LANG_A],
+)
+
+
+def T_shape(shape, s="1", theta="0", x="0", y="0", simplify=True):
+    tmat, m_string = M_string(s, theta, x, y, simplify=simplify)  # get affine matrix.
+    shape.strokes = _tform_once(shape.strokes, tmat)
+    shape.base_program = f"(T {shape.base_program} {m_string})"
+
+    # Generate an unconstant folded one also.
+    tmat, m_string = M_string(s, theta, x, y, simplify=False)
+    shape.unsimplified_program = f"(T {shape.base_program} {m_string})"
+    return shape
+
+
+def polygon_shape(n, simplify=True):
+    stroke, program = polygon_string(n, simplify)
+    s, unsimplified_program = polygon_string(n, simplify=False)
+    shape = Shape.init_with_language(
+        stroke,
+        program,
+        unsimplified_program,
+        nouns=[LANG_GON_NAMES[n]],
+        adjectives=[LANG_TINY],
+        article=[LANG_A],
+    )
+    return shape
+
