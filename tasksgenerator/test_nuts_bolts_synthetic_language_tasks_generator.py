@@ -43,3 +43,25 @@ def test_generate_simple_nuts_stimuli_shapes(tmpdir):
         # Save all of the shapes
         _test_parse_render_save_shape_programs(shapes, DESKTOP, split=split)
 
+
+def test_generate_perforated_nuts_stimuli_shapes(tmpdir):
+    generator = TasksGeneratorRegistry[
+        to_test.NutsBoltsSyntheticLanguageTasksGenerator.name
+    ]
+    (
+        train,
+        test,
+        train_shapes,
+        test_shapes,
+    ) = generator._generate_perforated_nuts_stimuli_shapes(train_ratio=0.8)
+    for (split, shapes) in [
+        ("train", train_shapes),
+        ("test", test_shapes),
+    ]:
+        # Print all of the whats.
+        for idx, s in enumerate(shapes):
+            print(f"{split} {idx}")
+            s._print_language()
+
+        # Save all of the shapes
+        _test_parse_render_save_shape_programs(shapes, DESKTOP, split=split)

@@ -322,6 +322,7 @@ def nested_scaling_string(shape_string, n, scale_factor):
 def rotation_string(
     p, p_string, n, displacement="0.5", decorator_start_angle="(/ pi 4)", simplify=True
 ):
+
     if simplify:
         n = get_simplified(n)
         displacement = get_simplified(displacement)
@@ -330,10 +331,10 @@ def rotation_string(
     theta = f"(/ (* 2 pi) {n})"
 
     # Base line that forms the side.
-    _, base_object = T_string(p, p_string, x=x, y=y)
+    _, base_object = T_string(p, p_string, x=x, y=y, simplify=simplify)
 
     # Rotation
-    _, rotation = M_string(theta=theta)
+    _, rotation = M_string(theta=theta, simplify=simplify)
 
     rotated_object_string = f"(repeat {base_object} {n} {rotation})"
     return peval(rotated_object_string), rotated_object_string
@@ -521,15 +522,23 @@ def rotation_shape(
     decorator_start_angle="(/ pi 4)",
     simplify=True,
 ):
+
     rotated_strokes, base_program = rotation_string(
-        shape.strokes, shape.base_program, displacement, decorator_start_angle, simplify
+        p=shape.strokes,
+        p_string=shape.base_program,
+        n=n,
+        displacement=displacement,
+        decorator_start_angle=decorator_start_angle,
+        simplify=simplify,
     )
+
     _, unsimplified_program = rotation_string(
-        shape.strokes,
-        shape.unsimplified_program,
-        displacement,
-        decorator_start_angle,
-        simplify,
+        p=shape.strokes,
+        p_string=shape.unsimplified_program,
+        n=n,
+        displacement=displacement,
+        decorator_start_angle=decorator_start_angle,
+        simplify=simplify,
     )
     shape = copy.deepcopy(shape)
     shape.strokes = rotated_strokes

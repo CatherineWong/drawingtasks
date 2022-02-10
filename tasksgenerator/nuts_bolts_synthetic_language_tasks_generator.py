@@ -61,7 +61,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
             all_strokes, train_ratio, strings_array=all_shapes,
         )
 
-    def _generate_perforated_nuts_stimuli_strings(
+    def _generate_perforated_nuts_stimuli_shapes(
         self, train_ratio, stochastic_language=False
     ):
         """Generates nuts with perforated 'decorators' around the center. Also generates strings. See: nuts_bolts_tasks_generator._generate_perforated_nuts_stimuli for original implementation."""
@@ -225,7 +225,7 @@ class NutsBoltsSyntheticLanguageTasksGenerator(AbstractTasksGenerator):
         # Place decorators along evenly divided segments of a circle.
         # Note that this does not perfectly replicate the for-loop behavior in the original.
         if n_decorators != STR_ZERO:
-            decorator_shape = T_string(decorator_shape, s=decorator_size)
+            decorator_shape = T_shape(decorator_shape, s=decorator_size)
 
             # Add the individual decorators.
             shape_abstraction = "decorator_strokes"
