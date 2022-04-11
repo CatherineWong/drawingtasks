@@ -263,7 +263,7 @@
 },
 "metadata": {
 "name": "nuts_bolts_synthetic_all",
-"timestamp": "2022-02-10T17-08-42-296798",
+"timestamp": "2022-02-17T17-36-13-615063",
 "generating_command": "python generate_drawing_tasks.py --task_export_dir data --synthesis_export_dir None --summaries_export_dir None --libraries_export_dir data/libraries --renders_export_dir None --tasks_generator nuts_bolts_synthetic --num_tasks_per_condition all --train_ratio 0.8 --no_synthesis_tasks False --no_render False --task_summaries True"
 }
 }

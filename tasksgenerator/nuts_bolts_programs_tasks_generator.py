@@ -299,9 +299,7 @@ class NutsBoltsProgramsTasksGenerator(AbstractTasksGenerator):
             simple_train_strings,
             simple_test_strings,
         ) = self._generate_simple_nuts_stimuli_strings(train_ratio)
-        import pdb
 
-        pdb.set_trace()
         (
             perforated_train,
             perforated_test,

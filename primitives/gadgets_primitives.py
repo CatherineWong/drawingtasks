@@ -271,7 +271,7 @@ def get_simplified(program_string):
             return program_string
 
 
-def M_string(s="1", theta="0", x="0", y="0", simplify=True):
+def M_string(s="1", theta="0", x="0", y="0", simplify=False):
     affine_matrix = _makeAffineSimple(peval(s), peval(theta), peval(x), peval(y))
     if simplify:
         m_string = f"(M {get_simplified(s)} {get_simplified(theta)} {get_simplified(x)} {get_simplified(y)})"
@@ -280,7 +280,7 @@ def M_string(s="1", theta="0", x="0", y="0", simplify=True):
     return affine_matrix, m_string
 
 
-def T_string(p, p_string, s="1", theta="0", x="0", y="0", simplify=True):
+def T_string(p, p_string, s="1", theta="0", x="0", y="0", simplify=False):
     """Transform Python utility wrapper that applies an affine transformation matrix directly to a primitive, while also generating a string that can be applied to a downstream stroke. Python-usable API that mirrors the functional semantics"""
     tmat, m_string = M_string(s, theta, x, y, simplify=simplify)  # get affine matrix.
     p = _tform_once(p, tmat)
@@ -288,14 +288,14 @@ def T_string(p, p_string, s="1", theta="0", x="0", y="0", simplify=True):
     return p, t_string
 
 
-def scaled_rectangle_string(w, h, simplify=True):
+def scaled_rectangle_string(w, h, simplify=False):
     if simplify:
         w, h = get_simplified(w), get_simplified(h)
     scaled_rectangle_string = f"(r_s {w} {h})"
     return peval(scaled_rectangle_string), scaled_rectangle_string
 
 
-def polygon_string(n, simplify=True):
+def polygon_string(n, simplify=False):
     if simplify:
         n = get_simplified(str(n))
     y = f"(/ 0.5 (tan (/ pi {n})))"
@@ -320,7 +320,7 @@ def nested_scaling_string(shape_string, n, scale_factor):
 
 
 def rotation_string(
-    p, p_string, n, displacement="0.5", decorator_start_angle="(/ pi 4)", simplify=True
+    p, p_string, n, displacement="0.5", decorator_start_angle="(/ pi 4)", simplify=False
 ):
 
     if simplify:

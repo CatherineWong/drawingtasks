@@ -71,9 +71,7 @@ parser.add_argument(
     help="How many tasks to leave out at each translation model fitting.",
 )
 parser.add_argument(
-    "--num_ibm_iterations",
-    type=int,
-    default=DEFAULT_IBM_ITERATIONS,
+    "--num_ibm_iterations", type=int, default=DEFAULT_IBM_ITERATIONS,
 )
 parser.add_argument("--random_likelihood_baseline", action="store_true")
 

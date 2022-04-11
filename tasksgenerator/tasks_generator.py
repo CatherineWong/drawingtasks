@@ -498,11 +498,9 @@ class DrawingTask(Task):
             for verbosity_level in [VERBOSITY_0, VERBOSITY_1]:
                 self.verbose_ground_truth_programs[
                     "unfolded_" + str(verbosity_level)
-                ] = {
-                    Program.parse(task_shape.unsimplified_program).show(
-                        isFunction=False, alternate_names=verbosity_level
-                    )
-                }
+                ] = Program.parse(task_shape.unsimplified_program).show(
+                    isFunction=False, alternate_names=verbosity_level
+                )
 
         self.possible_ground_truth_strokes = [ground_truth_strokes]
         self.rendering = rendering
