@@ -1,8 +1,8 @@
 """test_tasks_generator.py | Author: Catherine Wong"""
 
 import tasksgenerator.tasks_generator as to_test
-from dreamcoder.program import Program
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.program import Program
+from dreamcoder_programs.grammar import Grammar
 import primitives.object_primitives as object_primitives
 
 

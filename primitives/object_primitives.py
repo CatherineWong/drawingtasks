@@ -12,9 +12,9 @@ import math
 import cairo
 import imageio
 import numpy as np
-from dreamcoder.utilities import Curried
-from dreamcoder.program import Program, Primitive
-from dreamcoder.type import baseType, arrow, tmaybe, t0, t1, t2
+from dreamcoder_programs.utilities import Curried
+from dreamcoder_programs.program import Program, Primitive
+from dreamcoder_programs.type import baseType, arrow, tmaybe, t0, t1, t2
 
 ### Base types
 tstroke = baseType("tstroke")

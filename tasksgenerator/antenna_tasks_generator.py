@@ -4,7 +4,7 @@ Defines TasksGenerators that produce gadget tasks with a ANTENNA on them.
 """
 import math, random, itertools
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -70,11 +70,7 @@ class SimpleAntennaTasksGenerator(AbstractTasksGenerator):
         )
 
     def _generate_stacked_antenna(
-        self,
-        n_wires=3,
-        antenna_size=ANTENNA_SMALL,
-        scale_wires=True,
-        end_shape=None,
+        self, n_wires=3, antenna_size=ANTENNA_SMALL, scale_wires=True, end_shape=None,
     ):
         l = long_vline
         w = short_hline

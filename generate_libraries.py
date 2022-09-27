@@ -14,15 +14,15 @@ Usage:
 import random
 import itertools
 import csv, os, json, argparse, sys
-from dreamcoder.task import Task
-from dreamcoder.frontier import Frontier
-from dreamcoder.compression import ocamlInduce
-from dreamcoder.utilities import get_root_dir
+from dreamcoder_programs.task import Task
+from dreamcoder_programs.frontier import Frontier
+from dreamcoder_programs.compression import ocamlInduce
+from dreamcoder_programs.utilities import get_root_dir
 import numpy as np
 
 from primitives.gadgets_primitives import *
-from dreamcoder.grammar import Grammar
-from dreamcoder.program import Program, prettyProgram
+from dreamcoder_programs.grammar import Grammar
+from dreamcoder_programs.program import Program, prettyProgram
 
 random.seed(0)
 np.random.seed(0)
@@ -202,11 +202,7 @@ def combined_libraries(libraries):
 
 
 def run_iteration_library_compression(
-    args,
-    tasks_dict,
-    library_dict,
-    max_cutoff=250,
-    timeout_mins=10,
+    args, tasks_dict, library_dict, max_cutoff=250, timeout_mins=10,
 ):
     parallel_bucket_size = args.batch_size
     shuffled_tasks = sorted(list(tasks_dict.keys()))[:max_cutoff]
@@ -297,9 +293,7 @@ def run_and_export_all_library_compression(
     for library_iteration in range(1, args.max_libraries + 1):
         print(f"...running library compression at iteration: {library_iteration}")
         frontiers_dict, library_dict = run_iteration_library_compression(
-            args,
-            frontiers_dict,
-            library_dict,
+            args, frontiers_dict, library_dict,
         )
         # Rewrite all of the library functions under new tokens.
         library_dict[MASKED_TO_ORIGINAL] = library_dict[LIBRARY].masked_to_original

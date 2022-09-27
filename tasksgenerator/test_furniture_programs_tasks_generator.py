@@ -21,7 +21,7 @@ from primitives.test_object_primitives import (
 )
 import tasksgenerator.furniture_programs_tasks_generator as to_test
 
-DESKTOP = f"/Users/catherinewong/Desktop/zyzzyva/research/language-abstractions/drawing_tasks_stimuli/{to_test.FurnitureProgramsTasksGenerator.name}"  # Internal for testing purposes.
+DESKTOP = f"/Users/catwong/Desktop/zyzzyva/research/lax-language-abstractions/drawing_tasks_stimuli/{to_test.FurnitureProgramsTasksGenerator.name}"  # Internal for testing purposes.
 
 
 generator = TasksGeneratorRegistry[to_test.FurnitureProgramsTasksGenerator.name]

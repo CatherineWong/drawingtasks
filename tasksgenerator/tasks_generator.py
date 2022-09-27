@@ -9,10 +9,10 @@ import datetime
 import numpy as np
 from collections import defaultdict
 from class_registry import ClassRegistry
-from dreamcoder.utilities import NEGATIVEINFINITY
-from dreamcoder.task import Task
-from dreamcoder.grammar import Grammar
-from dreamcoder.program import VERBOSITY_0, VERBOSITY_1, Program
+from dreamcoder_programs.utilities import NEGATIVEINFINITY
+from dreamcoder_programs.task import Task
+from dreamcoder_programs.grammar import Grammar
+from dreamcoder_programs.program import VERBOSITY_0, VERBOSITY_1, Program
 import math, random, itertools, copy
 
 DEFAULT_DRAWING_TASK_GENERATOR = "drawing"

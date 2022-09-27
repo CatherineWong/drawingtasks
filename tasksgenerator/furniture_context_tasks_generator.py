@@ -1,16 +1,16 @@
 """
-furniture_programs_tasks_generator.py | Author: Catherine Wong.
+furniture_context_tasks_generator.py | Author: Catherine Wong.
 
-Defines TaskGenerators that produce tasks for furniture drawings.
+Generates programs at varying contexts.
 
-Threads program string generating logic through the generation.
+Avoids randomizing choices.
 """
 import copy
 import itertools
 import math
 import random
 
-from dreamcoder_programs.grammar import Grammar
+from dreamcoder_programs_programs_programs.grammar import Grammar
 from primitives.gadgets_primitives import *
 
 from tasksgenerator.bases_parts_tasks_generator import *
@@ -30,8 +30,8 @@ octagon_string = T_string(octagon_string[0], octagon_string[1], s=THREE_QUARTER_
 
 
 @TasksGeneratorRegistry.register
-class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
-    name = "furniture_programs"
+class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
+    name = "furniture_context"
 
     def _generate_drawer_pulls_strings_iterator(
         self,
@@ -40,23 +40,29 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         n_drawer_pulls,
         float_location=FLOAT_CENTER,
         drawer_pull_scale=str(SCALE_UNIT),
+        context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
         wheels_generator = WheelsProgramsTasksGenerator()
 
+        if context == CONTEXT_LARGE_ABSTRACTIONS:
+            possible_outer_shapes = [[]]
+            possible_inner_shapes = [[r_string]]
+        else:
+            # Arbitrary context.
+            possible_outer_shapes = [
+                [cc_string],
+                [octagon_string],
+                [],
+            ]
+            possible_inner_shapes = [[c_string], [r_string]]
+
+        # Always have the base ones.
         base_min_size = MEDIUM * MEDIUM
-        for outer_shapes in [
-            [cc_string],
-            [cc_string, cc_string],
-            [r_string],
-            [octagon_string],
-            [],
-        ]:
+        for outer_shapes in possible_outer_shapes:
             for outer_shapes_min_size in [base_min_size]:
-                for inner_shapes in [[c_string], [r_string]]:
+                for inner_shapes in possible_inner_shapes:
                     for inner_shapes_max_size in [base_min_size * THREE_QUARTER_SCALE]:
                         for n_decorators in [0]:
-                            if outer_shapes + inner_shapes == [r_string, r_string]:
-                                continue
                             # Row of wheels is very similar to a set of drawer pulls.
                             yield wheels_generator._generate_row_of_wheels_strings(
                                 outer_shapes=outer_shapes,
@@ -83,7 +89,19 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         ],
         stack_float_locations=FLOAT_CENTER,
         generation_probability=1.0,
+        context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
+
+        if context == CONTEXT_LARGE_ABSTRACTIONS:
+            possible_base_heights_and_widths = [
+                (SMALL * 3, MEDIUM * 9),
+            ]
+            possible_drawer_pulls = [2]
+        else:
+            # Arbitrary context.
+            possible_outer_shapes = base_heights_and_widths
+            possible_drawer_pulls = [0, 2]
+
         original_generator = generator = TasksGeneratorRegistry[
             FurnitureTasksGenerator.name
         ]
@@ -107,7 +125,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
             )
             drawn_blank = False
 
-            for n_drawer_pulls in [0, 2]:
+            for n_drawer_pulls in possible_drawer_pulls:
                 for (
                     drawer_pull_idx,
                     (
@@ -276,13 +294,23 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         max_y,
         feet_heights=[SMALL, MEDIUM * 2, MEDIUM * 4],
         generation_probability=1.0,
+        context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
         short_v_line = T_string(
             short_l_string[0], short_l_string[1], theta=STR_VERTICAL
         )
+
+        if context == CONTEXT_LARGE_ABSTRACTIONS:
+            possible_feet_heights = [SMALL, MEDIUM * 2]
+            possible_foot_primitives = [LINE]
+        else:
+            # Arbitrary context.
+            possible_feet_heights = feet_heights
+            possible_foot_primitives = [RECTANGLE, LINE]
+
         # Adds a row of feet to the object. These can be short or tall.
-        for foot_primitive in [RECTANGLE, LINE]:
-            for foot_height in feet_heights:
+        for foot_primitive in possible_foot_primitives:
+            for foot_height in possible_feet_heights:
                 foot_synthetic_dict = copy.deepcopy(SYNTHETIC_DICT)
                 if foot_primitive == RECTANGLE:
                     foot_width = SMALL
@@ -369,8 +397,20 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         )
 
     def _generate_stacked_drawers_stimuli_strings(
-        self, total_drawers=4, train_ratio=1.0, generation_probability=0.45
+        self,
+        total_drawers=4,
+        train_ratio=1.0,
+        generation_probability=0.45,
+        context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
+        if context == CONTEXT_LARGE_ABSTRACTIONS:
+            generation_probability = 1.0
+            possible_n_feet = [2]
+            possible_feet_heights = [SMALL, MEDIUM * 2]
+        else:
+            possible_n_feet = [2, 3, 4]
+            possible_feet_heights = [SMALL, MEDIUM * 2, MEDIUM * 4]
+
         stimuli_strokes, stimuli_strings, stroke_dicts = [], [], []
         # Draw stacked bookshelves with no legs.
         for n_drawers in range(2, int(total_drawers) + 1):
@@ -411,7 +451,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
             ):
 
                 if enclosure_strokes:
-                    for n_feet in [2, 3, 4]:
+                    for n_feet in possible_n_feet:
                         for (
                             feet_strokes,
                             feet_string,
@@ -422,7 +462,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                             max_x=enclosure_max_x,
                             min_y=enclosure_min_y,
                             max_y=enclosure_max_y,
-                            feet_heights=[SMALL, MEDIUM * 2, MEDIUM * 4],
+                            feet_heights=possible_feet_heights,
                             generation_probability=generation_probability,
                         ):
                             drawer_strokes = [enclosure_strokes[0] + feet_strokes[0]]
@@ -451,16 +491,39 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         )
 
     def _generate_lounges_stimuli_strings(
-        self, train_ratio=1.0, generation_probability=0.6
+        self,
+        train_ratio=1.0,
+        generation_probability=0.6,
+        context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
+        if context == CONTEXT_LARGE_ABSTRACTIONS:
+            generation_probability = 1.0
+            possible_base_heights_and_widths = [
+                (SMALL * 3, MEDIUM * 9),
+            ]
+            all_seat_back_primitives = [
+                [CIRCLE, CIRCLE, ([], "empt")],
+            ]
+            possible_n_feet = [2]
+            possible_feet_heights = [SMALL, MEDIUM * 2]
+
+        else:
+            possible_base_heights_and_widths = [
+                (SMALL * 3, MEDIUM * 9),
+                (SMALL * 3, MEDIUM * 10),
+            ]
+            all_seat_back_primitives = [
+                [CIRCLE, CIRCLE, ([], "empt")],
+                [RECTANGLE, ([], "empt"), RECTANGLE],
+                [RECTANGLE, CIRCLE, ([], "empt"), RECTANGLE],
+            ]
+            possible_n_feet = [2, 3, 4]
+            possible_feet_heights = [SMALL, MEDIUM * 2]
+
         # Generates lounges containing a large base and one or more rectangular pillows on top. Lounges may or may not have an inset drawer.
         # Grab the drawer stack enclosure and add pillows, etc.
         stimuli_strokes, stimuli_strings, stroke_dicts = [], [], []
         # Draw short drawers with long legs.
-        base_heights_and_widths = [
-            (SMALL * 3, MEDIUM * 9),
-            (SMALL * 3, MEDIUM * 10),
-        ]
         for (
             enclosure_strokes,
             enclosure_stroke_strings,
@@ -471,18 +534,14 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
             enclosure_max_y,
         ) in self._generate_drawers_strings_iterator(
             n_drawers=1,
-            base_heights_and_widths=base_heights_and_widths,
+            base_heights_and_widths=possible_base_heights_and_widths,
             stack_float_locations=FLOAT_BOTTOM,
             generation_probability=1.0,
         ):
             enclosure_width = enclosure_max_x - enclosure_min_x
             if enclosure_strokes:
                 # Now add pillows.
-                all_seat_back_primitives = [
-                    [CIRCLE, CIRCLE, ([], "empt")],
-                    [RECTANGLE, ([], "empt"), RECTANGLE],
-                    [RECTANGLE, CIRCLE, ([], "empt"), RECTANGLE],
-                ]
+
                 for seat_back_primitives in all_seat_back_primitives:
                     for base_height in [MEDIUM, MEDIUM * 2]:
                         n_segments = len(seat_back_primitives)
@@ -523,7 +582,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                             right_margins=[0 for x in range(n_segments)],
                         )
 
-                        for n_feet in [2, 3, 4]:
+                        for n_feet in possible_n_feet:
                             for (
                                 feet_strokes,
                                 feet_string,
@@ -534,7 +593,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                                 max_x=enclosure_max_x,
                                 min_y=enclosure_min_y,
                                 max_y=enclosure_max_y,
-                                feet_heights=[SMALL, MEDIUM * 2],
+                                feet_heights=possible_feet_heights,
                                 generation_probability=1.0,
                             ):
                                 feet_strokes, feet_string = T_string(
@@ -582,16 +641,30 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
         )
 
     def _generate_seat_drawers_stimuli_strings(
-        self, train_ratio=1.0, generation_probability=0.7
+        self,
+        train_ratio=1.0,
+        generation_probability=0.7,
+        context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
+
+        if context == CONTEXT_LARGE_ABSTRACTIONS:
+            generation_probability = 1.0
+            possible_base_heights_and_widths = [
+                (SMALL * 3, MEDIUM * 9),
+            ]
+            possible_feet_heights = [SMALL, MEDIUM * 2]
+
+        else:
+            possible_base_heights_and_widths = [
+                (SMALL * 2, SMALL * 5),
+                (SMALL * 4, SMALL * 8),
+            ]
+            possible_feet_heights = [SMALL, MEDIUM * 2]
         # Generates lounges containing a large base and one or more rectangular pillows on top. Lounges may or may not have an inset drawer.
         # Grab the drawer stack enclosure and add pillows, etc.
         stimuli_strokes, stimuli_strings, stroke_dicts = [], [], []
         # Draw short drawers with long legs.
-        base_heights_and_widths = [
-            (SMALL * 2, SMALL * 5),
-            (SMALL * 4, SMALL * 8),
-        ]
+
         for (
             enclosure_strokes,
             enclosure_strokes_strings,
@@ -602,7 +675,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
             enclosure_max_y,
         ) in self._generate_drawers_strings_iterator(
             n_drawers=1,
-            base_heights_and_widths=base_heights_and_widths,
+            base_heights_and_widths=possible_base_heights_and_widths,
             stack_float_locations=FLOAT_TOP,
             generation_probability=1.0,
         ):
@@ -643,7 +716,7 @@ class FurnitureProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerato
                         max_x=seat_max_x,
                         min_y=seat_min_y,
                         max_y=seat_max_y,
-                        feet_heights=[SMALL, SMALL * 4],
+                        feet_heights=possible_feet_heights,
                         generation_probability=1.0,
                     ):
                         feet_strokes, feet_string = T_string(

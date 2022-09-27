@@ -4,7 +4,7 @@ Defines TasksGenerators that produce simplified and compositional stimuli simila
 """
 import math, random, itertools
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -174,8 +174,7 @@ class S16TasksGenerator(AbstractTasksGenerator):
             num_tasks_to_generate_per_condition
         )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
+            curriculum_id=human_readable, task_generator_name=self.name,
         )
 
         task_curriculum.add_tasks(
@@ -313,8 +312,7 @@ class S17TasksGenerator(AbstractTasksGenerator):
             num_tasks_to_generate_per_condition
         )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
+            curriculum_id=human_readable, task_generator_name=self.name,
         )
 
         task_curriculum.add_tasks(

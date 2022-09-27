@@ -7,7 +7,7 @@ Threads program string generating logic through the generation.
 import math, random, itertools, copy
 from sqlite3 import connect
 from primitives.gadgets_primitives import *
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.dial_programs_task_generator import DialProgramsTasksGenerator
 
 from tasksgenerator.tasks_generator import (
@@ -237,8 +237,9 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 max_y += peval(tier_height)
                 strokes = [strokes[0] + new_strokes[0]]
                 stroke_strings = connect_strokes([stroke_strings, new_stroke_strings])
-                min_x, max_x = min(peval(min_x), peval(new_min_x)), max(
-                    peval(new_max_x), peval(max_x)
+                min_x, max_x = (
+                    min(peval(min_x), peval(new_min_x)),
+                    max(peval(new_max_x), peval(max_x)),
                 )
 
                 # Replace the high-level with the whole base.
@@ -317,8 +318,9 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             max_y += antenna_height
             strokes = [strokes[0] + new_strokes[0]]
             stroke_strings = connect_strokes([stroke_strings, new_stroke_strings])
-            min_x, max_x = min(peval(min_x), peval(new_min_x)), max(
-                peval(new_max_x), peval(max_x)
+            min_x, max_x = (
+                min(peval(min_x), peval(new_min_x)),
+                max(peval(new_max_x), peval(max_x)),
             )
             antenna_synthetic_dict = copy.deepcopy(antenna[-1])
             for k in antenna_synthetic_dict:
@@ -471,9 +473,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 antenna_string,
                 antenna_dict,
             ) = antenna_generator._generate_stacked_antenna_strings(
-                n_wires=n_wires,
-                scale_wires=scale_wires,
-                end_shape=None,
+                n_wires=n_wires, scale_wires=scale_wires, end_shape=None,
             )
             strokes += antenna_object
             stroke_strings.append(antenna_string)
@@ -553,14 +553,10 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
         caboose_width = MEDIUM
         caboose_height = body_height * THREE_QUARTER_SCALE
         caboose_primitives, caboose_heights, caboose_widths, caboose_floats = (
-            [
-                RECTANGLE,
-            ],
+            [RECTANGLE,],
             [caboose_height],
             [caboose_width],
-            [
-                FLOAT_TOP,
-            ],
+            [FLOAT_TOP,],
         )
 
         small_width, large_width = SMALL * 7, SMALL * 9
@@ -599,14 +595,12 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                 body_repetitions * 3,
                             ]
                             for n_wheels in n_wheels_types:
-                                wheels_iterator = (
-                                    self._generate_wheels_strings_iterator(
-                                        base_min_x,
-                                        base_max_x,
-                                        n_wheels=n_wheels,
-                                        float_location=FLOAT_CENTER,
-                                        wheel_scale=THREE_QUARTER_SCALE,
-                                    )
+                                wheels_iterator = self._generate_wheels_strings_iterator(
+                                    base_min_x,
+                                    base_max_x,
+                                    n_wheels=n_wheels,
+                                    float_location=FLOAT_CENTER,
+                                    wheel_scale=THREE_QUARTER_SCALE,
                                 )
                                 for (
                                     wheels_strokes,
@@ -645,9 +639,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 antenna_string,
                 antenna_dict,
             ) = antenna_generator._generate_stacked_antenna_strings(
-                n_wires=n_wires,
-                scale_wires=scale_wires,
-                end_shape=None,
+                n_wires=n_wires, scale_wires=scale_wires, end_shape=None,
             )
             antenna_object = antenna_object[0]
 
@@ -661,10 +653,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                 for first_tier_width in [LARGE * n for n in [5, 8]]:
                     for nose_tail_heights, nose_tail_widths in [
                         (0, 0),
-                        (
-                            first_tier_height * THREE_QUARTER_SCALE,
-                            LARGE,
-                        ),
+                        (first_tier_height * THREE_QUARTER_SCALE, LARGE,),
                     ]:
                         for antenna in [
                             (antenna_object, antenna_string, antenna_dict),
@@ -698,13 +687,11 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                                     n_windows=0,
                                 )
 
-                                wheels_iterator = (
-                                    self._generate_wheels_strings_iterator(
-                                        base_min_x + nose_tail_widths,
-                                        base_max_x - nose_tail_widths,
-                                        n_wheels=n_wheels,
-                                        float_location=FLOAT_CENTER,
-                                    )
+                                wheels_iterator = self._generate_wheels_strings_iterator(
+                                    base_min_x + nose_tail_widths,
+                                    base_max_x - nose_tail_widths,
+                                    n_wheels=n_wheels,
+                                    float_location=FLOAT_CENTER,
                                 )
                                 for (
                                     wheels_strokes,

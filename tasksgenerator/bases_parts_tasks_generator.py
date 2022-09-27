@@ -4,7 +4,7 @@ Defines an abstract bases generator that creates classes of common reusable part
 """
 import math, random, itertools
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.dial_tasks_generator import BASE_CENTER
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,

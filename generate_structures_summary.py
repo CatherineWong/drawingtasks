@@ -16,9 +16,9 @@ from data.build_bitext import DEFAULT_SUMMARIES_DIR
 
 from primitives.gadgets_primitives import *
 from primitives.structures_primitives import *
-from dreamcoder.program import *
+from dreamcoder_programs.program import *
 from tasksgenerator.tasks_generator import *
-from dreamcoder.grammar import *
+from dreamcoder_programs.grammar import *
 
 
 DEFAULT_SUMMARIES_SUBDIR = "data/summaries"
@@ -42,10 +42,7 @@ parser.add_argument(
     help="Top level directory to import task data.",
 )
 parser.add_argument(
-    "--task_csv",
-    default=None,
-    required=True,
-    help="File name of initial CSV.",
+    "--task_csv", default=None, required=True, help="File name of initial CSV.",
 )
 parser.add_argument(
     "--summaries_export_dir",

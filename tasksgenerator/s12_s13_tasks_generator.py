@@ -5,7 +5,7 @@ Draws from the original source at: https://github.com/lucast4/drawgood/blob/main
 """
 import math, random
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     TasksGeneratorRegistry,
@@ -234,8 +234,7 @@ class S12StochasticTasksGenerator(AbstractTasksGenerator):
         """:ret: a curriculum for both conditions containing a single test block."""
 
         task_curriculum = TaskCurriculum(
-            curriculum_id=self.name,
-            task_generator_name=self.name,
+            curriculum_id=self.name, task_generator_name=self.name,
         )
 
         task_curriculum.add_tasks(
@@ -457,8 +456,7 @@ class S13StochasticTasksGenerator(AbstractTasksGenerator):
         )
 
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
+            curriculum_id=human_readable, task_generator_name=self.name,
         )
 
         task_curriculum.add_tasks(
@@ -554,8 +552,7 @@ class S12S13TestTasksGenerator(AbstractTasksGenerator):
         """:ret: a curriculum for both conditions containing a single test block."""
         assert num_tasks_to_generate_per_condition == TaskCurriculum.CONDITION_ALL
         task_curriculum = TaskCurriculum(
-            curriculum_id=TaskCurriculum.CONDITION_ALL,
-            task_generator_name=self.name,
+            curriculum_id=TaskCurriculum.CONDITION_ALL, task_generator_name=self.name,
         )
 
         task_curriculum.add_tasks(

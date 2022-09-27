@@ -5,7 +5,7 @@ Implements the bases_parts_tasks_generator with program string generation.
 """
 import math, random, itertools, copy
 from primitives.gadgets_primitives import *
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,

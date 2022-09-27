@@ -6,7 +6,7 @@ Each subclass has 250 total stimuli: 200 train, and 50 test.
 """
 import math, random, itertools
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,

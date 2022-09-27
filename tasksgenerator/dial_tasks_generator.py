@@ -4,7 +4,7 @@ Defines TasksGenerators that produce gadget tasks with a dial on them.
 """
 import math, random, itertools
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -328,17 +328,13 @@ class DialsTasksGenerator(SimpleDialTasksGenerator):
             for scale_wires in [True, False]:
                 for end_shape in antenna_end_shapes:
                     antenna_primitives += antenna_generator._generate_stacked_antenna(
-                        n_wires=n_wires,
-                        scale_wires=scale_wires,
-                        end_shape=end_shape,
+                        n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape,
                     )
 
         sideways_antenna_primitives = []
         for n_wires in [2, 3]:
             sideways_antenna_primitives += antenna_generator._generate_stacked_antenna(
-                n_wires=n_wires,
-                scale_wires=False,
-                end_shape=None,
+                n_wires=n_wires, scale_wires=False, end_shape=None,
             )
 
         for base_antenna_primitive in antenna_primitives:
@@ -466,9 +462,7 @@ class DialsTasksGenerator(SimpleDialTasksGenerator):
             for scale_wires in [True, False]:
                 for end_shape in antenna_end_shapes:
                     all_parts_stimuli += antenna_generator._generate_stacked_antenna(
-                        n_wires=n_wires,
-                        scale_wires=scale_wires,
-                        end_shape=end_shape,
+                        n_wires=n_wires, scale_wires=scale_wires, end_shape=end_shape,
                     )
 
         # Generate dials
@@ -725,8 +719,7 @@ class DialsTasksGenerator(SimpleDialTasksGenerator):
             num_tasks_to_generate_per_condition, train_ratio
         )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
+            curriculum_id=human_readable, task_generator_name=self.name,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

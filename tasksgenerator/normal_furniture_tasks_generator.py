@@ -5,7 +5,7 @@ Defines TasksGenerators that produce tasks for furniture drawings.
 import math, random, itertools, copy
 
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -335,10 +335,7 @@ class NormalFurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                     base_min_y,
                     base_max_y,
                 ) = self._generate_seat_back(
-                    n_side_arms * 2 + 1,
-                    seat_back,
-                    seat_back_heights,
-                    seat_back_widths,
+                    n_side_arms * 2 + 1, seat_back, seat_back_heights, seat_back_widths,
                 )
                 all_strokes += [base_strokes]
 
@@ -457,8 +454,7 @@ class NormalFurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
             num_tasks_to_generate_per_condition, train_ratio
         )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
+            curriculum_id=human_readable, task_generator_name=self.name,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

@@ -3,7 +3,7 @@
 import os
 import math
 import numpy as np
-from dreamcoder.program import Program
+from dreamcoder_programs.program import Program
 import primitives.object_primitives as to_test
 
 SIMPLE_OBJECT_PROGRAMS = ["(line)", "(circle)", "(rectangle)"]
@@ -23,10 +23,6 @@ def _test_parse_render_save_programs(program_strings, tmpdir, split="train"):
             # Can it render the program?
             rendered = to_test.render_parsed_program(
                 p, stroke_width_height=8 * to_test.XYLIM
-            )
-            assert rendered.shape == (
-                to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
-                to_test.SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
             )
             # Can it save the program?
             saved_file = to_test.export_rendered_program(

@@ -4,7 +4,7 @@ Defines TasksGenerators that produce gadget tasks with wheels on them.
 """
 import math, random, itertools, copy
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -351,9 +351,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
             antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
             n_wires = 3
             antenna_object = antenna_generator._generate_stacked_antenna(
-                n_wires=n_wires,
-                scale_wires=scale_wires,
-                end_shape=None,
+                n_wires=n_wires, scale_wires=scale_wires, end_shape=None,
             )
             all_parts_stimuli += antenna_object
         return random_sample_ratio_ordered_array(all_parts_stimuli, train_ratio)
@@ -410,14 +408,10 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
         caboose_width = MEDIUM
         caboose_height = body_height * THREE_QUARTER_SCALE
         caboose_primitives, caboose_heights, caboose_widths, caboose_floats = (
-            [
-                RECTANGLE,
-            ],
+            [RECTANGLE,],
             [caboose_height],
             [caboose_width],
-            [
-                FLOAT_TOP,
-            ],
+            [FLOAT_TOP,],
         )
 
         small_width, large_width = SMALL * 7, SMALL * 9
@@ -479,9 +473,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
             antenna_generator = antenna_tasks_generator.SimpleAntennaTasksGenerator()
             n_wires = 3
             antenna_object = antenna_generator._generate_stacked_antenna(
-                n_wires=n_wires,
-                scale_wires=scale_wires,
-                end_shape=None,
+                n_wires=n_wires, scale_wires=scale_wires, end_shape=None,
             )[0]
             antenna_height = antenna_tasks_generator.ANTENNA_BASE_HEIGHT + (
                 antenna_tasks_generator.ANTENNA_SMALL * (n_wires - 1)
@@ -494,10 +486,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                 for first_tier_width in [LARGE * n for n in [5, 8]]:
                     for nose_tail_heights, nose_tail_widths in [
                         (0, 0),
-                        (
-                            first_tier_height * THREE_QUARTER_SCALE,
-                            LARGE,
-                        ),
+                        (first_tier_height * THREE_QUARTER_SCALE, LARGE,),
                     ]:
                         for antenna in [antenna_object, None]:
                             n_wheel_sets = (
@@ -596,8 +585,7 @@ class WheeledVehiclesTasksGenerator(AbstractBasesAndPartsTasksGenerator):
             num_tasks_to_generate_per_condition, train_ratio
         )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
+            curriculum_id=human_readable, task_generator_name=self.name,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

@@ -8,7 +8,7 @@ python render_programs.py
 """
 import csv, os, json, argparse, sys
 import struct
-from dreamcoder.program import Program
+from dreamcoder_programs.program import Program
 import primitives.object_primitives as object_primitives
 import primitives.gadgets_primitives as gadgets_primitives
 import primitives.structures_primitives as structures_primitives

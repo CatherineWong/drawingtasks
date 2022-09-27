@@ -17,9 +17,9 @@ import cairo
 import imageio
 import numpy as np
 from num2words import num2words
-from dreamcoder.utilities import Curried
-from dreamcoder.program import *
-from dreamcoder.type import baseType, arrow, tmaybe, t0, t1, t2
+from dreamcoder_programs.utilities import Curried
+from dreamcoder_programs.program import *
+from dreamcoder_programs.type import baseType, arrow, tmaybe, t0, t1, t2
 from tasksgenerator.tasks_generator import *
 
 from primitives.object_primitives import (

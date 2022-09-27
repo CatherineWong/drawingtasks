@@ -6,7 +6,7 @@ import math, random, itertools, copy
 
 from numpy.core.fromnumeric import repeat
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -291,8 +291,7 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
                 enclosure_min_y,
                 enclosure_max_y,
             ) in self._generate_drawers_iterator(
-                n_drawers=n_drawers,
-                generation_probability=generation_probability,
+                n_drawers=n_drawers, generation_probability=generation_probability,
             ):
                 if drawer_strokes:
                     stimuli_strokes += drawer_strokes
@@ -543,8 +542,7 @@ class FurnitureTasksGenerator(AbstractBasesAndPartsTasksGenerator):
             num_tasks_to_generate_per_condition, train_ratio
         )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
+            curriculum_id=human_readable, task_generator_name=self.name,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

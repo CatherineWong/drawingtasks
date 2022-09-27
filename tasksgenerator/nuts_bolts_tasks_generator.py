@@ -4,7 +4,7 @@ Defines TasksGenerators that produce gadget tasks that look like nuts and bolts.
 """
 import math, random, itertools, copy
 import primitives.object_primitives as object_primitives
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from tasksgenerator.tasks_generator import (
     AbstractTasksGenerator,
     ManualCurriculumTasksGenerator,
@@ -142,9 +142,7 @@ class NutsBoltsTasksGenerator(SimpleDialTasksGenerator):
             num_tasks_to_generate_per_condition, train_ratio
         )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
-            task_generator_name=self.name,
-            grammar=None,
+            curriculum_id=human_readable, task_generator_name=self.name, grammar=None,
         )
 
         train_tasks, test_tasks = self._generate_train_test_tasks(

@@ -6,7 +6,7 @@ Threads program string generating logic through the generation.
 """
 import math, random, itertools, copy
 from primitives.gadgets_primitives import *
-from dreamcoder.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from primitives.object_primitives import rectangle
 from tasksgenerator.dial_tasks_generator import (
     ANTENNA_DIAL_SCALE_DOWN,

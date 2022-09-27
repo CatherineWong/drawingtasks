@@ -4,7 +4,7 @@ import os
 import math
 import numpy as np
 from numpy.testing._private.utils import assert_almost_equal
-from dreamcoder.program import DEFAULT_NAME, VERBOSITY_0, VERBOSITY_1, Program
+from dreamcoder_programs.program import DEFAULT_NAME, VERBOSITY_0, VERBOSITY_1, Program
 import primitives.gadgets_primitives as to_test
 from primitives.test_object_primitives import (
     _test_parse_render_save_programs,

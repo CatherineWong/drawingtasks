@@ -7,15 +7,17 @@ Credit: builds on primitives designed by Kevin Ellis; and structuers primitives 
 import os
 import imageio
 import block_utils.blockworld_utils as blockworld_utils
-from dreamcoder.domains.tower.makeTowerTasks import SupervisedTower
+from dreamcoder_programs.domains.tower.makeTowerTasks import SupervisedTower
 
 from primitives.block_dict_to_input_program import convert
-from dreamcoder.domains.tower.towerPrimitives import *
-from dreamcoder.domains.tower.tower_common import renderPlan
-from dreamcoder.domains.tower.makeTowerTasks import *
+from dreamcoder_programs.domains.tower.towerPrimitives import *
+from dreamcoder_programs.domains.tower.tower_common import renderPlan
+from dreamcoder_programs.domains.tower.makeTowerTasks import *
+
 
 def get_default_structures_grammar():
     structures_primitives = []
+
 
 def render_block_jsons_to_canvas(block_json):
     program = convert(block_json, whole_squares=False)
