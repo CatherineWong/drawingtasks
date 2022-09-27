@@ -10,7 +10,7 @@ import itertools
 import math
 import random
 
-from dreamcoder_programs_programs_programs.grammar import Grammar
+from dreamcoder_programs.grammar import Grammar
 from primitives.gadgets_primitives import *
 
 from tasksgenerator.bases_parts_tasks_generator import *

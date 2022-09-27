@@ -35,6 +35,11 @@ from tasksgenerator.s12_s13_tasks_generator import (
     hl,
 )
 
+CONTEXT_SMALL_ABSTRACTIONS, CONTEXT_LARGE_ABSTRACTIONS, CONTEXT_DIVERSE = (
+    "context_small_abstractions",
+    "context_large_abstractions",
+    "context_diverse_abstractions",
+)
 CIRCLE, RECTANGLE, LINE = ("CIRCLE", "RECTANGLE", "LINE")
 FLOAT_TOP, FLOAT_CENTER, FLOAT_BOTTOM = "FLOAT_TOP", "FLOAT_CENTER", "FLOAT_BOTTOM"
 BASE_CENTER = 0
