@@ -22,7 +22,7 @@ def _test_parse_render_save_programs(program_strings, tmpdir, split="train"):
             p = Program.parse(program_string)
             # Can it render the program?
             rendered = to_test.render_parsed_program(
-                p, stroke_width_height=8 * to_test.XYLIM
+                p, stroke_width_height=10 * to_test.XYLIM
             )
             # Can it save the program?
             saved_file = to_test.export_rendered_program(

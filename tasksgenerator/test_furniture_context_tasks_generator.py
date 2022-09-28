@@ -43,3 +43,105 @@ def test_furniture_tasks_generator_generate_parts_for_stimuli(tmpdir):
         _test_parse_render_save_programs(
             program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
         )
+
+
+def test_furniture_tasks_generator_generate_stacked_drawers_stimuli_strings(tmpdir):
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_stacked_drawers_stimuli_strings(
+        train_ratio=1.0, context=CONTEXT_LARGE_ABSTRACTIONS
+    )
+    for split, objects, test_stroke_strings in [
+        (CONTEXT_LARGE_ABSTRACTIONS + "_stacked", train, train_strings),
+    ]:
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        _test_parse_render_save_programs(
+            program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        )
+
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_stacked_drawers_stimuli_strings(
+        train_ratio=1.0, context=CONTEXT_SMALL_ABSTRACTIONS
+    )
+    for split, objects, test_stroke_strings in [
+        (CONTEXT_SMALL_ABSTRACTIONS + "_stacked", train, train_strings),
+    ]:
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        _test_parse_render_save_programs(
+            program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        )
+
+
+def test_generate_lounges_stimuli_strings(tmpdir):
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_lounges_stimuli_strings(
+        train_ratio=1.0, context=CONTEXT_LARGE_ABSTRACTIONS
+    )
+    for split, objects, test_stroke_strings in [
+        (CONTEXT_LARGE_ABSTRACTIONS + "_lounge", train, train_strings),
+    ]:
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        _test_parse_render_save_programs(
+            program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        )
+
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_lounges_stimuli_strings(
+        train_ratio=1.0, context=CONTEXT_SMALL_ABSTRACTIONS
+    )
+    for split, objects, test_stroke_strings in [
+        (CONTEXT_SMALL_ABSTRACTIONS + "_lounge", train, train_strings),
+    ]:
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        _test_parse_render_save_programs(
+            program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        )
+
+
+def test_generate_seat_drawers_stimuli_strings(tmpdir):
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_seat_drawers_stimuli_strings(
+        train_ratio=1.0, context=CONTEXT_LARGE_ABSTRACTIONS
+    )
+    for split, objects, test_stroke_strings in [
+        (CONTEXT_LARGE_ABSTRACTIONS + "_seat", train, train_strings),
+    ]:
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        _test_parse_render_save_programs(
+            program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        )
+
+    (
+        train,
+        test,
+        train_strings,
+        test_strings,
+    ) = generator._generate_seat_drawers_stimuli_strings(
+        train_ratio=1.0, context=CONTEXT_SMALL_ABSTRACTIONS
+    )
+    for split, objects, test_stroke_strings in [
+        (CONTEXT_SMALL_ABSTRACTIONS + "_seat", train, train_strings),
+    ]:
+        test_stroke_strings, synthetic = zip(*test_stroke_strings)
+        _test_parse_render_save_programs(
+            program_strings=test_stroke_strings, tmpdir=DESKTOP, split=split
+        )

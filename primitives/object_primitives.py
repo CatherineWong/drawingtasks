@@ -256,7 +256,7 @@ def render_stroke_arrays_to_canvas(
 
 def render_parsed_program(
     program,
-    stroke_width_height=8 * XYLIM,
+    stroke_width_height=10 * XYLIM,
     canvas_width_height=SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
     allow_partial_rendering=False,
 ):

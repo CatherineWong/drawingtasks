@@ -202,7 +202,7 @@ class TaskCurriculum:
         domain = self.cleaned_name(self.name.split(f"_{PROGRAMS_NAME}")[0])
         s3_domain = f"https://lax-drawing-{domain}-all.s3.amazonaws.com/"
         all_tasks = []
-        for split in ["test", "train"]:
+        for split in self.curriculum.keys():
             for condition in self.curriculum[split]:
                 for curriculum_block in self.curriculum[split][condition]:
                     tasks = self.curriculum[split][condition][curriculum_block]
@@ -260,9 +260,10 @@ class AbstractTasksGenerator:
         request_type,
         render_strokes_fn=None,
         task_generator_name=None,
-        train_ratio=1.0,
+        train_ratio=0.8,
         render_parsed_program_fn=None,
         use_object_shapes=False,
+        context=None,
     ):
         """Helper method to generate Drawing Tasks from strokes arrays. Deprecated: number to generate."""
         (
@@ -301,13 +302,23 @@ class AbstractTasksGenerator:
                 for (task_idx, task_strokes) in enumerate(test_tasks)
             ]
         else:
-            # From the 'programs' generators.
-            (
-                train_tasks,
-                test_tasks,
-                train_shapes,
-                test_shapes,
-            ) = self._generate_strokes_strings_for_stimuli(train_ratio)
+            if context is None:
+                # From the 'programs' generators.
+                (
+                    train_tasks,
+                    test_tasks,
+                    train_shapes,
+                    test_shapes,
+                ) = self._generate_strokes_strings_for_stimuli(train_ratio)
+            else:
+                (
+                    train_tasks,
+                    test_tasks,
+                    train_shapes,
+                    test_shapes,
+                ) = self._generate_strokes_strings_for_stimuli(
+                    train_ratio=train_ratio, context=context
+                )
 
             # Back compatability: separate synthetic dictionaries and programs.
             if use_object_shapes:
@@ -344,6 +355,7 @@ class AbstractTasksGenerator:
                 ]
             else:
                 train_strings, train_synthetic = zip(*train_shapes)
+
                 test_strings, test_synthetic = zip(*test_shapes)
 
                 train_tasks = [
@@ -458,15 +470,18 @@ class DrawingTask(Task):
         synthetic_abstractions={},
         task_shape=None,
         synthetic_language={},
+        task_name=None,
     ):
         padded_index = str.zfill(str(task_id), 3)
-
-        if PROGRAMS_NAME in task_generator_name:
-            task_name = task_generator_name.split(f"_{PROGRAMS_NAME}")[0]
-            task_name = f"{task_name}_{padded_index}"
-        else:
-            task_name = f"{task_generator_name}_{padded_index}"
-        super(DrawingTask, self).__init__(task_name, request, examples=[], features=[])
+        if task_name is not None:
+            if PROGRAMS_NAME in task_generator_name:
+                task_name = task_generator_name.split(f"_{PROGRAMS_NAME}")[0]
+                task_name = f"{task_name}_{padded_index}"
+            else:
+                task_name = f"{task_generator_name}_{padded_index}"
+            super(DrawingTask, self).__init__(
+                task_name, renamequest, examples=[], features=[]
+            )
 
         self.task_shape = task_shape
         self.task_generator_name = task_generator_name

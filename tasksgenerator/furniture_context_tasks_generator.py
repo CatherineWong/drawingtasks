@@ -31,7 +31,7 @@ octagon_string = T_string(octagon_string[0], octagon_string[1], s=THREE_QUARTER_
 
 @TasksGeneratorRegistry.register
 class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
-    name = "furniture_context"
+    name = "furniture_context_programs"
 
     def _generate_drawer_pulls_strings_iterator(
         self,
@@ -50,11 +50,9 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
         else:
             # Arbitrary context.
             possible_outer_shapes = [
-                [cc_string],
-                [octagon_string],
                 [],
             ]
-            possible_inner_shapes = [[c_string], [r_string]]
+            possible_inner_shapes = [[cc_string], [r_string]]
 
         # Always have the base ones.
         base_min_size = MEDIUM * MEDIUM
@@ -93,13 +91,17 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
     ):
 
         if context == CONTEXT_LARGE_ABSTRACTIONS:
-            possible_base_heights_and_widths = [
-                (SMALL * 3, MEDIUM * 9),
+            base_heights_and_widths = [
+                # (SMALL * 3, MEDIUM * 9),
+                (SMALL * 5, SMALL * 12),
             ]
             possible_drawer_pulls = [2]
         else:
+            base_heights_and_widths = [
+                (SMALL * 3, SMALL * 15),
+                (SMALL * 5, SMALL * 12),
+            ]
             # Arbitrary context.
-            possible_outer_shapes = base_heights_and_widths
             possible_drawer_pulls = [0, 2]
 
         original_generator = generator = TasksGeneratorRegistry[
@@ -144,6 +146,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
                         n_drawer_pulls=n_drawer_pulls,
                         float_location=FLOAT_CENTER,
                         drawer_pull_scale=SCALE_UNIT,
+                        context=context,
                     )
                 ):
                     drawer_spacing = base_height * QUARTER_SCALE
@@ -301,7 +304,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
         )
 
         if context == CONTEXT_LARGE_ABSTRACTIONS:
-            possible_feet_heights = [SMALL, MEDIUM * 2]
+            possible_feet_heights = [MEDIUM * 4]
             possible_foot_primitives = [LINE]
         else:
             # Arbitrary context.
@@ -400,13 +403,14 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
         self,
         total_drawers=4,
         train_ratio=1.0,
-        generation_probability=0.45,
+        generation_probability=1.0,
         context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
         if context == CONTEXT_LARGE_ABSTRACTIONS:
             generation_probability = 1.0
-            possible_n_feet = [2]
-            possible_feet_heights = [SMALL, MEDIUM * 2]
+            possible_n_feet = [2, 3, 4]
+            possible_feet_heights = [MEDIUM * 4]
+
         else:
             possible_n_feet = [2, 3, 4]
             possible_feet_heights = [SMALL, MEDIUM * 2, MEDIUM * 4]
@@ -423,7 +427,9 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
                 enclosure_min_y,
                 enclosure_max_y,
             ) in self._generate_drawers_strings_iterator(
-                n_drawers=n_drawers, generation_probability=generation_probability,
+                n_drawers=n_drawers,
+                generation_probability=generation_probability,
+                context=context,
             ):
                 if drawer_strokes:
                     stimuli_strokes += drawer_strokes
@@ -448,8 +454,8 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
                 base_heights_and_widths=base_heights_and_widths,
                 stack_float_locations=FLOAT_TOP,
                 generation_probability=generation_probability,
+                context=context,
             ):
-
                 if enclosure_strokes:
                     for n_feet in possible_n_feet:
                         for (
@@ -464,6 +470,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
                             max_y=enclosure_max_y,
                             feet_heights=possible_feet_heights,
                             generation_probability=generation_probability,
+                            context=context,
                         ):
                             drawer_strokes = [enclosure_strokes[0] + feet_strokes[0]]
                             stimuli_strokes += drawer_strokes
@@ -493,7 +500,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
     def _generate_lounges_stimuli_strings(
         self,
         train_ratio=1.0,
-        generation_probability=0.6,
+        generation_probability=1.0,
         context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
         if context == CONTEXT_LARGE_ABSTRACTIONS:
@@ -504,20 +511,19 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
             all_seat_back_primitives = [
                 [CIRCLE, CIRCLE, ([], "empt")],
             ]
-            possible_n_feet = [2]
+            possible_n_feet = [2, 4]
             possible_feet_heights = [SMALL, MEDIUM * 2]
 
         else:
+            generation_probability = 1.0
             possible_base_heights_and_widths = [
                 (SMALL * 3, MEDIUM * 9),
-                (SMALL * 3, MEDIUM * 10),
             ]
             all_seat_back_primitives = [
                 [CIRCLE, CIRCLE, ([], "empt")],
-                [RECTANGLE, ([], "empt"), RECTANGLE],
-                [RECTANGLE, CIRCLE, ([], "empt"), RECTANGLE],
+                [RECTANGLE, CIRCLE, ([], "empt"),],
             ]
-            possible_n_feet = [2, 3, 4]
+            possible_n_feet = [2, 4]
             possible_feet_heights = [SMALL, MEDIUM * 2]
 
         # Generates lounges containing a large base and one or more rectangular pillows on top. Lounges may or may not have an inset drawer.
@@ -537,13 +543,14 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
             base_heights_and_widths=possible_base_heights_and_widths,
             stack_float_locations=FLOAT_BOTTOM,
             generation_probability=1.0,
+            context=context,
         ):
             enclosure_width = enclosure_max_x - enclosure_min_x
             if enclosure_strokes:
                 # Now add pillows.
 
                 for seat_back_primitives in all_seat_back_primitives:
-                    for base_height in [MEDIUM, MEDIUM * 2]:
+                    for base_height in [MEDIUM * 2]:
                         n_segments = len(seat_back_primitives)
                         shape_heights = [base_height] * n_segments
 
@@ -631,6 +638,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
 
         # Shuffle before returning.
         stimuli_data = list(zip(stimuli_strokes, stimuli_strings, stroke_dicts))
+
         random.shuffle(stimuli_data)
         stimuli_strokes, stimuli_strings, stroke_dicts = zip(*stimuli_data)
 
@@ -643,7 +651,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
     def _generate_seat_drawers_stimuli_strings(
         self,
         train_ratio=1.0,
-        generation_probability=0.7,
+        generation_probability=1.0,
         context=CONTEXT_LARGE_ABSTRACTIONS,
     ):
 
@@ -678,6 +686,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
             base_heights_and_widths=possible_base_heights_and_widths,
             stack_float_locations=FLOAT_TOP,
             generation_probability=1.0,
+            context=context,
         ):
             enclosure_width = enclosure_max_x - enclosure_min_x
             # Shift it to one side.
@@ -705,7 +714,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
                 )
 
                 # Add feet.
-                for n_feet in [2]:
+                for n_feet in [2, 3, 4]:
                     for (
                         feet_strokes,
                         feet_string,
@@ -718,6 +727,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
                         max_y=seat_max_y,
                         feet_heights=possible_feet_heights,
                         generation_probability=1.0,
+                        context=context,
                     ):
                         feet_strokes, feet_string = T_string(
                             feet_strokes, feet_string, y=float(seat_min_y)
@@ -761,14 +771,15 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
 
     def _generate_strokes_strings_for_stimuli(
         self,
-        train_ratio=1.0,
+        train_ratio=0.8,
         generation_probability=1.0,  # Probabilistically generate from space
+        context=None,
     ):
         """Main generator function. Returns a list of all stimuli from this generative model as sets of strokes."""
         train, test = [], []
         train_strings, test_strings = [], []
+
         for generator_fn in [
-            self._generate_parts_stimuli_strings,
             self._generate_stacked_drawers_stimuli_strings,
             self._generate_lounges_stimuli_strings,
             self._generate_seat_drawers_stimuli_strings,
@@ -778,7 +789,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
                 generator_test,
                 generator_train_strings,
                 generator_test_strings,
-            ) = generator_fn(train_ratio=train_ratio)
+            ) = generator_fn(train_ratio=train_ratio, context=context)
             train += generator_train
             test += generator_test
             train_strings += generator_train_strings
@@ -792,6 +803,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
         train_ratio=0.8,
         max_train=200,
         max_test=50,
+        context=None,
     ):
         # Currently generates all tasks as single entities. Does not generate a curriculum.
         train_tasks, test_tasks = self._generate_drawing_tasks_from_strokes(
@@ -800,6 +812,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
             render_parsed_program_fn=object_primitives.render_parsed_program,
             task_generator_name=self.name,
             train_ratio=train_ratio,
+            context=context,
         )
         max_train = len(train_tasks) if max_train == None else max_train
         max_test = len(test_tasks) if max_test == None else max_test
@@ -809,35 +822,25 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
         self, num_tasks_to_generate_per_condition, train_ratio=0.8
     ):
         """:ret: a curriculum that randomly samples among the train ratio for the simple and complex stimuli."""
-        (
-            num_tasks_to_generate_per_condition,
-            human_readable,
-        ) = self._get_number_tasks_to_generate_per_condition(
-            num_tasks_to_generate_per_condition, train_ratio
-        )
         task_curriculum = TaskCurriculum(
-            curriculum_id=human_readable,
+            curriculum_id=num_tasks_to_generate_per_condition,
             task_generator_name=self.name,
             grammar=self.grammar,
         )
 
-        train_tasks, test_tasks = self._generate_train_test_tasks(
-            num_tasks_to_generate_per_condition, train_ratio=train_ratio
-        )
+        for context in [CONTEXT_LARGE_ABSTRACTIONS, CONTEXT_SMALL_ABSTRACTIONS]:
+            train_tasks, test_tasks = self._generate_train_test_tasks(
+                num_tasks_to_generate_per_condition, train_ratio=0.8, context=context,
+            )
+            # Rename all of the tasks.
+            tasks = train_tasks + test_tasks
+            for idx, task in enumerate(tasks):
+                padded_index = str.zfill(str(idx), 3)
 
-        # Add the train tasks.
-        task_curriculum.add_tasks(
-            split=TaskCurriculum.SPLIT_TRAIN,
-            condition=self.name,
-            curriculum_block=0,
-            tasks=train_tasks,
-        )
+                task.name = f"{self.name}_{context}_{padded_index}"
 
-        # Add the train tasks.
-        task_curriculum.add_tasks(
-            split=TaskCurriculum.SPLIT_TEST,
-            condition=self.name,
-            curriculum_block=0,
-            tasks=test_tasks,
-        )
+            # Add the train tasks.
+            task_curriculum.add_tasks(
+                split=context, condition=self.name, curriculum_block=0, tasks=tasks,
+            )
         return task_curriculum
