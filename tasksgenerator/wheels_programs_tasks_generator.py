@@ -660,7 +660,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                             None,
                         ]:
                             n_wheel_sets = (
-                                [2] if first_tier_width <= small_width else [2, 6]
+                                [2] if first_tier_width <= small_width else [2, 4, 6]
                             )
                             for n_wheels in n_wheel_sets:
                                 (
