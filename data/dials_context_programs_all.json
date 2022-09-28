@@ -1,0 +1,75 @@
+{
+"context_large_abstractions": {
+"condition_dials_context_programs": {
+"curriculum_0": [
+"dials_context_programs_context_large_abstractions_000.png",
+"dials_context_programs_context_large_abstractions_001.png",
+"dials_context_programs_context_large_abstractions_002.png",
+"dials_context_programs_context_large_abstractions_003.png",
+"dials_context_programs_context_large_abstractions_004.png",
+"dials_context_programs_context_large_abstractions_005.png",
+"dials_context_programs_context_large_abstractions_006.png",
+"dials_context_programs_context_large_abstractions_007.png",
+"dials_context_programs_context_large_abstractions_008.png",
+"dials_context_programs_context_large_abstractions_009.png",
+"dials_context_programs_context_large_abstractions_010.png",
+"dials_context_programs_context_large_abstractions_011.png",
+"dials_context_programs_context_large_abstractions_012.png",
+"dials_context_programs_context_large_abstractions_013.png",
+"dials_context_programs_context_large_abstractions_014.png"
+]
+}
+},
+"context_small_abstractions": {
+"condition_dials_context_programs": {
+"curriculum_0": [
+"dials_context_programs_context_small_abstractions_000.png",
+"dials_context_programs_context_small_abstractions_001.png",
+"dials_context_programs_context_small_abstractions_002.png",
+"dials_context_programs_context_small_abstractions_003.png",
+"dials_context_programs_context_small_abstractions_004.png",
+"dials_context_programs_context_small_abstractions_005.png",
+"dials_context_programs_context_small_abstractions_006.png",
+"dials_context_programs_context_small_abstractions_007.png",
+"dials_context_programs_context_small_abstractions_008.png",
+"dials_context_programs_context_small_abstractions_009.png",
+"dials_context_programs_context_small_abstractions_010.png",
+"dials_context_programs_context_small_abstractions_011.png",
+"dials_context_programs_context_small_abstractions_012.png",
+"dials_context_programs_context_small_abstractions_013.png",
+"dials_context_programs_context_small_abstractions_014.png",
+"dials_context_programs_context_small_abstractions_015.png",
+"dials_context_programs_context_small_abstractions_016.png",
+"dials_context_programs_context_small_abstractions_017.png",
+"dials_context_programs_context_small_abstractions_018.png",
+"dials_context_programs_context_small_abstractions_019.png",
+"dials_context_programs_context_small_abstractions_020.png",
+"dials_context_programs_context_small_abstractions_021.png",
+"dials_context_programs_context_small_abstractions_022.png",
+"dials_context_programs_context_small_abstractions_023.png",
+"dials_context_programs_context_small_abstractions_024.png",
+"dials_context_programs_context_small_abstractions_025.png",
+"dials_context_programs_context_small_abstractions_026.png",
+"dials_context_programs_context_small_abstractions_027.png",
+"dials_context_programs_context_small_abstractions_028.png",
+"dials_context_programs_context_small_abstractions_029.png",
+"dials_context_programs_context_small_abstractions_030.png",
+"dials_context_programs_context_small_abstractions_031.png",
+"dials_context_programs_context_small_abstractions_032.png",
+"dials_context_programs_context_small_abstractions_033.png",
+"dials_context_programs_context_small_abstractions_034.png",
+"dials_context_programs_context_small_abstractions_035.png",
+"dials_context_programs_context_small_abstractions_036.png",
+"dials_context_programs_context_small_abstractions_037.png",
+"dials_context_programs_context_small_abstractions_038.png",
+"dials_context_programs_context_small_abstractions_039.png",
+"dials_context_programs_context_small_abstractions_040.png"
+]
+}
+},
+"metadata": {
+"name": "dials_context_programs_all",
+"timestamp": "2022-09-27T22-54-53-016701",
+"generating_command": "python generate_drawing_tasks.py --task_export_dir data --synthesis_export_dir None --summaries_export_dir None --libraries_export_dir data/libraries --renders_export_dir None --tasks_generator dials_context_programs --num_tasks_per_condition all --train_ratio 0.8 --no_synthesis_tasks False --no_render False --task_summaries True"
+}
+}

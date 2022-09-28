@@ -41,6 +41,7 @@ import tasksgenerator.furniture_programs_tasks_generator
 import tasksgenerator.nuts_bolts_synthetic_language_tasks_generator
 
 import tasksgenerator.furniture_context_tasks_generator
+import tasksgenerator.dial_context_tasks_generator
 
 DEFAULT_EXPORT_DIR = "data"
 DEFAULT_SUMMARIES_SUBDIR = "summaries"
