@@ -1,7 +1,11 @@
 """
 upload_context_stimuli.py | Upload context stimuli, then upload the stimuli sets.
 
-Usage:  python upload_context_stimuli.py --task_generators wheels_context_programs dials_context_programs furniture_context_programs
+Usage:  
+v1 experiment: 
+python upload_context_stimuli.py --task_generators wheels_context_programs dials_context_programs furniture_context_programs --generate_v1_random_contexts
+
+python upload_context_stimuli.py --task_generators wheels_context_programs dials_context_programs furniture_context_programs --generate_v2_random_contexts --skip_upload_stimuli 
 
 Uploads to: https://lax-context-stimuli.s3.amazonaws.com/
 """
@@ -46,6 +50,18 @@ parser.add_argument(
     "--skip_upload_stimuli",
     action="store_true",
     help="Whether to skip images upload and only generate a config.",
+)
+
+parser.add_argument(
+    "--generate_v1_random_contexts",
+    action="store_true",
+    help="v1 experiment: 3 contexts, single target.",
+)
+
+parser.add_argument(
+    "--generate_v2_random_contexts",
+    action="store_true",
+    help="v2 experiment: 2 contexts, n targets.",
 )
 
 
@@ -103,7 +119,7 @@ def upload_image_stimuli(args):
     upload_images_to_s3(images_to_upload, bucket_name="lax-context-stimuli")
 
 
-def generate_random_contexts(args):
+def generate_v1_random_contexts(args):
     # All possible images.
     renders_path = os.path.join(DEFAULT_EXPORT_DIR, DEFAULT_RENDERS_SUBDIR)
     all_context_images = []
@@ -153,29 +169,40 @@ def generate_random_contexts(args):
                 }
             )
     # Create the JSON.
+    experiment_name = "lax-drawing-context-library-v1"
     context_json = {
-        "experiment_name": "lax-drawing-context-library-v1",
+        "experiment_name": experiment_name,
         "metadata": {
             "human_readable": "Context manipulation experiment. This contains the PNG names which need to be preprocessed to map them to URLs on S3, since we have a different numbering scheme.",
         },
         "stimuli": context_targets,
     }
-    return context_json
+    return experiment_name, context_json
+
+
+def generate_v2_random_contexts(args):
+    experiment_name = "lax-drawing-context-library-v2"
+
+    return experiment_name
 
 
 def main(args):
-    upload_image_stimuli(args)
-    context_generation = generate_random_contexts(args)
+    if not args.skip_upload_stimuli:
+        upload_image_stimuli(args)
+
+    if args.generate_v1_context:
+        experiment_name, context_generation = generate_v1_random_contexts(args)
+
+    if args.generate_v2_random_contexts:
+        experiment_name, context_generation = generate_v2_random_contexts(args)
 
     # Write out the stimulus file.
-    with open(
-        os.path.join(DEFAULT_EXPORT_DIR, "lax-drawing-context-library-v1.json"), "w",
-    ) as f:
+    with open(os.path.join(DEFAULT_EXPORT_DIR, f"{experiment_name}.json"), "w",) as f:
         json.dump(context_generation, f)
 
     upload_json_to_s3(
         json_object=context_generation,
-        json_name="lax-drawing-context-library-v1.json",
+        json_name=f"{experiment_name}.json",
         bucket_name="lax-context-stimuli",
     )
 

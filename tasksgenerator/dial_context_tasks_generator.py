@@ -673,7 +673,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                     stroke_dicts.append(antenna_dict)
 
         # Generate dials.
-        for total_dials in [1, max_dials + 1]:
+        for total_dials in [1, 2, max_dials + 1]:
             # Varying bases for the single small dials.
             for base_columns in [1, max_dials + 1]:
                 for base_heights in [1, max_dials]:
@@ -768,6 +768,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 [c_string, r_string],
             ]
             generation_probability = 1.0
+            antenna_generation_probability = 1.0
 
         else:
             possible_rows = [1, 2]
@@ -781,6 +782,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                 [c_string, c_string],
             ]
             generation_probability = 0.14
+            antenna_generation_probability = 0.25
 
         # Loop over the full cross product of dials / antenna / stimuli / tiers
         total_dials_range = list(range(1, max_dials + 1))
@@ -924,6 +926,7 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
                                                 base_height=total_base_height,
                                                 add_double_antenna=add_double_antenna,
                                                 add_side_antenna=add_side_antenna,
+                                                antenna_generation_probability=antenna_generation_probability,
                                                 generation_probability=generation_probability,
                                                 stimuli_synthetic_dict=stimuli_dict,
                                                 context=context,

@@ -533,37 +533,40 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                         nose_scale=nose_scale,
                         reverse=reverse,
                     )
-                    n_wheels_types = [2, 4, 6]
+                    n_wheels_types = [2, 4, 5, 6]
                     for n_wheels in n_wheels_types:
-                        paired_wheels = True if n_wheels > 2 else False
-                        wheels_iterator = self._generate_wheels_strings_iterator(
-                            base_min_x,
-                            base_max_x,
-                            n_wheels=n_wheels,
-                            float_location=FLOAT_CENTER,
-                            paired_wheels=paired_wheels,
-                            context=context,
-                        )
-                        for (
-                            wheels_strokes,
-                            wheels_strokes_strings,
-                            wheels_synthetic_dict,
-                            wheels_min_x,
-                            wheels_max_x,
-                            wheels_min_y,
-                            wheels_max_y,
-                        ) in wheels_iterator:
-
-                            synthetic_dict = copy.deepcopy(base_synthetic_dict)
-                            truck_strokes = [base_strokes[0] + wheels_strokes[0]]
-                            truck_stroke_strings = connect_strokes(
-                                [base_stroke_strings, wheels_strokes_strings]
+                        for paired_wheels in [True, False]:
+                            if (n_wheels == 2 or n_wheels % 2 != 0) and paired_wheels:
+                                continue
+                            # paired_wheels = True if n_wheels > 2 else False
+                            wheels_iterator = self._generate_wheels_strings_iterator(
+                                base_min_x,
+                                base_max_x,
+                                n_wheels=n_wheels,
+                                float_location=FLOAT_CENTER,
+                                paired_wheels=paired_wheels,
+                                context=context,
                             )
-                            for k in wheels_synthetic_dict:
-                                synthetic_dict[k] += wheels_synthetic_dict[k]
-                            strokes += truck_strokes
-                            stroke_strings.append(truck_stroke_strings)
-                            stroke_dicts.append(synthetic_dict)
+                            for (
+                                wheels_strokes,
+                                wheels_strokes_strings,
+                                wheels_synthetic_dict,
+                                wheels_min_x,
+                                wheels_max_x,
+                                wheels_min_y,
+                                wheels_max_y,
+                            ) in wheels_iterator:
+
+                                synthetic_dict = copy.deepcopy(base_synthetic_dict)
+                                truck_strokes = [base_strokes[0] + wheels_strokes[0]]
+                                truck_stroke_strings = connect_strokes(
+                                    [base_stroke_strings, wheels_strokes_strings]
+                                )
+                                for k in wheels_synthetic_dict:
+                                    synthetic_dict[k] += wheels_synthetic_dict[k]
+                                strokes += truck_strokes
+                                stroke_strings.append(truck_stroke_strings)
+                                stroke_dicts.append(synthetic_dict)
 
         return random_sample_ratio_ordered_array(
             strokes, train_ratio, strings_array=list(zip(stroke_strings, stroke_dicts))
@@ -711,7 +714,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                             ]
                         for antenna in possible_antenna:
                             n_wheel_sets = (
-                                [2] if first_tier_width <= small_width else [2, 6]
+                                [2, 4, 6] if first_tier_width <= small_width else [2, 6]
                             )
                             for n_wheels in n_wheel_sets:
                                 (

@@ -27,7 +27,7 @@ trep = baseType("trep")
 
 ### Constant values
 XYLIM = 3.5  # i.e., -3 to 3
-SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT = 512
+SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT = 1024
 
 SCALES = [0.5, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 4.0]
 NPOLY = range(3, 7)  # range of regular polyogns allowed.
@@ -231,7 +231,7 @@ relations = [
 # Utilities for rendering.
 def render_stroke_arrays_to_canvas(
     stroke_arrays,
-    stroke_width_height=8 * XYLIM,
+    stroke_width_height=12 * XYLIM,
     canvas_width_height=SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
 ):
     """See original source: prog2pxl https://github.com/ellisk42/ec/blob/draw/dreamcoder/domains/draw/primitives.py"""
@@ -256,10 +256,11 @@ def render_stroke_arrays_to_canvas(
 
 def render_parsed_program(
     program,
-    stroke_width_height=10 * XYLIM,
+    stroke_width_height=12 * XYLIM,
     canvas_width_height=SYNTHESIS_TASK_CANVAS_WIDTH_HEIGHT,
     allow_partial_rendering=False,
 ):
+    stroke_width_height = 12 * XYLIM
     if type(program) == str:
         program = Program.parse(program)
     if not hasattr(program, "rendering"):

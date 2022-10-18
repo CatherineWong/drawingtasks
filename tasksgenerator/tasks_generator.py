@@ -473,15 +473,12 @@ class DrawingTask(Task):
         task_name=None,
     ):
         padded_index = str.zfill(str(task_id), 3)
-        if task_name is not None:
-            if PROGRAMS_NAME in task_generator_name:
-                task_name = task_generator_name.split(f"_{PROGRAMS_NAME}")[0]
-                task_name = f"{task_name}_{padded_index}"
-            else:
-                task_name = f"{task_generator_name}_{padded_index}"
-            super(DrawingTask, self).__init__(
-                task_name, renamequest, examples=[], features=[]
-            )
+        if PROGRAMS_NAME in task_generator_name:
+            task_name = task_generator_name.split(f"_{PROGRAMS_NAME}")[0]
+            task_name = f"{task_name}_{padded_index}"
+        else:
+            task_name = f"{task_generator_name}_{padded_index}"
+        super(DrawingTask, self).__init__(task_name, request, examples=[], features=[])
 
         self.task_shape = task_shape
         self.task_generator_name = task_generator_name

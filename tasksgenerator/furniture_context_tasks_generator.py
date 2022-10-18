@@ -510,6 +510,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
             ]
             all_seat_back_primitives = [
                 [CIRCLE, CIRCLE, ([], "empt")],
+                [([], "empt"), CIRCLE, CIRCLE],
             ]
             possible_n_feet = [2, 4]
             possible_feet_heights = [SMALL, MEDIUM * 2]
@@ -522,6 +523,7 @@ class FurnitureContextTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator
             all_seat_back_primitives = [
                 [CIRCLE, CIRCLE, ([], "empt")],
                 [RECTANGLE, CIRCLE, ([], "empt"),],
+                [([], "empt"), CIRCLE, CIRCLE],
             ]
             possible_n_feet = [2, 4]
             possible_feet_heights = [SMALL, MEDIUM * 2]
