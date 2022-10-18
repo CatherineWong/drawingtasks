@@ -11,6 +11,7 @@ Uploads to: https://lax-context-stimuli.s3.amazonaws.com/
 """
 import os
 import random
+import numpy as np
 
 import boto3
 import argparse
@@ -42,7 +43,14 @@ parser.add_argument(
 parser.add_argument(
     "--context_size",
     type=int,
-    default=12,
+    default=9,
+    help="Task generators to draw on to create contextual stimuli.",
+)
+
+parser.add_argument(
+    "--targets_size",
+    type=int,
+    default=6,
     help="Task generators to draw on to create contextual stimuli.",
 )
 
@@ -63,6 +71,8 @@ parser.add_argument(
     action="store_true",
     help="v2 experiment: 2 contexts, n targets.",
 )
+
+random.seed(0)
 
 
 def connect_to_s3_and_create_bucket(bucket_name="lax-context-stimuli"):
@@ -181,16 +191,88 @@ def generate_v1_random_contexts(args):
 
 
 def generate_v2_random_contexts(args):
-    experiment_name = "lax-drawing-context-library-v2"
+    # All possible images.
+    renders_path = os.path.join(DEFAULT_EXPORT_DIR, DEFAULT_RENDERS_SUBDIR)
+    all_context_images = []
+    for task_generator in args.task_generators:
+        image_paths = [
+            image_path
+            for image_path in os.listdir(renders_path)
+            if task_generator in image_path
+        ]
+        all_context_images += image_paths
 
-    return experiment_name
+    context_targets = []
+    for task_generator in args.task_generators:
+        # Large context targets.
+        large_abstractions_context = [
+            p
+            for p in all_context_images
+            if task_generator in p and CONTEXT_LARGE_ABSTRACTIONS in p
+        ]
+        small_abstractions_context = [
+            p
+            for p in all_context_images
+            if task_generator in p and CONTEXT_SMALL_ABSTRACTIONS in p
+        ]
+        # Random shuffle.
+        random.shuffle(large_abstractions_context)
+        random.shuffle(small_abstractions_context)
+
+        # Total stimuli: n_context + n_targets
+        total_stimuli = args.context_size + args.targets_size
+        large_abstractions_context, small_abstractions_context = (
+            large_abstractions_context[:total_stimuli],
+            small_abstractions_context[:total_stimuli],
+        )
+        # Create shifted disjoint batches to the best that we can.
+        n_batches = int(np.ceil(total_stimuli / args.targets_size))
+        large_wraparound, small_wraparound = (
+            large_abstractions_context + large_abstractions_context,
+            small_abstractions_context + small_abstractions_context,
+        )
+        for batch in range(n_batches):
+            batch_start, batch_end = (
+                batch * args.targets_size,
+                (batch + 1) * args.targets_size,
+            )
+            large_targets = large_wraparound[batch_start:batch_end]
+            small_targets = small_wraparound[batch_start:batch_end]
+            large_context = [
+                i for i in large_abstractions_context if i not in large_targets
+            ]
+            small_context = [
+                i for i in small_abstractions_context if i not in small_targets
+            ]
+
+            context_targets.append(
+                {
+                    "target-set-id": hash(str(large_targets)),
+                    "subdomain": task_generator,
+                    "targets": [TARGET_PATH + t for t in large_targets],
+                    "context-1-id": hash(str(large_context)),
+                    "context-2-id": hash(str(small_context)),
+                    "context-1": [TARGET_PATH + p for p in large_context],
+                    "context-2": [TARGET_PATH + p for p in small_context],
+                }
+            )
+    # Create the JSON.
+    experiment_name = "lax-drawing-context-library-v2"
+    context_json = {
+        "experiment_name": experiment_name,
+        "metadata": {
+            "human_readable": "Context manipulation experiment v2. Fixed context, n targets",
+        },
+        "stimuli": context_targets,
+    }
+    return experiment_name, context_json
 
 
 def main(args):
     if not args.skip_upload_stimuli:
         upload_image_stimuli(args)
 
-    if args.generate_v1_context:
+    if args.generate_v1_random_contexts:
         experiment_name, context_generation = generate_v1_random_contexts(args)
 
     if args.generate_v2_random_contexts:
