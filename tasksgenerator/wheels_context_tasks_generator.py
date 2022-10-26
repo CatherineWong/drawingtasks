@@ -700,7 +700,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
             for first_tier_height, second_tier_height in [
                 (MEDIUM * 3, SMALL),
             ]:
-                small_width = LARGE * 7
+                small_width = LARGE * 5
                 for first_tier_width in possible_tier_widths:
                     for (nose_tail_heights, nose_tail_widths,) in [
                         (0, 0),
@@ -714,7 +714,7 @@ class WheelsProgramsTasksGenerator(AbstractBasesAndPartsProgramsTasksGenerator):
                             ]
                         for antenna in possible_antenna:
                             n_wheel_sets = (
-                                [2, 4, 6] if first_tier_width <= small_width else [2, 6]
+                                [2] if first_tier_width <= small_width else [2, 4, 6]
                             )
                             for n_wheels in n_wheel_sets:
                                 (
