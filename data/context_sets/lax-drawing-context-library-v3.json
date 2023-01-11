@@ -1,0 +1,332 @@
+{
+    "experiment_name": "lax-drawing-context-library-v3",
+    "metadata": {
+        "human_readable": "Context manipulation experiment v2. Fixed context, n targets"
+    },
+    "stimuli": [
+        {
+            "target-set-id": 3058937657811029784,
+            "subdomain": "wheels_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_011.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_000.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_016.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_015.png"
+            ],
+            "context-1-id": 4930839304174883164,
+            "context-2-id": -710281720894119334,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_003.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_005.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_006.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_004.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_053.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_035.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_058.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_116.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_102.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_021.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_073.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_023.png"
+            ]
+        },
+        {
+            "target-set-id": 3683948602381372854,
+            "subdomain": "wheels_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_003.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_005.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_006.png"
+            ],
+            "context-1-id": -6117099616880191839,
+            "context-2-id": 153172056625269916,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_011.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_000.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_016.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_015.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_004.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_027.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_046.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_050.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_082.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_077.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_021.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_073.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_023.png"
+            ]
+        },
+        {
+            "target-set-id": 6835411692261382894,
+            "subdomain": "wheels_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_004.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_011.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_000.png"
+            ],
+            "context-1-id": 7096212593220019646,
+            "context-2-id": 3041450054374676333,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_016.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_015.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_003.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_005.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_large_abstractions_006.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_082.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_077.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_053.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_035.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_058.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_116.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/wheels_context_programs_context_small_abstractions_102.png"
+            ]
+        },
+        {
+            "target-set-id": 6016433158536312688,
+            "subdomain": "dials_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_017.png"
+            ],
+            "context-1-id": -7801644116495727823,
+            "context-2-id": -3490770453572767759,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_025.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_022.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_012.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_020.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_018.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_004.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_016.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_004.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_027.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_031.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_000.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_020.png"
+            ]
+        },
+        {
+            "target-set-id": -238421788304734664,
+            "subdomain": "dials_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_025.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_022.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_012.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_020.png"
+            ],
+            "context-1-id": -5591653729246445194,
+            "context-2-id": 7534502475822363369,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_018.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_004.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_016.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_013.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_003.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_032.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_026.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_020.png"
+            ]
+        },
+        {
+            "target-set-id": -1926419161131809996,
+            "subdomain": "dials_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_018.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_004.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_016.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_008.png"
+            ],
+            "context-1-id": -7808257503002781552,
+            "context-2-id": 8630264171352190105,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_025.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_022.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_014.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_012.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_large_abstractions_020.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_032.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_026.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_004.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_027.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_031.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_000.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/dials_context_programs_context_small_abstractions_017.png"
+            ]
+        },
+        {
+            "target-set-id": -8965933734394196133,
+            "subdomain": "furniture_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_006.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_012.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_003.png"
+            ],
+            "context-1-id": 8953823527894718550,
+            "context-2-id": -8498210006648515992,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_013.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_016.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_015.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_005.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_001.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_011.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_024.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_094.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_027.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_038.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_190.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_108.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_078.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_031.png"
+            ]
+        },
+        {
+            "target-set-id": 8284805124210881791,
+            "subdomain": "furniture_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_013.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_016.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_015.png"
+            ],
+            "context-1-id": -7707917378366625333,
+            "context-2-id": 2328946538836013962,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_006.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_012.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_003.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_005.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_001.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_011.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_097.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_067.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_056.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_041.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_028.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_112.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_108.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_078.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_031.png"
+            ]
+        },
+        {
+            "target-set-id": 1906319949651344763,
+            "subdomain": "furniture_context_programs",
+            "targets": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_005.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_001.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_011.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_010.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_006.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_012.png"
+            ],
+            "context-1-id": -6461327817659436018,
+            "context-2-id": -7758497219368648176,
+            "context-1": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_009.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_007.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_003.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_013.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_002.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_017.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_008.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_016.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_large_abstractions_015.png"
+            ],
+            "context-2": [
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_041.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_028.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_112.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_029.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_024.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_094.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_027.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_038.png",
+                "https://lax-drawing-context-library-v3.s3.amazonaws.com/furniture_context_programs_context_small_abstractions_190.png"
+            ]
+        }
+    ]
+}

@@ -41,7 +41,7 @@ python generate_drawing_tasks.py --tasks_generator wheels_context_programs --num
 ```
 python upload_context_stimuli.py --task_generators wheels_context_programs dials_context_programs furniture_context_programs --generate_v2_random_contexts
 ```
-These should upload the stimuli to: `https://lax-context-stimuli.s3.amazonaws.com/`.
+These should upload the stimuli to: `https://lax-context-stimuli.s3.amazonaws.com/`. These stimuli have the same names as the local file paths.
 
 The outputs of the task generator are the same as those in the CogSci 2022 dataset. 
     - *Images* written to `data/renders`

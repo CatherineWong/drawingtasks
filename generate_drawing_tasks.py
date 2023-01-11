@@ -158,6 +158,7 @@ def export_task_summary(args, tasks_curriculum):
 
     import csv
 
+    print(f"Writing out a task summary to: {curriculum_summary_file}")
     with open(curriculum_summary_file, "w", encoding="utf8", newline="") as f:
         fc = csv.DictWriter(f, fieldnames=tasks_summaries[0].keys(),)
         fc.writeheader()
@@ -200,9 +201,13 @@ def export_rendered_images(args, tasks_curriculum):
     renders_export_dir = (
         args.renders_export_dir
         if args.renders_export_dir
-        else os.path.join(args.task_export_dir, DEFAULT_RENDERS_SUBDIR)
+        else os.path.join(
+            args.task_export_dir, DEFAULT_RENDERS_SUBDIR, args.tasks_generator
+        )
     )
-    pathlib.Path(renders_export_dir).mkdir(parents=True, exist_ok=True)
+    pathlib.Path(renders_export_dir).mkdir(
+        parents=True, exist_ok=False
+    )  # Don't pollute images.
     curriculum_tasks = tasks_curriculum.get_all_tasks()
     print(f"Writing {len(curriculum_tasks)} renders out to: {renders_export_dir}")
     for task in curriculum_tasks:

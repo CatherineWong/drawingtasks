@@ -1,0 +1,2 @@
+#### Context set readme.
+- data/context_sets/lax-drawing-context-library-v2-1-11-2022.json: Due to a bug in the data generation code, this contains the original pilot data that was generated and used in the documented experiments.

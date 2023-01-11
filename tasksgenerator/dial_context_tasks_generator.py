@@ -1003,4 +1003,6 @@ class DialProgramsTasksGenerator(AbstractTasksGenerator):
             task_curriculum.add_tasks(
                 split=context, condition=self.name, curriculum_block=0, tasks=tasks,
             )
+            for t in tasks:
+                print(t.name)
         return task_curriculum
