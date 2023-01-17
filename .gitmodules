@@ -1,6 +1,6 @@
 [submodule "block_utils"]
 	path = block_utils
 	url = git@github.com:cogtoolslab/block_utils.git
-[submodule "dreamcoder_programs_programs"]
+[submodule "dreamcoder_programs"]
 	path = dreamcoder_programs
 	url = git@github.com:CatherineWong/dreamcoder_programs.git
